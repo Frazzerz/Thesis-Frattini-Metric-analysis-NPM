@@ -32,3 +32,82 @@
   biburl       = {https://dblp.org/rec/conf/coco/Karp72.bib},
   bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
+
+@misc{huang2024donapimaliciousnpmpackages,
+      title={DONAPI: Malicious NPM Packages Detector using Behavior Sequence Knowledge Mapping}, 
+      author={Cheng Huang and Nannan Wang and Ziyan Wang and Siqi Sun and Lingzi Li and Junren Chen and Qianchong Zhao and Jiaxuan Han and Zhen Yang and Lei Shi},
+      year={2024},
+      eprint={2403.08334},
+      archivePrefix={arXiv},
+      primaryClass={cs.CR},
+      url={https://arxiv.org/abs/2403.08334}, 
+}
+
+@inproceedings{10.1145/3691620.3695492,
+author = {Huang, Yiheng and Wang, Ruisi and Zheng, Wen and Zhou, Zhuotong and Wu, Susheng and Ke, Shulin and Chen, Bihuan and Gao, Shan and Peng, Xin},
+title = {SpiderScan: Practical Detection of Malicious NPM Packages Based on Graph-Based Behavior Modeling and Matching},
+year = {2024},
+isbn = {9798400712487},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3691620.3695492},
+doi = {10.1145/3691620.3695492},
+abstract = {Open source software (OSS) supply chains have been attractive targets for attacks. One of the significant, popular attacks is realized by malicious packages on package registries. NPM, as the largest package registry, has been recently flooded with malicious packages. In response to this severe security risk, many detection tools have been proposed. However, these tools do not model malicious behavior in a holistic way; only consider a predefined set of sensitive APIs; and require huge manual confirmation effort due to high false positives and binary detection results. Thus, their practical usefulness is hindered.To address these limitations, we propose a practical tool, named SpiderScan, to identify malicious NPM packages based on graph-based behavior modeling and matching. In the offline phase, given a set of malicious packages, SpiderScan models each malicious behavior in a graph that considers control flows and data dependencies across sensitive API calls, while leveraging LLM to recognize sensitive APIs in both built-in modules and third-party dependencies. In the online phase, given a target package, SpiderScan constructs its suspicious behavior graphs and matches them with malicious behavior graphs, and uses dynamic analysis and LLM to confirm the maliciousness only for certain malicious behaviors. Our extensive evaluation has demonstrated the effectiveness of SpiderScan over the state-of-the-art. SpiderScan has detected 249 new malicious packages in NPM, and received 70 thank letters from the official team of NPM.},
+booktitle = {Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering},
+pages = {1146–1158},
+numpages = {13},
+keywords = {software supply chain, malware detection, behavior modeling},
+location = {Sacramento, CA, USA},
+series = {ASE '24}
+}
+
+@misc{zahan2025leveraginglargelanguagemodels,
+      title={Leveraging Large Language Models to Detect npm Malicious Packages}, 
+      author={Nusrat Zahan and Philipp Burckhardt and Mikola Lysenko and Feross Aboukhadijeh and Laurie Williams},
+      year={2025},
+      eprint={2403.12196},
+      archivePrefix={arXiv},
+      primaryClass={cs.CR},
+      url={https://arxiv.org/abs/2403.12196}, 
+}
+
+@article{weissberg2025llm,
+  title={LLM-based Vulnerability Discovery through the Lens of Code Metrics},
+  author={Weissberg, Felix and Pirch, Lukas and Imgrund, Erik and M{\"o}ller, Jonas and Eisenhofer, Thorsten and Rieck, Konrad},
+  journal={arXiv preprint arXiv:2509.19117},
+  year={2025}
+}
+
+@article{article,
+author = {Wang, Jian and Li, Zhen and Qu, Jixiang and Zou, Deqing and Xu, Shouhuai and Xu, Ziteng and Wang, Zhenwei and Jin, Hai},
+year = {2025},
+month = {01},
+pages = {1-1},
+title = {MalPacDetector: An LLM-based Malicious NPM Package Detector},
+volume = {PP},
+journal = {IEEE Transactions on Information Forensics and Security},
+doi = {10.1109/TIFS.2025.3580336}
+}
+
+@article{Zhang_2025,
+   title={Killing Two Birds with One Stone: Malicious Package Detection in NPM and PyPI using a Single Model of Malicious Behavior Sequence},
+   volume={34},
+   ISSN={1557-7392},
+   url={http://dx.doi.org/10.1145/3705304},
+   DOI={10.1145/3705304},
+   number={4},
+   journal={ACM Transactions on Software Engineering and Methodology},
+   publisher={Association for Computing Machinery (ACM)},
+   author={Zhang, Junan and Huang, Kaifeng and Huang, Yiheng and Chen, Bihuan and Wang, Ruisi and Wang, Chong and Peng, Xin},
+   year={2025},
+   month=apr, pages={1–28} }
+
+@misc{li2024surveyhonestylargelanguage,
+      title={A Survey on the Honesty of Large Language Models}, 
+      author={Siheng Li and Cheng Yang and Taiqiang Wu and Chufan Shi and Yuji Zhang and Xinyu Zhu and Zesen Cheng and Deng Cai and Mo Yu and Lemao Liu and Jie Zhou and Yujiu Yang and Ngai Wong and Xixin Wu and Wai Lam},
+      year={2024},
+      eprint={2409.18786},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2409.18786}, 
+}

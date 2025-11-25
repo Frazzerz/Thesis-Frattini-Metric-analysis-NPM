@@ -1,6 +1,38 @@
 \chapter{Related Work}
 \label{ch:related}
 
+Several works have addressed in the analysis and identification of malware within the \ac{NPM} ecosystem, 
+but none of them considered the evolution of the code with respect to all the published releases.
+One such tool is DONAPI \cite{huang2024donapimaliciousnpmpackages}.
+It uses a combination of static analysis, based on a predefined database of sensitive \ac{APIs}, 
+and dynamic analysis to extract behavioral patterns in order to detect and classify malicious packages.
+
+An alternative to DONAPI is SpiderScan \cite{10.1145/3691620.3695492},
+which is based on graph-based behavior modeling and matching.
+This tool uses \ac{LLM} for various tasks, including the identification 
+of sensitive APIs and the analysis of shell commands. 
+Other tools also use \ac{LLM} for \ac{NPM} package analysis,
+such as the tool by \textcite{zahan2025leveraginglargelanguagemodels, article, Zhang_2025}.
+
+Although these tools achieve excellent results in identifying malicious packages, 
+they are not open source and they also have limitations.
+The dynamic analysis in DONAPI, according to \textcite{10.1145/3691620.3695492}, risks ``hindering their 
+practical usefulness in real-world scenarios``.
+Additionally, a common issue not specific to DONAPI and CEREBRO \cite{Zhang_2025}
+is that most existing tools (including rule-based and learning-based methods) 
+fail to holistically model malicious behavior. As noted by \textcite{10.1145/3691620.3695492}, 
+``these tools capture package behavior as a set of discrete features over sensitive 
+APIs, code structures or semantics (e.g., data flow), simplifying the modeling of 
+malicious behavior and thus hindering their practical effectiveness``.
+Furthermore, as discussed by \textcite{10.1145/3691620.3695492}, ``Prompt engineering methods 
+leverage the capability of ChatGPT, and use self-refinement and chain-of-thought techniques to detect 
+maliciousness, but can incur high expense in real-world scenarios``, besides the fact that in
+general \ac{LLM} can be prone to hallucination, as he states \textcite{li2024surveyhonestylargelanguage}.
+
+In the work conducted by \textcite{weissberg2025llm}, it is argued that often simple traditional code metrics
+are enough to achieve results similar to, if not better than, those obtained with complex \ac{LLM}.
+
+-----------------------------------------------------------------------------------------------------------------------
 This chapter is dedicated to the work that has been done by others in the field of your thesis.
 Don't write a mere list of papers with a summary of each. Instead, the goal is to give a picture
 of how your work is situated in the context of the work of others. In this case, you should
