@@ -1,0 +1,57 @@
+\chapter{Case Study and Threat Modeling}\label{ch:threatModeling}
+
+As a first step, two real-world attacks that occurred within the \acp{NPM}
+Software Supply Chain (\acp{SSC}) were selected and analyzed.
+
+The study of these cases made it possible to gain a deeper understanding
+of the main characteristics of these attacks,
+providing the basis for the subsequent definition 
+of the metrics necessary to identify these types of threats,
+in the \nameref{ch:metrics} (\Cref{ch:metrics}).
+
+\section{Crypto related attack - September 2025}
+
+The first attack, which occurred on September 8 2025,
+compromised 18 highly popular \acp{NPM} packages, including \texttt{chalk},
+\texttt{debug}, and \texttt{ansi-colors} \cite{henig2025breakdownwidespreadnpmsupplychainattack}.
+
+The attack was made possible by compromising the account of a maintainer of one of the packages via a phishing email.
+
+After obtaining the account credentials,
+the attacker published malicious versions of the affected packages,
+which contained malware designed to steal cryptocurrencies
+by intercepting and manipulating users’ browser transactions.
+
+The malware's operation can be divided into these main phases \cite{matthee2025npmsupplychainattack}.
+First, the malicious code checked for the presence of a Web3 wallet interface
+in the browser (e.g., \texttt{window.ethereum}).
+
+If present, it hooked one of these specific functions
+(\texttt{eth\_send\-Transaction}, \texttt{solana\_sign\-Transaction},
+\texttt{solana\_sign\-And\-Send\-Transaction})
+with the goal of replacing the transaction's destination address
+with one controlled by the attacker; 
+this is done by intercepting network calls (using the \texttt{fetch} or \texttt{XMLHttpRequest} \acp{APIs}).
+
+The compromised package versions remained online
+for approximately two hours before being detected by developers and removed by \acp{NPM}.
+As a result, the overall impact of the attack was limited.
+
+\section{Information theft attack - November 2025}
+
+The second attack considered in this study occurred on November 24 2025.
+Within a few hours, over 1,000 \acp{NPM} packages were infected,
+all using the same technique; again relying on compromised maintainer accounts
+\cite{ravie2025secondsha1hulud}.
+
+The attack, known as \textit{Sha1-Hulud}, introduced the Bun runtime
+as a dependency in the packages,
+adding a \texttt{preinstall} script (\texttt{node setup\_bun.js})
+along with a highly obfuscated file named \texttt{bun\_environment.js},
+with a size exceeding 10 MB \cite{helixguard2025malicioussha1hulud}.
+
+When executed, the script downloaded and ran TruffleHog
+to scan the local system,
+stealing sensitive information such as \acp{NPM} tokens,
+\acp{AWS}, \acp{GCP}, and Azure credentials, and environment variables.
+

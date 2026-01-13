@@ -1,7 +1,74 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-This is a template for the Computer Science Master's Theses at \myhref{https://dibris.unige.it}{\ac{DIBRIS}, University of Genoa.}
+The open-source software \acp{OSS} ecosystem represents one of the fundamental 
+pillars of modern software development, with millions of projects relying on publicly shared libraries and packages.
+
+Within this context, the Node Package Manager \acp{NPM} ecosystem
+for JavaScript emerges as one of the largest and most dynamic software repositories, 
+hosting more than two million packages \cite{10.1145/3510457.3513044}.
+
+This strong interdependence creates complex software supply chains,
+in which the security and integrity of a project are inherently tied
+to those of all its direct and transitive dependencies \cite{10.1109/ASE56229.2023.00135}.
+As a result, the compromise of a single widely used library
+can rapidly propagate, causing a cascading effect across many projects.
+
+A significant example of a supply chain attack occurred on September 8, 2025,
+when an attacker compromised 18 popular \acp{NPM} packages, including chalk and color \cite{henig2025breakdownwidespreadnpmsupplychainattack}.
+These packages alone account for over 2.6 billion downloads each week,
+making this attack one of the most impactful in the recent history of the \acp{NPM} ecosystem.
+
+To address these threats, several detection tools have been proposed,
+mainly based on intrinsic source code analysis,
+such as DONAPI \cite{huang2024donapimaliciousnpmpackages} and SpiderScan \cite{10.1145/3691620.3695492}.
+
+This thesis proposes an alternative approach to the problem.
+The goal is to evaluate whether it is possible to identify anomalous updates in an \acp{NPM} package
+using specifically designed metrics,
+analyzing the evolution of the code over all releases.
+Unlike approaches that focus on isolated updates,
+this work considers the entire evolutionary history of a package.
+
+To achieve this, a multi-phase process was followed.
+
+First, two real attacks that occurred within the \acp{NPM} ecosystem were selected
+and used as case studies for threat modeling.
+Based on the analysis of these attacks, a set of metrics was defined and classified by type,
+as they were considered relevant for the identification of these kinds of threats.
+
+Subsequently, a tool was developed to monitor the evolution of these metrics
+across all versions of an \acp{NPM} package.
+
+The tool was initially tested on a small dataset of malicious packages,
+all related to the threat modeling performed in the previous phase.
+These packages were identified and downloaded using a custom developed script.
+This phase made it possible to observe the behavior of the metrics
+in the presence of malicious code.
+
+A study of the real-world context was also conducted.
+
+In particular, 500 \acp{NPM} packages selected from the top 1000 most popular ones were analyzed,
+in order to understand the behavior of the metrics in real scenarios.
+This allowed the estimation of the average values assumed by each metric.
+
+By comparing these values with those observed in malicious packages,
+it was possible to define meaningful threshold values for each metric.
+Unlike other tools, the thresholds were not defined a priori,
+as they can be easily bypassed by an attacker,
+but instead were derived from studying the real-world behavior of the metrics.
+
+Finally, specific behaviors of the metrics to be monitored have been defined,
+defined as flags, and the corresponding thresholds were associated with each of them.
+
+After validation on the malicious dataset, the complete tool was applied again to the 1000 
+most downloaded \acp{NPM} real-world packages, to evaluate its overall effectiveness.
+
+%... The results obtained demonstrate the potential of this approach...
+
+
+\begin{comment}
+This is a template for the Computer Science Master's Theses at \myhref{https://dibris.unige.it}{\acp{DIBRIS}, University of Genoa.}
 It uses the \xspace{\LaTeX} class \texttt{masterthesis.cls} by
 Davide Ancona. We will use this template to discuss what is generally expected in the
 structure of a Master's Thesis. While reading academic documents, you will find that
@@ -108,4 +175,4 @@ Advisors may have very different preferences in how to share feedback. A possibi
 
 %TODO
 \textbf{IMPORTANT: Make sure the curriculum on the cover pages and the department address matches your own.} Currently, you'll have to edit the \texttt{masterthesis.cls} file accordingly; I plan to eventually provide a class option to facilitate that without the need to edit the \texttt{.cls} file. If you feel like you want to help me with that, please let me know! You'll get gratitude and an acknowledgment here.
-
+\end{comment}

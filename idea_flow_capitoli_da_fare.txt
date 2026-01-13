@@ -1,0 +1,9 @@
+Possibile flow capitoli da fare:
+
+!- Tool principale
+- Tool per scaricare malware
+!- Risultati solo malware su tool principale
+!- Risultati sul mondo reale
+- Confronti 2 risultati: solo malware e mondo reale
+- Flag
+- Risultati finali

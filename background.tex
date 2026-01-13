@@ -1,6 +1,44 @@
 \chapter{Background}
 \label{ch:background}
 
+Third-party packages play a crucial role in modern software
+development by reducing implementation effort and providing reusable functionalities 
+that would otherwise be timeconsuming to develop from scratch \cite{unknown}.
+
+To support JavaScript developers in the reuse of third-party code, the \acp{NPM} provides
+hundreds of thousands of free and reusable code software packages.
+The \acp{NPM} platform consists of an online registry for searching 
+packages suitable for given tasks, and a package manager
+that automatically resolves and installs dependencies, 
+simplify the integration of these packages into projects \cite{10.5555/3361338.3361407}.
+By design, The \acp{NPM} ecosystem is open, allowing any user to freely publish.
+
+This openness has been a key factor in the rapid growth and success of \acp{NPM},
+but it also introduces significant security risks.
+In particular, the widespread use of third-party dependencies makes \acp{NPM}
+a central component of the JavaScript software supply chain.
+
+The software Supply Chain \acp{SSC} refers to the set of processes to select and obtain software components
+from third parties; it also comprehends the companies involved in these processes \cite{gokkaya2023softwaresupplychainreview}.
+
+Modern software systems heavily rely on \acp{SSCs}, often incorporating a large number of direct
+and transitive dependencies.
+Within this context, the \acp{NPM} ecosystem exemplifies how supply chain dependencies
+can amplify the impact of security incidents.
+
+Highly popular packages can directly or indirectly influence
+many other projects, sometimes exceeding 100,000 dependent packages \cite{10.5555/3361338.3361407}.
+Moreover, installing an average \acp{NPM} package implicitly introduces
+trust on 79 third-party packages and 39 maintainers \cite{10.5555/3361338.3361407}.
+
+As a consequence, the \acp{NPM} ecosystem has become a prominent target for
+Software Supply Chain attacks \acp{SCCA}, characterized by the injection of malicious code
+into legitimate packages update, in order to compromise
+dependent systems further down the chain \cite{ohm2020backstabbersknifecollectionreview}.
+
+
+\begin{comment}
+
 This chapter provides the necessary background information to understand the content of your thesis.
 The goal is to make your thesis \emph{self-contained}: the reader, who you can assume will be
 a fellow Computer Science student, should be able to understand your work without having to refer
@@ -20,3 +58,4 @@ did should be described in the \nameref{ch:method} (\Cref{ch:method}) instead.
 The amount of information you will need to present in this chapter can vary a lot between theses.
 In some cases, you will have no or very little need for a Background chapter; in that case, it
 may make sense to move this information to a section in the Related Work chapter.
+\end{comment}
