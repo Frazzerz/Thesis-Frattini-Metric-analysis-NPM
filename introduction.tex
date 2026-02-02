@@ -1,12 +1,76 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-The open-source software \acp{OSS} ecosystem represents one of the fundamental 
-pillars of modern software development, with millions of projects relying on publicly shared libraries and packages.
+In recent years, JavaScript has increased in popularity, becoming one of the most widely used programming languages in the world, 
+not only for web development but also for server-side applications via Node.js.
+For this ecosystem, \ac{NPM} is one of the largest and active package repositories, 
+with over two million packages available \cite{9505063}.
 
-Within this context, the Node Package Manager \acp{NPM} ecosystem
+The core idea of \ac{NPM} and similar package managers is to promote code reuse, 
+avoiding the need to reinvent the wheel for common functionalities, e.g., 
+to parse dates, manage HTTP requests, or graphical \acp{UI}.
+
+Each \ac{NPM} package can depend on other packages, creating a network of dependencies which constitute 
+\acp{SSC} \cite{10.1109/ASE56229.2023.00135}.
+
+The \ac{SSC} is the set of processes and external components that a software project depends on.
+When a library from \ac{NPM} is used, its code is not only included in the project, 
+but its authors, its own dependencies, and their security are also implicitly trusted.
+
+If one of these components is compromised, the effect can propagate through all the projects that depend on it, even indirectly.
+
+The problem is that \ac{NPM} is an open and decentralized system where anyone can publish a package.
+This makes it vulnerable to \acp{SCCA}, where an attacker inserts malicious code in a legitimate package, 
+e.g., through compromising the maintainer's account; infecting 
+in this way all the projects that depend on it.
+
+Recently, one of the most impactful \acp{SCCA} in the \ac{NPM} ecosystem occurred.
+On September 8, 2025, an attacker compromised 18 popular \ac{NPM} packages, 
+including \texttt{chalk} and \texttt{color}; these packages count over 2.6 billion downloads each week \cite{henig2025breakdownwidespreadnpmsupplychainattack}.
+
+To counter these threats, many detection tools for detecting malicious code in these \ac{NPM} packages have developed, 
+which also work well, e.g., \texttt{DONAPI} \cite{huang2024donapimaliciousnpmpackages} and \texttt{SpiderScan} \cite{10.1145/3691620.3695492}.
+
+However, most of these kinds of tools have two main characteristics.
+First, they focus on analyzing only the most recent update of a package.
+Second, to determine whether a package is malicious, they often rely on features (which vary by tool) 
+with fixed a priori thresholds, without studying their behavior in real-world contexts.
+
+The aim of this thesis is to evaluate if it is possible to identify anomalous updates (not necessarily malicious) 
+in an \ac{NPM} package by analyzing its evolution over releases, using specifically designed metrics, 
+and testing this approach in the real-world context.
+
+Unlike other approaches that focus on the isolated last available update, 
+this work also considers previous versions of the package to gain a view of its evolution over time.
+
+To achieve this, first I focused on and threat modeled two real \acp{SCCA} that happened in the \ac{NPM} ecosystem,
+discussed in \nameref{ch:threatModeling} (\Cref{ch:threatModeling}).
+Also, I created a script to download specific \ac{NPM} package versions with the aim of obtaining the tarball 
+of these malicious versions for these two attacks.
+
+Based on the analysis of these \acp{SCCA}, I defined a set of metrics and classified them by type described in \nameref{ch:metrics} (\Cref{ch:metrics});
+considering them as relevant for the identification of this type of threats.
+
+Afterward, I developed a tool to monitor the evolution of these metrics across versions of an \ac{NPM} package,
+described in \nameref{ch:tools} (\Cref{ch:tools}) with the previously script to download specific \ac{NPM} package versions.
+
+Then I conducted a study in a real-world context, approximately selecting and analyzing 500 \ac{NPM} packages from the top 1000 most popular ones.
+
+After understanding the behavior of these metrics in real-world scenarios, 
+I estimated their average values across package releases, and plotted the results.
+
+Finally, I compared these findings with those of the malicious packages to determine
+whether it was possible to identify anomalous values for each metric.
+
+All these last phases are described and discussed in \nameref{ch:results} (\Cref{ch:results}).
+
+
+\begin{comment}
+The open-source software \ac{OSS} ecosystem represents one of the fundamental 
+pillars of modern software development, with millions of projects relying on publicly shared libraries and packages.
+Within this context, the Node Package Manager \ac{NPM} ecosystem
 for JavaScript emerges as one of the largest and most dynamic software repositories, 
-hosting more than two million packages \cite{10.1145/3510457.3513044}.
+hosting more than two million packages \cite{9505063}.
 
 This strong interdependence creates complex software supply chains,
 in which the security and integrity of a project are inherently tied
@@ -15,16 +79,16 @@ As a result, the compromise of a single widely used library
 can rapidly propagate, causing a cascading effect across many projects.
 
 A significant example of a supply chain attack occurred on September 8, 2025,
-when an attacker compromised 18 popular \acp{NPM} packages, including chalk and color \cite{henig2025breakdownwidespreadnpmsupplychainattack}.
+when an attacker compromised 18 popular \ac{NPM} packages, including chalk and color \cite{henig2025breakdownwidespreadnpmsupplychainattack}.
 These packages alone account for over 2.6 billion downloads each week,
-making this attack one of the most impactful in the recent history of the \acp{NPM} ecosystem.
+making this attack one of the most impactful in the recent history of the \ac{NPM} ecosystem.
 
 To address these threats, several detection tools have been proposed,
 mainly based on intrinsic source code analysis,
 such as DONAPI \cite{huang2024donapimaliciousnpmpackages} and SpiderScan \cite{10.1145/3691620.3695492}.
 
 This thesis proposes an alternative approach to the problem.
-The goal is to evaluate whether it is possible to identify anomalous updates in an \acp{NPM} package
+The goal is to evaluate whether it is possible to identify anomalous updates in an \ac{NPM} package
 using specifically designed metrics,
 analyzing the evolution of the code over all releases.
 Unlike approaches that focus on isolated updates,
@@ -32,13 +96,13 @@ this work considers the entire evolutionary history of a package.
 
 To achieve this, a multi-phase process was followed.
 
-First, two real attacks that occurred within the \acp{NPM} ecosystem were selected
+First, two real attacks that occurred within the \ac{NPM} ecosystem were selected
 and used as case studies for threat modeling.
 Based on the analysis of these attacks, a set of metrics was defined and classified by type,
 as they were considered relevant for the identification of these kinds of threats.
 
 Subsequently, a tool was developed to monitor the evolution of these metrics
-across all versions of an \acp{NPM} package.
+across all versions of an \ac{NPM} package.
 
 The tool was initially tested on a small dataset of malicious packages,
 all related to the threat modeling performed in the previous phase.
@@ -48,7 +112,7 @@ in the presence of malicious code.
 
 A study of the real-world context was also conducted.
 
-In particular, 500 \acp{NPM} packages selected from the top 1000 most popular ones were analyzed,
+In particular, 500 \ac{NPM} packages selected from the top 1000 most popular ones were analyzed,
 in order to understand the behavior of the metrics in real scenarios.
 This allowed the estimation of the average values assumed by each metric.
 
@@ -62,10 +126,8 @@ Finally, specific behaviors of the metrics to be monitored have been defined,
 defined as flags, and the corresponding thresholds were associated with each of them.
 
 After validation on the malicious dataset, the complete tool was applied again to the 1000 
-most downloaded \acp{NPM} real-world packages, to evaluate its overall effectiveness.
-
-%... The results obtained demonstrate the potential of this approach...
-
+most downloaded \ac{NPM} real-world packages, to evaluate its overall effectiveness.
+\end{comment}
 
 \begin{comment}
 This is a template for the Computer Science Master's Theses at \myhref{https://dibris.unige.it}{\acp{DIBRIS}, University of Genoa.}
