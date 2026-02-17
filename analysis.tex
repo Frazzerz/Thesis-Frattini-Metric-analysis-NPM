@@ -13,7 +13,7 @@
 Il grafico \ref{fig:hex_unique_plot1} illustra 
 l'andamento nelle 20 versioni
 della metrica relativa al numero di valori esadecimali unici, 
-ovvero non considerando valori duplicati;
+ovvero non considerando valori duplicati,
 presenti nei file plain text dei pacchetti NPM del mondo reale.
 
 Come descritto nel sottocapitolo cleanup; 
@@ -32,27 +32,27 @@ l'asse delle ordinate rappresenta il numero di valori esadecimali in scala logar
 
 Le altezze delle barre nere verticali rappresentano gli intervalli di confidenza, 
 ovvero gli intervalli in cui risiedono il 95\% della popolazione (dei 107 pacchetti) per una determinata versione.
-I pacchetti che si posizionano all'interno di uno di questi intervalli, 
+I pacchetti che si posizionano all'interno di uno di questi intervalli
 hanno un numero di valori esadecimali compreso 
 tra il valore minimo (0) e il 95° percentile della popolazione per quella versione.
 
 I pallini grigi invece rappresentano i valori outlier,
 ovvero il restante 5\% della popolazione che si posiziona al di fuori dell'intervallo di confidenza.
-Un pacchetto assume valori outlier per una versione, quando il numero di valori esadecimali unici in quella versione supera il valore del 95° percentile
+Un pacchetto assume valori outlier per una versione quando il numero di valori esadecimali unici in quella versione supera il valore del 95° percentile
 di quell'intervallo di confidenza.
 
 
 Nell'ambito dei 107 pacchetti considerati, 
 ho evidenziato individualmente con 
-delle linee colorate nel grafico \ref{fig:hex_unique_plot1}, 
+delle linee colorate nel grafico \ref{fig:hex_unique_plot1}
 10 pacchetti che presentano caratteristiche interessanti.
-Infatti questi 10 pacchetti hanno un numero di valori esadecimali unici tale da 
-essere per più o tutte le versioni, un outlier o il limite superiore di un intervallo di confidenza.
+Questi hanno un numero di valori esadecimali unici tale da 
+essere per più o tutte le versioni un outlier o il limite superiore di un intervallo di confidenza.
 
 
 Questi pacchetti, e i loro relativi valori outlier, hanno 
 un comportamento atipico rispetto alla maggior parte della popolazione,
-motivo per cui sono stati evidenziati e successivamente analizzati singolarmente;
+motivo per cui sono stati evidenziati e successivamente analizzati singolarmente,
 per comprenderne la natura e le motivazioni che hanno portato a questi valori esadecimali unici così elevati.
 
 
@@ -73,7 +73,7 @@ pacchetti con un numero di valori esadecimali unici che superano di diversi ordi
 quelli della maggior parte della popolazione; per vari motivi che discuteremo dopo.
 
 
-Per gestire questa popolazione eterogenea, ho deciso di adottare la scala logaritmica.
+Per gestire questa popolazione eterogenea ho deciso di adottare la scala logaritmica.
 
 
 L'obiettivo principale quindi è studiare la natura dei pacchetti che assumono valori esadecimali outlier.
@@ -142,7 +142,7 @@ passando da 0 a 2208 valori esadecimali unici, rappresentando l'outlier più est
 
 In questa versione, gli sviluppatori hanno erroneamente inserito 
 nel tarball finale distribuito al pubblico, una directory cache .yarn.
-La directory conteneva svariati file, tra cui un file JavaScript bundle generato, 
+La directory conteneva numerosi file, tra cui un file JavaScript bundle generato, 
 contenente numerosi valori esadecimali.
 
 Nella versione 4.0.4 (-11 nel grafico \ref{fig:hex_unique_plot1}) è stata rimossa
@@ -165,7 +165,7 @@ fa uso della tabella CRC: una matrice di 256 valori pre-calcolati che evita al p
 eseguire calcoli matematici complessi su ogni singolo byte.
 
 Fino alla versione 0.2.13 (-9 nel grafico \ref{fig:hex_unique_plot1}), 
-il pacchetto aveva 256 valori esadecimali unici, rappresentanti appunto i valori della tabella CRC.
+il pacchetto aveva 256 valori esadecimali unici, rappresentanti i valori della tabella CRC.
 
 Dalla versione 1.0.0-RC1 (-8 nel grafico \ref{fig:hex_unique_plot1}), gli sviluppatori hanno deciso 
 di ottimizzare lo spazio del pacchetto,
@@ -210,8 +210,8 @@ migliorare le performace di installazione.
 
 Il pacchetto object-hash ha seguito questa best practice, 
 e a partire dalla versione 1.1.7 (-12 nel grafico \ref{fig:hex_unique_plot1})
-ha ridotto prima il numero di test, e di conseguenza diminuito il numero di valori esadecimali unici da 78 a 5;
-e successivamente dalla versione 2.0.3 (-4 nel grafico \ref{fig:hex_unique_plot1}),
+ha ridotto prima il numero di test, e di conseguenza diminuito il numero di valori esadecimali unici da 78 a 5.
+Successivamente, dalla versione 2.0.3 (-4 nel grafico \ref{fig:hex_unique_plot1}),
 ha rimosso completamente il file di test dal tarball, portando il numero di valori esadecimali unici a 0.
 
     \end{itemize}
@@ -252,12 +252,12 @@ numerosi file JavaScript generati di build, che fanno uso di valori esadecimali.
 Questo comportamento è il medesimo 
 già visto precedentemente per i pacchetti polished e buffer-crc32.
 
-Nel dettaglio, il pacchetto next, framework full-stack di React,
+Nel dettaglio: il pacchetto next, framework full-stack di React,
 rappresenta nel grafico \ref{fig:hex_unique_plot1}
 il limite superiore degli intervalli di confidenza per le versioni dalla -8 alla -2, 
-con un numero di valori esadecimali unici costante a 40.
+con un numero di valori esadecimali unici costante a 40;
 
-Invece il pacchetto aws-sdk, libreria ufficiale per interagire con i servizi cloud AWS,
+il pacchetto aws-sdk, libreria ufficiale per interagire con i servizi cloud AWS,
 rappresenta nel grafico \ref{fig:hex_unique_plot1} 
 un outlier in tutte le versioni, con un numero di valori esadecimali unici di 600.
 
@@ -277,9 +277,9 @@ un outlier in tutte le versioni, con un numero di valori esadecimali unici di 60
 Una volta compresa la natura di questi valori outlier, 
 ho realizzato un secondo grafico \ref{fig:hex_unique_plot2}
 per verificare se le versioni malevole dei pacchetti, relative ai 4 specifici attacchi considerati
-nel capitolo relativo al threat modeling, fossero individuabili tramite questa metrica.
+nel capitolo relativo al threat modeling, fossero individuabili tramite il numero di valori esadecimali unici.
 
-Affinchè siano individuabili, le versioni malevole devono 
+Le versioni malevole, affinchè siano individuabili, devono 
 posizionarsi tra i valori outlier, ovvero superare 
 il valore del 95° percentile dell'intervallo di confidenza per quella versione.
 
@@ -294,16 +294,16 @@ Il grafico \ref{fig:hex_unique_plot2} mantiene gli stessi intervalli di confiden
 e outlier spiegati precedentemente e presenti nel grafico \ref{fig:hex_unique_plot1}; 
 calcolati sempre sui 107 pacchetti che hanno avuto almeno un valore esadecimale positivo in almeno una delle 20 versioni.
 
-Non sono più presenti le linee colorate che rappresentano i pacchetti evidenziati precedentemente,
-e la mediana, in quanto non più necessari per lo scopo di questo grafico \ref{fig:hex_unique_plot2}.
+Non sono più presenti né le linee colorate che rappresentano i pacchetti evidenziati precedentemente,
+né la mediana, in quanto non più necessari per lo scopo di questo grafico \ref{fig:hex_unique_plot2}.
 
 Nel grafico \ref{fig:hex_unique_plot2}, le linee colorate con diverse tipologie di tratteggio
 rappresentano i 20 pacchetti compromessi considerati, ognuno riconducibile a uno dei 4 specifici attacchi presi in analisi,
 descritti in dettaglio nel capitolo threat modeling.
-Invece le croci rosse nel grafico \ref{fig:hex_unique_plot2} 
+Le croci rosse nel grafico \ref{fig:hex_unique_plot2} 
 rappresentano le versioni malevole.
 
-Come discusso nel capitolo metriche, ho scelto di considerare questa metrica 
+Come discusso nel capitolo metriche, ho scelto di considerare il numero di valori esadecimali unici come metrica 
 perchè esistono attacchi che fanno uso di tecniche di offuscamento,
 e secondo [Moog] la tecnica più comunemente usata 
 è quella della sostituzione di variabili e nomi di funzioni con identificatori esadecimali randomici.
@@ -334,10 +334,10 @@ Il funzionamento dei 4 attacchi presi in analisi sono spiegati in dettaglio nel 
     
     \item \textbf{Shai-Hulud 1.0 (3rd attack):}   
         Nel terzo attacco, l'attaccante ha introdotto un file malevolo in chiaro, chiamato bundle.js;
-        e pertanto il numero di valori esadecimali unici non è aumentato in modo significativo.
+        pertanto il numero di valori esadecimali unici non è aumentato in modo significativo.
         
         Dal grafico \ref{fig:hex_unique_plot2} si può vedere che
-        il numero di valori esadecimali delle versioni malevole, le croci rosse sulle linee colorate continue; 
+        il numero di valori esadecimali delle versioni malevole, le croci rosse sulle linee colorate continue, 
         rimangono dentro gli intervalli di confidenza.
         
         Dunque, la metrica non è indicativa per rilevare questo attacco,
@@ -348,7 +348,7 @@ Il funzionamento dei 4 attacchi presi in analisi sono spiegati in dettaglio nel 
         l'attaccante introduce un file malevolo offuscato, chiamato setup\_bun.js.
 
         Come si può notare nel grafico \ref{fig:hex_unique_plot2},
-        i pacchetti con la versione compromessa, le linee colorate puntinate,
+        i pacchetti con la versione compromessa, ovvero le croci rosse sulle linee colorate puntinate,
         hanno un numero di valori esadecimali unici che schizza fino ad arrivare a 122535; 
         superando di gran lunga i valori massimi outlier.
 
