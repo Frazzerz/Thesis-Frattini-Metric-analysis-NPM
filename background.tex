@@ -1,41 +1,160 @@
 \chapter{Background}
 \label{ch:background}
 
+In this chapter, I provide the fundamental information 
+regarding the objects considered for the subsequent analyses presented in this thesis: tarballs.
+
+An \ac{NPM} tarball, according to the official \ac{NPM} documentation \cite{npmdocs2026npmdocumentation}, 
+is a compressed archive with a .tgz extension, 
+containing all the files needed to install an \ac{NPM} package.
+
+
+Although the tarball and the source repository of an \ac{NPM} package are related concepts, they are distinct.
+In fact, the source repository represents the development process, while the \ac{NPM} tarball represents the distributed product.
+
+To ensure a fair and symmetrical comparison, it is necessary to analyze the same type of artifact,
+as source repositories and published tarballs can differ significantly in the files they include.
+
+According to the official \ac{NPM} documentation \cite{npmdocs2026npmdocumentation},
+and as confirmed by the analysis I conducted in \nameref{ch:analysis},
+an \ac{NPM} tarball generally contains the following categories of files:
+
+\begin{itemize}
+    \item \textbf{package.json:}
+    It is mandatory to have this file present inside the tarball.
+    Publishing a package requires that the \texttt{package.\allowbreak json} file must at least specify the fields for the package name and its version.
+    Other common optional fields are the description, license, repository URL, any dependencies
+    from other packages, and more.
+    Indeed, it is not necessary for an \ac{NPM} package to declare a link to a public repository.
+
+
+    \item \textbf{Code files:}
+    The tarball generally includes JavaScript and/or TypeScript code files.
+    The code is distributed and included directly in the tarball itself, for reasons of transparency, inspectability, and debugging.
+    However, as \textcite{10.5555/3361338.3361407} highlights,
+    there is no guarantee that the code present in the \ac{NPM} tarball is equivalent to the one in the public version control system (e.g. GitHub).
+    
+    Furthermore, the code can be manually altered after its 
+    publication, for example by an attacker injecting malicious code;
+    and the user cannot verify this with certainty.
+    The presence and structure of these files vary by package, as the standard is not rigid.
+
+    Rarely, some packages may not have any JavaScript or TypeScript code files at all, 
+    and this depends on the purpose of the package.
+    For example, there are packages whose resource and utility lie solely in the data inside \texttt{.json} files.
+    Notable examples include \texttt{node-\allowbreak releases}, which offers a list of Node.js release versions, 
+    and \texttt{spdx-\allowbreak license-\allowbreak ids}, which provides the official list of \ac{SPDX} licenses. 
+    Developers use these packages as dependencies to get the current data without hard-coding it manually.
+
+    Alternatively, some packages may have no code at all because they are deprecated and maintained solely as placeholders, 
+    like recently \texttt{@types/\allowbreak uuid} package.
+
+
+    \item \textbf{Metadata:}
+    Frequently, documentation files, 
+    such as Markdown files like \texttt{README.md} and \texttt{CHANGELOG.md}, and the \texttt{LICENSE} text file 
+    used to specify copyright; are included inside the tarball.
+
+    \item \textbf{Build files/artifacts:}
+    Spesso, all'interno del tarball npm, si trovano file che non sono scritti direttamente dagli sviluppatori, 
+    ma vengono generati tramite un processo di build o compilazione a partire dal codice sorgente originale.
+
+    Questi artefatti permettono agli utenti di integrare e utilizzare i pacchetti nei propri progetti senza 
+    dover replicare il processo di build originale, che potrebbe richiedere configurazioni complesse di tool come Webpack, Rollup o TypeScript. 
+    Ciò garantisce che le funzionalità del pacchetto siano immediatamente fruibili in tutti gli ambienti di 
+    destinazione, come in Node.js, browser, ecc.
+
+    In alcuni casi, per ridurre le dimensioni del pacchetto, 
+    gli sviluppatori possono scegliere di escludere completamente il codice sorgente, e includere solo i file compilati,
+    come nel package @babel/parser dalla versione 8.0.0-beta.2 alla versione 8.0.0-beta.3.
+    Qui inoltre si può vedere che questi artifacts are not necessarily \texttt{.js} files, ma 
+    they can also be source maps (\texttt{.map}) or declaration files (\texttt{.d.ts}).
+
+    Non tutti i pacchetti su npm contengono artefatti di build; infatti, 
+    se il codice è scritto in JavaScript conforme agli standard supportati (ECMAScript) 
+    e non utilizza linguaggi che richiedono traspilazione (come TypeScript), 
+    può essere distribuito direttamente nella sua forma originale.
+
+    These artifacts possono variare da pacchetto a pacchetto e tra versioni diverse dello stesso pacchetto.
+    Ad esempio possono diventare più ottimizzati tra una versione e l'altra; for example, moving from multi-line files with spaces and comments
+    to a single line with no comments and minimal whitespace; as in the case of the \texttt{svgo} package for the file \texttt{dist/svgo.browser.js}
+    from version 3.3.1 to 3.3.2.
+    Oppure rimanere uguale, ad esempio the \texttt{css-tree} package for the file \texttt{dist/csstree.js} che sta su più righe. 
+    
+    Inoltre, as shown by \textcite{9240695}, even if the source code remains the same, the build files, and 
+    consequently the final tarball, may differ due to non-deterministic factors in the build process.
+
+    Since the \ac{NPM} ecosystem is permissive, there is no universal way to distinguish if a file was built or hand-written simply by looking 
+    at the directory or the metadata in \texttt{package.json}. 
+    As highlighted by \textcite{9240695}, common conventions suggest that folders such as \texttt{dist/}, \texttt{build/} or \texttt{lib/} contain artifacts, 
+    but this division is not guaranteed or verifiable a priori, because it depends on the developer's choices.
+    
+    In fact, in Chapter \ref{ch:analysis}, we will see that generated artifacts can reside in other folders; 
+    for example the \texttt{css-what} package contains the generated \texttt{out.json} file in \texttt{src/( \_\_fixtures\_\_/)}.
+    Additionally, there are cases where a hand-written files reside in \texttt{dist/} or \texttt{build/}, 
+    such as the \texttt{helper\allowbreak .d.ts} file for the \texttt{domutils} package, which is located in the \texttt{lib/} directory;
+    or the \texttt{lib/\allowbreak index\allowbreak .d.ts} file for the \texttt{@babel/\allowbreak parser} package from version 8.0.0-beta.2 to 8.0.0-beta.3.
+    
+    Hence, I decided not to exclude any folders based on their name, avoiding the risk of overlooking relevant files.
+    
+
+\end{itemize}
+
+As can be observed better in \nameref{ch:analysis}, other files can be found in tarballs.
+
+The \texttt{html} files, after careful analysis,
+represent mainly test files, code coverage reports, and demos, such in the \texttt{jwt-decode} package;
+or presentation pages of the package, documentation, and licenses, such in the \texttt{sax} and \texttt{pino} packages.
+
+Instead, the \texttt{css} files are either used as test fixtures (e.g., example data for testing), 
+as in the case of the \texttt{convert-source-map} package;
+or simply as styles for HTML-based tests and demos, as in the \texttt{loglevel} package.
+
+However, in modern packaging practices,
+non essential assets are often removed to keep the final product as lightweight as possible.
+
+Moreover, like build artifacts, these files are not always located in specific directories,
+and it is not possible to determine with certainty if a file is test file or not.
+
+
+
+
+\begin{comment}
 Third-party packages play a crucial role in modern software
 development by reducing implementation effort and providing reusable functionalities 
 that would otherwise be timeconsuming to develop from scratch \cite{unknown}.
 
-To support JavaScript developers in the reuse of third-party code, the \acp{NPM} provides
+To support JavaScript developers in the reuse of third-party code, the \ac{NPM} provides
 hundreds of thousands of free and reusable code software packages.
-The \acp{NPM} platform consists of an online registry for searching 
+The \ac{NPM} platform consists of an online registry for searching 
 packages suitable for given tasks, and a package manager
 that automatically resolves and installs dependencies, 
 simplify the integration of these packages into projects \cite{10.5555/3361338.3361407}.
-By design, The \acp{NPM} ecosystem is open, allowing any user to freely publish.
+By design, The \ac{NPM} ecosystem is open, allowing any user to freely publish.
 
-This openness has been a key factor in the rapid growth and success of \acp{NPM},
+This openness has been a key factor in the rapid growth and success of \ac{NPM},
 but it also introduces significant security risks.
-In particular, the widespread use of third-party dependencies makes \acp{NPM}
+In particular, the widespread use of third-party dependencies makes \ac{NPM}
 a central component of the JavaScript software supply chain.
 
-The software Supply Chain \acp{SSC} refers to the set of processes to select and obtain software components
+The software Supply Chain \ac{SSC} refers to the set of processes to select and obtain software components
 from third parties; it also comprehends the companies involved in these processes \cite{gokkaya2023softwaresupplychainreview}.
 
-Modern software systems heavily rely on \acp{SSCs}, often incorporating a large number of direct
+Modern software systems heavily rely on \ac{SSC}, often incorporating a large number of direct
 and transitive dependencies.
-Within this context, the \acp{NPM} ecosystem exemplifies how supply chain dependencies
+Within this context, the \ac{NPM} ecosystem exemplifies how supply chain dependencies
 can amplify the impact of security incidents.
 
 Highly popular packages can directly or indirectly influence
 many other projects, sometimes exceeding 100,000 dependent packages \cite{10.5555/3361338.3361407}.
-Moreover, installing an average \acp{NPM} package implicitly introduces
+Moreover, installing an average \ac{NPM} package implicitly introduces
 trust on 79 third-party packages and 39 maintainers \cite{10.5555/3361338.3361407}.
 
-As a consequence, the \acp{NPM} ecosystem has become a prominent target for
+As a consequence, the \ac{NPM} ecosystem has become a prominent target for
 Software Supply Chain attacks \acp{SCCA}, characterized by the injection of malicious code
 into legitimate packages update, in order to compromise
 dependent systems further down the chain \cite{ohm2020backstabbersknifecollectionreview}.
-
+\end{comment}
 
 \begin{comment}
 
