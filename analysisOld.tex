@@ -1,152 +1,9 @@
-\chapter{Metrics Analysis}
-\label{ch:metricsAnalysis}
-\setcounter{section}{-1} % Imposta il contatore a -1 così la prossima sezione sarà 0
+\chapter{Analysis}
+\label{ch:analysis}
 
-\begin{comment}
-In this chapter, we evaluate the effectiveness of the metrics in \cref{ch:metrics}
-in detecting the malicious versions of the packages of the four attacks considered in \cref{sec:malwareDataset}.
+\section{Heatmap of file types in tarballs}
+\label{sec:realWorldAnalysisFileTypes}
 
-To validate each metric, we follow a three-step analysis:
-\begin{enumerate}
-    \item An analysis of the metric's behavior considering the real-world NPM package dataset \cref{sec:goodwareDataset},
-    \item An investigation of the anomalous values found therein,
-    \item A comparison between the real-world package dataset and the malicious package dataset \cref{sec:malwareDataset}.
-\end{enumerate}
-
-
-As mentioned in \cref{ch:metrics}, these metrics were defined based on the main characteristics
-of one or more of the four attacks.
-Therefore, we do not expect every metric to detect all four attacks.
-Rather, we expect each metric to detect the specific attack or attacks for which it was defined.
-\end{comment}
-
-\section{Preface to the analysis}
-\label{sec:prefaceAnalysis}
-
-\subsection{Goodware Dataset Scenario}
-
-Come descritto in x, 
-tra i 1000 pacchetti più scaricati da NPM, sono stati considerati solo quelli che hanno almeno 20 versioni disponibili,
-ovvero 629 pacchetti.
-
-Come descritto nei paragrafi di analisi, tutti i pacchetti non significativi per tale metrica, 
-verranno esclusi dai successivi grafici di analisi.
-
-\subsection{Outlier Analysis}
-
-Escludendo la prima metrica, di cui si parlerà nel capitolo x;
-per tutte le altre metriche, i grafici si leggono in questo modo.
-
-I grafici di analisi illustrano 
-l'andamento nelle 20 versioni
-della metrica presa in analisi.
-
-
-L'asse delle ascisse riporta le versioni dei pacchetti dalla meno recente (-19) all'ultima disponibile (0), mentre 
-l'asse delle ordinate rappresenta il numero delle occorrenze della metrica.
-
-Per meglio rappresentare la popolazione eterogenea dei valori delle ordinate, viene adottata la scala logaritmica.
-
-
-Le altezze delle barre nere verticali rappresentano gli intervalli di confidenza, 
-ovvero gli intervalli in cui risiedono il 95\% della popolazione dei pacchetti per una determinata versione.
-I pacchetti che si posizionano all'interno di uno di questi intervalli
-hanno un numero di valori compreso 
-tra il valore minimo (0) e il 95° percentile della popolazione per quella versione.
-
-I pallini grigi invece rappresentano i valori outlier,
-ovvero il restante 5\% della popolazione che si posiziona al di fuori dell'intervallo di confidenza.
-Un pacchetto assume valori outlier per una versione quando il numero di valori in quella versione supera il valore del 95° percentile
-di quell'intervallo di confidenza.
-
-
-Per ogni metrica il grafico sopra descritto vengono riportati 2 grafici distinti.
-Il primo illusta l'andamento nelle 20 versioni
-della metrica presa in analisi del dataset goodware, definito nel capitolo x;
-il secondo mostra l'andamento nelle 20 versioni
-della metrica presa in analisi confrontando il dataset goodware con il dataset Malware, 
-definito nel capitolo x.
-
-Eccezzioni: nell'ambito di ogni metrica sono stati eventualmente evidenziati pacchetti con valori 
-fuori scala, ossia un numero di occorrenze tale da 
-essere per più o tutte le versioni un outlier o il limite superiore di un intervallo di confidenza.
-
-
-Questi pacchetti, e i loro relativi valori outlier, hanno 
-un comportamento atipico rispetto alla maggior parte della popolazione,
-motivo per cui sono stati evidenziati nel primo grafico di ciascuna metrica con linee colorate
-e successivamente analizzati singolarmente
-per comprenderne la natura e le motivazioni che hanno portato a questi valori esadecimali unici così elevati.
-
-
-
-Nel primo grafico di ogni metrica è stata indicata con linea tratteggiata in rosso la mediana
-calcolata sui pacchetti del dataset Goodware.
-
-A differenza della media, la mediana non è influenzata dai valori outlier e  
-non distorce quindi il reale comportamento della metrica.
-
-E' stata inserita la mediana per evidenziare questa forte assimmetria tra i pacchetti,
-in quanto esistono pacchetti con un numero di valori bassi, e
-pacchetti con un numero di valori che superano di diversi ordini di grandezza
-quelli della maggior parte della popolazione.
-Tali comportamenti veranno analizzati singolarmente per ciascuna metrica.
-
-
-\subsection{Comparison Malware dataset vs. Goodware dataset and Results for each 4 attacks}
-
-Una volta compresa la natura di questi valori outlier, 
-viene riportato il secondo grafico per ciascuna metrica,
-per verificare se le versioni malevole dei pacchetti, relative ai 4 specifici attacchi considerati
-nel capitolo x, siano individuabili con tale metrica.
-
-Le versioni malevole, affinchè siano individuabili, devono 
-posizionarsi tra i valori outlier, ovvero superare 
-il valore del 95° percentile dell'intervallo di confidenza per quella versione.
-
-Se invece, le versioni malevole assumono un numero di 
-occorrenze tale da posizionarsi dentro agli
-intervalli di confidenza, ovvero tra il valore minimo e il valore del 95° percentile;
-la metrica non sarà indicativa per rilevarle,
-in quanto risulterebbero indistinguibili da quelle legittime.
-
-
-Il secondo grafico mantiene gli stessi intervalli di confidenza 
-e outlier del primo grafico, 
-calcolati sempre sugli stessi pacchetti del dataset goodware, nelle 20 versioni.
-
-Non sono più presenti né le linee colorate che rappresentano i pacchetti evidenziati precedentemente,
-né la mediana, in quanto non più necessari per lo scopo di questo grafico.
-
-Nel secondo grafico, le linee colorate con diverse tipologie di tratteggio
-rappresentano i pacchetti del dataset Malware, ossia i pacchetti 
-compromessi da uno dei 4 specifici attacchi,
-descritti nel capitolo x.
-Le croci rosse del secondo grafico rappresentano le versioni malevole.
-
-\newpage
-
-\section{Analysis Metric 1: File Types}
-\label{sec:analysisFileTypes}
-
-\subsection{Goodware Dataset Scenario}
-\label{sec:goodwareFileTypes}
-
-
-\subsection{Outlier Analysis}
-\label{sec:outlierFileTypes}
-
-
-
-\subsection{Comparison Malware dataset vs. Goodware dataset and Results for each 4 attacks}
-
-
-
-
-\newpage
-
-\begin{comment}
-% ------------------------- QUESTO E' DA DECOMMENTARE
 Rarely, some packages may not have any JavaScript or TypeScript code files at all, 
 and this depends on the purpose of the package.
 For example, there are packages whose resource and utility lie solely in the data inside \texttt{.json} files.
@@ -174,7 +31,6 @@ non essential assets are often removed to keep the final product as lightweight 
 
 Moreover, like build artifacts, these files are not always located in specific directories,
 and it is not possible to determine with certainty if a file is test file or not.
-\end{comment}
 
 
 \begin{comment}
@@ -195,49 +51,10 @@ Keeping with the trend of modern packaging, the final product is made as relaxed
 
 
 
-% ------------------------------------------
-\section{Analysis Metric 2: Package Size}
 
-\subsection{Goodware Dataset Scenario}
+\section{Real-world packages analysis for the unique hexadecimal values (no duplicates) metric}
+\label{sec:realWorldAnalysisHexUnique}
 
-
-\subsection{Outlier Analysis}
-
-
-
-\subsection{Comparison Malware dataset vs. Goodware dataset and Results for each 4 attacks}
-
-\newpage
-
-
-
-% ------------------------------------------
-\section{Analysis Metric 3: Unique Hexadecimal values (no duplicate values)}
-
-\subsection{Goodware Dataset Scenario}
-
-In questo capitolo si analizza
-l'andamento nelle 20 versioni
-della metrica relativa al numero di valori esadecimali unici, 
-ovvero non considerando valori duplicati,
-presenti nei file plain text dei pacchetti, come definito nel capitolo metrica x.
-
-
-Nel grafico \ref{fig:hex_unique_plot1} sono stati esclusi dai 629 pacchetti del dataset Goodware
-i 522 pacchetti che non hanno avuto alcun valore esadecimale positivo in nessuna delle 20 versioni
-e pertanto nessun valore anomalo da analizzare.
-
-I 107 pacchetti restanti, considerati nel grafico \ref{fig:hex_unique_plot1}, sono quindi 
-quelli che hanno avuto almeno un valore esadecimale positivo in almeno una delle 20 versioni.
-
-%Ti segnalo anche che nella tesi ti dovrai riferire ai grafici come “figure”. E già che ci siamo: “a figure” 
-%generica in minuscolo, mentre “Figura x.y” in maiuscolo perché è proprio una precisa. 
-
-\subsection{Outlier Analysis}
-
-
-\begingroup % Inizia un gruppo per confinare il cambiamento
-\renewcommand{\thefigure}{7.3.b} % Sostituisci x.y con il numero che desideri
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{imgs/hex_unique_plot1.pdf}
@@ -245,32 +62,72 @@ quelli che hanno avuto almeno un valore esadecimale positivo in almeno una delle
     \label{fig:hex_unique_plot1}
 \end{figure}
 %``unique hexadecimal values (no duplicates)'' metric
-\endgroup % Chiude il gruppo: la prossima figura tornerà alla numerazione automatica
 
 
-Con riferimento alle definizioni di cui al capitolo \ref{sec:prefazioneAnalisi}:
+Il grafico \ref{fig:hex_unique_plot1} illustra 
+l'andamento nelle 20 versioni
+della metrica relativa al numero di valori esadecimali unici, 
+ovvero non considerando valori duplicati,
+presenti nei file plain text dei pacchetti NPM del mondo reale.
 
-Nell'ambito dei 107 pacchetti, 
-sono stati evidenziati 10 pacchetti che presentano caratteristiche interessanti, 
-evidenziate con linee colorate.
-I restanti pacchetti sono dentro agli intervalli di confidenza, e pertanto poco significati per 
-l'analisi di questo scenario.
+Come descritto nel sottocapitolo cleanup; 
+tra i 1000 pacchetti più scaricati da NPM, sono stati considerati solo quelli che hanno almeno 20 versioni disponibili,
+ovvero 629 pacchetti.
+
+Nel grafico \ref{fig:hex_unique_plot1} sono stati esclusi 
+i 522 pacchetti che non hanno avuto alcun valore esadecimale positivo in nessuna delle 20 versioni
+e pertanto nessun valore anomalo da analizzare.
+
+I 107 pacchetti restanti, considerati nel grafico \ref{fig:hex_unique_plot1}, sono quindi 
+quelli che hanno avuto almeno un valore esadecimale positivo in almeno una delle 20 versioni.
+
+L'asse delle ascisse riporta le versioni dei pacchetti dalla meno recente (-19) all'ultima disponibile (0), mentre 
+l'asse delle ordinate rappresenta il numero di valori esadecimali in scala logaritmica.
+
+Le altezze delle barre nere verticali rappresentano gli intervalli di confidenza, 
+ovvero gli intervalli in cui risiedono il 95\% della popolazione (dei 107 pacchetti) per una determinata versione.
+I pacchetti che si posizionano all'interno di uno di questi intervalli
+hanno un numero di valori esadecimali compreso 
+tra il valore minimo (0) e il 95° percentile della popolazione per quella versione.
+
+I pallini grigi invece rappresentano i valori outlier,
+ovvero il restante 5\% della popolazione che si posiziona al di fuori dell'intervallo di confidenza.
+Un pacchetto assume valori outlier per una versione quando il numero di valori esadecimali unici in quella versione supera il valore del 95° percentile
+di quell'intervallo di confidenza.
 
 
-Questi 10 pacchetti hanno un numero di valori esadecimali unici tale da 
-essere per più o tutte le versioni un outlier o il limite superiore di un intervallo di confidenza,
-la loro singola analisi viene riportata nel seguito.
+Nell'ambito dei 107 pacchetti considerati, 
+ho evidenziato individualmente con 
+delle linee colorate nel grafico \ref{fig:hex_unique_plot1}
+10 pacchetti che presentano caratteristiche interessanti.
+Questi hanno un numero di valori esadecimali unici tale da 
+essere per più o tutte le versioni un outlier o il limite superiore di un intervallo di confidenza.
 
 
-Nel grafico \ref{fig:hex_unique_plot1} la mediana è
+Questi pacchetti, e i loro relativi valori outlier, hanno 
+un comportamento atipico rispetto alla maggior parte della popolazione,
+motivo per cui sono stati evidenziati e successivamente analizzati singolarmente,
+per comprenderne la natura e le motivazioni che hanno portato a questi valori esadecimali unici così elevati.
+
+
+Ho evidenziato anche i pacchetti che rappresentano il limite superiore degli intervalli di confidenza 
+per comprendere meglio il motivo per cui nel corso delle versioni l'altezza dell'intervallo di confidenza cambia.
+
+
+Nel grafico \ref{fig:hex_unique_plot1} è presente la mediana
 calcolata sui 107 pacchetti analizzati e rappresentata dalla linea tratteggiata in rosso. 
 In ogni versione rimane costante a 1, indicando che almeno il 50\% della popolazione analizzata ha al massimo un unico valore esadecimale.
 
+A differenza della media, la mediana non è influenzata dai valori outlier e  
+non distorce quindi il reale comportamento della metrica.
 
 E' stata inserita la mediana per evidenziare questa forte assimmetria tra i pacchetti,
 in quanto esistono pacchetti con un numero di valori esadecimali unici basso, e
 pacchetti con un numero di valori esadecimali unici che superano di diversi ordini di grandezza
 quelli della maggior parte della popolazione; per vari motivi che discuteremo dopo.
+
+
+Per gestire questa popolazione eterogenea ho deciso di adottare la scala logaritmica.
 
 
 L'obiettivo principale quindi è studiare la natura dei pacchetti che assumono valori esadecimali outlier.
@@ -463,23 +320,45 @@ un outlier in tutte le versioni, con un numero di valori esadecimali unici di 60
     \end{itemize}
 \end{itemize}
 
+\section{Real-world packages analysis for the unique hexadecimal values (no duplicates) metric with malicious packages versions}\label{sec:realWorldAnalysisHexUniqueMalicious}
 
 
-\subsection{Comparison Malware dataset vs. Goodware dataset and Results for each 4 attacks}
-
-
-
-\begingroup % Inizia un gruppo per confinare il cambiamento
-\renewcommand{\thefigure}{7.3.c} % Sostituisci x.y con il numero che desideri
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{imgs/hex_unique_plot2.pdf}
     \caption{Packages analysis for the unique hexadecimal values (no duplicates) metric with malicious packages versions}
     \label{fig:hex_unique_plot2}
 \end{figure}
-\endgroup % Chiude il gruppo: la prossima figura tornerà alla numerazione automatica
 
 
+Una volta compresa la natura di questi valori outlier, 
+ho realizzato un secondo grafico \ref{fig:hex_unique_plot2}
+per verificare se le versioni malevole dei pacchetti, relative ai 4 specifici attacchi considerati
+nel capitolo relativo al threat modeling, fossero individuabili tramite il numero di valori esadecimali unici.
+
+Le versioni malevole, affinchè siano individuabili, devono 
+posizionarsi tra i valori outlier, ovvero superare 
+il valore del 95° percentile dell'intervallo di confidenza per quella versione.
+
+Se invece, le versioni malevole assumono un numero di 
+valori esadecimali unici tale da posizionarsi dentro agli
+intervalli di confidenza, ovvero tra il valore minimo (0) e il valore del 95° percentile;
+la metrica non sarà indicativa per rilevarle,
+in quanto risulterebbero indistinguibili da quelle legittime.
+
+
+Il grafico \ref{fig:hex_unique_plot2} mantiene gli stessi intervalli di confidenza 
+e outlier spiegati precedentemente e presenti nel grafico \ref{fig:hex_unique_plot1}; 
+calcolati sempre sui 107 pacchetti che hanno avuto almeno un valore esadecimale positivo in almeno una delle 20 versioni.
+
+Non sono più presenti né le linee colorate che rappresentano i pacchetti evidenziati precedentemente,
+né la mediana, in quanto non più necessari per lo scopo di questo grafico \ref{fig:hex_unique_plot2}.
+
+Nel grafico \ref{fig:hex_unique_plot2}, le linee colorate con diverse tipologie di tratteggio
+rappresentano i 20 pacchetti compromessi considerati, ognuno riconducibile a uno dei 4 specifici attacchi presi in analisi,
+descritti in dettaglio nel capitolo threat modeling.
+Le croci rosse nel grafico \ref{fig:hex_unique_plot2} 
+rappresentano le versioni malevole.
 
 Come discusso nel capitolo metriche, ho scelto di considerare il numero di valori esadecimali unici come metrica 
 perchè esistono attacchi che fanno uso di tecniche di offuscamento,
@@ -541,59 +420,6 @@ essere valori outlier.
 Al contrario, la metrica non è indicativa per rilevare l'attacco Malicious Windows DLL (1st attack) e l'attacco Shai-Hulud 1.0 (3rd attack),
 in quanto in entrambi i casi, le versioni malevole hanno un numero di valori esadecimali unici tale da posizionarsi dentro agli intervalli di confidenza,
 rendendo le versioni malevole indistinguibili dalle versioni legittime.
-
-
-\newpage
-
-
-
-% ------------------------------------------
-\section{Analysis Metric 4: Unique Sensitive keywords (no duplicate values)}
-
-\subsection{Goodware Dataset Scenario}
-
-
-\subsection{Outlier Analysis}
-
-
-
-\subsection{Comparison Malware dataset vs. Goodware dataset and Results for each 4 attacks}
-
-\newpage
-
-% ------------------------------------------
-\section{Analysis Metric 5: Unique Cryptocurrency addresses (no duplicate values)}
-
-\subsection{Goodware Dataset Scenario}
-
-
-\subsection{Outlier Analysis}
-
-
-\subsection{Comparison Malware dataset vs. Goodware dataset and Results for each 4 attacks}
-
-\newpage
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 \begin{comment}
