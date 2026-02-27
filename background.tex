@@ -1,180 +1,126 @@
 \chapter{Background}
 \label{ch:background}
 
-In this chapter, I provide the fundamental information 
-regarding the objects considered for the subsequent analyses presented in this thesis: tarballs.
-
-An \ac{NPM} tarball, according to the official \ac{NPM} documentation \cite{npmdocs2026npmdocumentation}, 
-is a compressed archive with a .tgz extension, 
-containing all the files needed to install an \ac{NPM} package.
+In this chapter, I provide the fundamental information regarding the \ac{SSC}, \ac{SCCA}, the \ac{NPM} ecosystem and the tarballs.
 
 
-Although the tarball and the source repository of an \ac{NPM} package are related concepts, they are distinct.
-In fact, the source repository represents the development process, while the \ac{NPM} tarball represents the distributed product.
+\section{Software Supply Chain and NPM Ecosystem}
+\label{sec:SSCandNPM}
 
-To ensure a fair and symmetrical comparison, it is necessary to analyze the same type of artifact,
-as source repositories and published tarballs can differ significantly in the files they include.
+Developers tend to use ready-made software components in their projects 
+for common functionalities (such as date parsing, HTTP request handling, or \ac{UI}), 
+rather than implementing them from scratch.
 
-According to the official \ac{NPM} documentation \cite{npmdocs2026npmdocumentation},
-and as confirmed by the analysis I conducted in \nameref{ch:analysis},
-an \ac{NPM} tarball generally contains the following categories of files:
+These software components are called dependencies, 
+and these dependencies in turn can depend on other components, 
+thus constituting the \ac{SSC} \cite{ohm2023sok}.
+
+These components or packages are distributed in Open Source Package Repositories such as \ac{PyPI}, \ac{NPM}, and RubyGems.
+
+These repositories are often used to carry out attacks on the \ac{SSC},
+as they are open and decentralized systems where anyone can freely publish a package \cite{ohm2020backstabbersknifecollectionreview}. 
+An attacker may inject malicious code into a legitimate package update, in order to compromise 
+in this way all projects and packages that depend on it.
+
+Several attack vectors are possible \cite{duan2020measuringsupplychainattacks},
+such as Account Compromise, which refers to compromising accounts of Package Maintainers 
+(those who develop and manage the packages) on the registry portal (like \ac{NPM}), allowing
+the attacker to release malicious versions.
+
+In \ac{SCCA} the victims are developers and users.
+Developers can be exploited 
+directly to steal their credentials or damage their infrastructure,
+and indirectly as a channel to reach users through their applications 
+or services. Users can be exploited to steal their credentials or damage their devices.
+
+All the information regarding \ac{NPM} reported below has been taken from the official documentation \cite{npmdocs2026npmdocumentation}.
+
+For the JavaScript and Node.js ecosystem, \ac{NPM} is one of the largest and most active Open source package repositories, 
+with over two million packages available \cite{9505063}.
+
+The public \ac{NPM} registry is a database of JavaScript packages, where developers 
+can share and download packages. % https://docs.npmjs.com/about-the-public-npm-registry
+
+A package is a folder containing various files
+that can be borrowed for use in own projects.
+% https://docs.npmjs.com/cli/v11/commands/npm-install
+% https://docs.npmjs.com/about-npm
+
+To resolve packages by name and version, \ac{NPM} communicates with the public registry
+(configured by default \href{https://registry.npmjs.org}{here}), from 
+which allows users to retrieve any version of a package currently available in the registry. % https://docs.npmjs.com/cli/v11/using-npm/registry
+
+A \ac{NPM} tarball is a gzipped package, which is 
+the format used when when packages are uploaded to a registry.
+Instead, a Git URL refers to a package in a Git repository. 
+% https://docs.npmjs.com/cli/v11/using-npm/package-spec
+% https://docs.npmjs.com/cli/v11/commands/npm-install
+
+The content of the tarball may differ from the content of the Git repository, even though both represent the same package.
+%https://docs.npmjs.com/cli/v11/commands/npm-publish
+%https://docs.npmjs.com/cli/v11/configuring-npm/package-json
+
+In fact, through the optional "files" field of package.json, 
+it is possible to include only the specified files, or exclude them if the .npmignore file is present.
+
+Therefore, to ensure a fair and symmetrical comparison, it is necessary to analyze the same type of artifact.
+
+
+
+\section{Tarball content}
+\label{sec:tarballContent}
+
+A tarball can contain any type of file, however, 
+the following types of files are typically found within it \cite{pinckney2023largescaleanalysissemantic}.
 
 \begin{itemize}
-    \item \textbf{package.json:}
-    It is mandatory to have this file present inside the tarball.
-    Publishing a package requires that the \texttt{package.\allowbreak json} file must at least specify the fields for the package name and its version.
-    Other common optional fields are the description, license, repository URL, any dependencies
-    from other packages, and more.
-    Indeed, it is not necessary for an \ac{NPM} package to declare a link to a public repository.
-
-
-    \item \textbf{Code files:}
-    The tarball generally includes JavaScript and/or TypeScript code files.
-    The code is distributed and included directly in the tarball itself, for reasons of transparency, inspectability, and debugging.
-    However, as \textcite{10.5555/3361338.3361407} highlights,
-    there is no guarantee that the code present in the \ac{NPM} tarball is equivalent to the one in the public version control system (e.g. GitHub).
+    \item \textbf{Configuration files and Metadata:}
     
-    Furthermore, the code can be manually altered after its 
-    publication, for example by an attacker injecting malicious code;
-    and the user cannot verify this with certainty.
-    The presence and structure of these files vary by package, as the standard is not rigid.
+    The package.json file describes the package's file or directory, 
+    and a package must contain a package.json file in order to be published to the \ac{NPM} registry.
+    %https://docs.npmjs.com/about-packages-and-modules
+    
+    In package.json, the name and version fields are required, and together they form an identifier that is assumed to be completely unique.
+    %https://docs.npmjs.com/cli/v11/configuring-npm/package-json
 
-    Rarely, some packages may not have any JavaScript or TypeScript code files at all, 
-    and this depends on the purpose of the package.
-    For example, there are packages whose resource and utility lie solely in the data inside \texttt{.json} files.
-    Notable examples include \texttt{node-\allowbreak releases}, which offers a list of Node.js release versions, 
-    and \texttt{spdx-\allowbreak license-\allowbreak ids}, which provides the official list of \ac{SPDX} licenses. 
-    Developers use these packages as dependencies to get the current data without hard-coding it manually.
+    Once a package is published with a given name and version, that specific combination can 
+    never be used again, even if it is removed with \texttt{npm unpublish}.
+    This is the reason why it is impossible to overwrite malicious versions once they have been released.
 
-    Alternatively, some packages may have no code at all because they are deprecated and maintained solely as placeholders, 
-    like recently \texttt{@types/\allowbreak uuid} package.
+    Other common optional fields include the description, license, repository and dependencies
+    on other packages.
+    It is important to note that specifying a reference (a link) 
+    to a GitHub repository for a package is optional.
 
+    \textcite{duan2020measuringsupplychainattacks} highlight that this lack of mandatory 
+    link represents a significant security gap because it prevents registries from verifying 
+    that the distributed package actually matches its public source code, allowing attackers to inject malicious 
+    code during the publication phase without detection.
+    
+    \item \textbf{Documentation and general information:}
 
-    \item \textbf{Metadata:}
     Frequently, documentation files, 
-    such as Markdown files like \texttt{README.md} and \texttt{CHANGELOG.md}, and the \texttt{LICENSE} text file 
-    used to specify copyright; are included inside the tarball.
+    such as Markdown files like README.md and CHANGELOG.md, and the LICENSE text file 
+    used to specify copyright, are included inside the tarball.
 
-    \item \textbf{Build files/artifacts:}
-    Spesso, all'interno del tarball npm, si trovano file che non sono scritti direttamente dagli sviluppatori, 
-    ma vengono generati tramite un processo di build o compilazione a partire dal codice sorgente originale.
+    \item \textbf{Code files and Build Artifacts:}
+    The tarball generally includes JavaScript and/or TypeScript code files, 
+    which constitute the functional logic of the package.
 
-    Questi artefatti permettono agli utenti di integrare e utilizzare i pacchetti nei propri progetti senza 
-    dover replicare il processo di build originale, che potrebbe richiedere configurazioni complesse di tool come Webpack, Rollup o TypeScript. 
-    Ciò garantisce che le funzionalità del pacchetto siano immediatamente fruibili in tutti gli ambienti di 
-    destinazione, come in Node.js, browser, ecc.
+    Build artifacts are often found within the tarball \cite{9240695}.
+    These files are the final product of the transformation and compilation process of a package's source code.
+    They are optimized versions of the original code automatically generated, rather than written directly by developers.
 
-    In alcuni casi, per ridurre le dimensioni del pacchetto, 
-    gli sviluppatori possono scegliere di escludere completamente il codice sorgente, e includere solo i file compilati,
-    come nel package @babel/parser dalla versione 8.0.0-beta.2 alla versione 8.0.0-beta.3.
-    Qui inoltre si può vedere che questi artifacts are not necessarily \texttt{.js} files, ma 
-    they can also be source maps (\texttt{.map}) or declaration files (\texttt{.d.ts}).
+    Through processes such as minification, these artifacts reduce the size of the files
+    and improving application performance.
 
-    Non tutti i pacchetti su npm contengono artefatti di build; infatti, 
-    se il codice è scritto in JavaScript conforme agli standard supportati (ECMAScript) 
-    e non utilizza linguaggi che richiedono traspilazione (come TypeScript), 
-    può essere distribuito direttamente nella sua forma originale.
+    Furthermore, this also ensures compatibility, as the code transformation during the build allows the software to run 
+    across different environments and runtimes without the end user needing to worry about the original syntax.
 
-    These artifacts possono variare da pacchetto a pacchetto e tra versioni diverse dello stesso pacchetto.
-    Ad esempio possono diventare più ottimizzati tra una versione e l'altra; for example, moving from multi-line files with spaces and comments
-    to a single line with no comments and minimal whitespace; as in the case of the \texttt{svgo} package for the file \texttt{dist/svgo.browser.js}
-    from version 3.3.1 to 3.3.2.
-    Oppure rimanere uguale, ad esempio the \texttt{css-tree} package for the file \texttt{dist/csstree.js} che sta su più righe. 
-    
-    Inoltre, as shown by \textcite{9240695}, even if the source code remains the same, the build files, and 
-    consequently the final tarball, may differ due to non-deterministic factors in the build process.
-
-    Since the \ac{NPM} ecosystem is permissive, there is no universal way to distinguish if a file was built or hand-written simply by looking 
-    at the directory or the metadata in \texttt{package.json}. 
-    As highlighted by \textcite{9240695}, common conventions suggest that folders such as \texttt{dist/}, \texttt{build/} or \texttt{lib/} contain artifacts, 
-    but this division is not guaranteed or verifiable a priori, because it depends on the developer's choices.
-    
-    In fact, in Chapter \ref{ch:analysis}, we will see that generated artifacts can reside in other folders; 
-    for example the \texttt{css-what} package contains the generated \texttt{out.json} file in \texttt{src/( \_\_fixtures\_\_/)}.
-    Additionally, there are cases where a hand-written files reside in \texttt{dist/} or \texttt{build/}, 
-    such as the \texttt{helper\allowbreak .d.ts} file for the \texttt{domutils} package, which is located in the \texttt{lib/} directory;
-    or the \texttt{lib/\allowbreak index\allowbreak .d.ts} file for the \texttt{@babel/\allowbreak parser} package from version 8.0.0-beta.2 to 8.0.0-beta.3.
-    
-    Hence, I decided not to exclude any folders based on their name, avoiding the risk of overlooking relevant files.
-    
+    Since the \ac{NPM} ecosystem is permissive, there is no standardized
+    way to distinguish if a package contains build artifacts or where they are located.
+    While common conventions suggest that folders such as \texttt{dist/}, 
+    \texttt{build/} or \texttt{lib/} contain artifacts, 
+    this structure is neither guaranteed nor verifiable a priori, as it depends entirely on the developer's choices.
 
 \end{itemize}
-
-As can be observed better in \nameref{ch:analysis}, other files can be found in tarballs.
-
-The \texttt{html} files, after careful analysis,
-represent mainly test files, code coverage reports, and demos, such in the \texttt{jwt-decode} package;
-or presentation pages of the package, documentation, and licenses, such in the \texttt{sax} and \texttt{pino} packages.
-
-Instead, the \texttt{css} files are either used as test fixtures (e.g., example data for testing), 
-as in the case of the \texttt{convert-source-map} package;
-or simply as styles for HTML-based tests and demos, as in the \texttt{loglevel} package.
-
-However, in modern packaging practices,
-non essential assets are often removed to keep the final product as lightweight as possible.
-
-Moreover, like build artifacts, these files are not always located in specific directories,
-and it is not possible to determine with certainty if a file is test file or not.
-
-
-
-
-\begin{comment}
-Third-party packages play a crucial role in modern software
-development by reducing implementation effort and providing reusable functionalities 
-that would otherwise be timeconsuming to develop from scratch \cite{unknown}.
-
-To support JavaScript developers in the reuse of third-party code, the \ac{NPM} provides
-hundreds of thousands of free and reusable code software packages.
-The \ac{NPM} platform consists of an online registry for searching 
-packages suitable for given tasks, and a package manager
-that automatically resolves and installs dependencies, 
-simplify the integration of these packages into projects \cite{10.5555/3361338.3361407}.
-By design, The \ac{NPM} ecosystem is open, allowing any user to freely publish.
-
-This openness has been a key factor in the rapid growth and success of \ac{NPM},
-but it also introduces significant security risks.
-In particular, the widespread use of third-party dependencies makes \ac{NPM}
-a central component of the JavaScript software supply chain.
-
-The software Supply Chain \ac{SSC} refers to the set of processes to select and obtain software components
-from third parties; it also comprehends the companies involved in these processes \cite{gokkaya2023softwaresupplychainreview}.
-
-Modern software systems heavily rely on \ac{SSC}, often incorporating a large number of direct
-and transitive dependencies.
-Within this context, the \ac{NPM} ecosystem exemplifies how supply chain dependencies
-can amplify the impact of security incidents.
-
-Highly popular packages can directly or indirectly influence
-many other projects, sometimes exceeding 100,000 dependent packages \cite{10.5555/3361338.3361407}.
-Moreover, installing an average \ac{NPM} package implicitly introduces
-trust on 79 third-party packages and 39 maintainers \cite{10.5555/3361338.3361407}.
-
-As a consequence, the \ac{NPM} ecosystem has become a prominent target for
-Software Supply Chain attacks \acp{SCCA}, characterized by the injection of malicious code
-into legitimate packages update, in order to compromise
-dependent systems further down the chain \cite{ohm2020backstabbersknifecollectionreview}.
-\end{comment}
-
-\begin{comment}
-
-This chapter provides the necessary background information to understand the content of your thesis.
-The goal is to make your thesis \emph{self-contained}: the reader, who you can assume will be
-a fellow Computer Science student, should be able to understand your work without having to refer
-to external sources. Of course, you should reference the sources you used to write this chapter, and references to documents that the reader can use to know more about those topics.
-
-Do not include information that is not necessary to understand your work. If something is complementary to your work, but not useful to understand it, you can include it in the \nameref{ch:related} (\Cref{ch:related}).
-
-Guide the reader while they are going through this chapter: do not just dump information, but present the context in which they will be used in the thesis, and what those concepts will be useful for.\footnote{A good exercise is thinking that your reader will constantly ask ``so what?'' after everything you tell them. If it is unclear why you provided them with information, you should explain (or, of course, remove the content if there is no explanation).}
-Put forward references to the places these concepts are used, and put backward references from that chapter to here so that the reader can link the pieces.\footnote{Always keep in mind that the reader will not necessarily read all your documents. Such forward- and back-references help refresh the memory of those who read your documents linearly \emph{and} help those who do not.}
-Pay close attention, here and everywhere else in your thesis, to make sure that every non-trivial concept you use is defined clearly before being used.
-
-Sometimes, there will be concepts that are tangential to your work: in those cases, avoid having an unclear or incomplete explanation: either explain it clearly in sufficient depth, or skip the concept altogether, leaving a bibliographic reference for those who want to understand the issue. A short but unclear explanation that will confuse readers is worse than either choice.
-
-The Background chapter contains information about work that \emph{you didn't do}. The work you
-did should be described in the \nameref{ch:method} (\Cref{ch:method}) instead.
-
-The amount of information you will need to present in this chapter can vary a lot between theses.
-In some cases, you will have no or very little need for a Background chapter; in that case, it
-may make sense to move this information to a section in the Related Work chapter.
-\end{comment}
