@@ -1,124 +1,33 @@
 \chapter{Related Work}
 \label{ch:related}
 
-As already anticipated in the \nameref{ch:introduction} (\Cref{ch:introduction}),
-several tools have been developed to identify malicious code in \ac{NPM} packages.
+To counter \ac{SCCA}, several detection tools have been developed
+to detect malicious code in \ac{NPM} packages. 
 
-One tool is \texttt{DONAPI}, presented by \textcite{huang2024donapimaliciousnpmpackages},
-which uses a combination of static analysis, based on a predefined database of sensitive \acp{API}; 
+DONAPI \cite{huang2024donapimaliciousnpmpackages} is one of these tools, 
+which uses a combination of static analysis, based on a predefined database of sensitive \acp{API}, 
 and dynamic analysis, to extract behavioral patterns in order to detect and classify malicious packages.
 
-Another tool is \texttt{SpiderScan}, presented by \textcite{10.1145/3691620.3695492},
+Another tool is SpiderScan \cite{10.1145/3691620.3695492},
 which is based on graph-based behavior modeling and matching.
 It uses an \ac{LLM} for various tasks, including the identification of sensitive \acp{API} and the analysis of shell commands. 
+SpiderScan is not the only tool that uses \acp{LLM}, as many others exist
+\cite{zahan2025leveraginglargelanguagemodels, article, Zhang_2025}.
 
-Other tools also use \ac{LLM} for analyzing \ac{NPM} packages, e.g., the tools by \textcite{zahan2025leveraginglargelanguagemodels, article, Zhang_2025}.
+These two tools are not open source and have some limitations.
 
-Although these tools achieve good results in identifying malicious package updates, they are not open source and have some limitations.
+For example the dynamic analysis in DONAPI risks hindering its 
+practical usefulness in real-world scenarios due to its heavyweight nature and increased slowness \cite{10.1145/3691620.3695492}.
 
-For example according to \textcite{10.1145/3691620.3695492}, the dynamic analysis in DONAPI risks hindering its 
-practical usefulness in real-world scenarios due to its heavyweight nature and increased slowness.
-The SpiderScan tool also has a limitation; in fact, they argue that the use of prompt engineering methods that 
-leverage the capability of ChatGPT, and use self-refinement and chain-of-thought techniques to detect 
+In SpiderScan, instead, the use of prompt engineering methods that 
+leverage the capability of \ac{LLM} to detect 
 maliciousness can be highly expensive to use in real-world scenarios.
-Additionally, some other tools require a huge amount of manual validation due to a high number of false positives.
-Moreover, as argued in the work conducted by \textcite{weissberg2025llm}, simple traditional code metrics are often 
-enough to achieve results similar to, if not better than, those obtained with complex \acp{LLM}.
 
-The approach of all of these tools, is to analyze only the last published release of the packages.
-Instead, the core idea of this thesis is to analyze the evolution of the code by considering more than one release.
+Furthermore, these tools analyze only the last published 
+release of the packages, without considering the anlysis of more release 
+to obtain a vision of the evolution of the package over time.
 
-This core idea originated in the thesis of \textcite{zoratti2025valutazione}, who proposed some specific metrics to identify \ac{BST} and 
-\ac{HUT} within \ac{NPM} package repositories.
-
-Therefore, my work is an in-depth study and analysis in a real-world \ac{NPM} context, 
-starting from the idea and work carried out by \textcite{zoratti2025valutazione}.
-
-The differences between these two theses are significant. 
-For instance, my thesis considers two distinct types of attacks (\Cref{ch:threatModeling}), 
-introduces an expanded set of metrics (\Cref{ch:metrics}), and 
-includes a real-world study on the 1000 most popular \ac{NPM} packages (\Cref{ch:results}).
-Furthermore, the two studies produced different tools: while Zoratti's 
-tool analyzes GitHub repositories of the \ac{NPM} packages, mine analyzes \ac{NPM} tarballs.
-
-
-\begin{comment}
-Additionally a common issue, is that most existing tools do not model malicious behavior in a holistic way. 
-In fact, these tools often focus only on predefined set of discrete features,
-like sensitive \acp{API}, code structures or semantics (e.g., data flow) \cite{10.1145/3691620.3695492}; but not considering 
-the history of the package code evolution through all its releases.
-\end{comment}
-
-\begin{comment}
-This chapter is dedicated to the work that has been done by others in the field of your thesis.
-Don't write a mere list of papers with a summary of each. Instead, the goal is to give a picture
-of how your work is situated in the context of the work of others. In this case, you should
-think your skeptical reader is asking ``hasn't this been solved already?''.
-
-There will be two main kinds of work that you will need to discuss: similar work
-to yours, and work that is complementary to yours.
-
-Similar work will try to solve the same problem you are addressing, or a similar one.
-Here, focus on the differences: for example, you may write something along the
-lines of ``\textcite{DBLP:journals/x/Turing50} provides a naive definition of
-`intelligent machine', which has this and that limitation. Our work is similar to that of
-\citeauthor{DBLP:journals/x/Turing50}, but we address these problems by doing this and
-that.''\footnote{Do not be arrogant! I called the work of Turing naive as a joke.
-For sure your work will have limitations that other work may not have, and you should be honest about them.}
-
-Complementary work does not try to solve the same problem you are addressing, but it is
-important to get a full picture of your contribution. For example, if you are
-\emph{not} attempting to solve a particular problem (it is ``out of scope'' for your work),
-but the solution to that problem is necessary for your work to be useful, you should explain
-that here.
-
-The Related Work chapter may end up in other places of the document.
-Consider that it does two pieces of work at the same time:
-\begin{inparaenum}[\it (i)]
-    \item substantiating the claim you made in the \fullref{ch:introduction} that your problem is relevant, and
-    \item describe the context around your work to help understand its impact.
-\end{inparaenum}
-If the latter part is more important, it may make sense to move this section to the end of the document, just before the \fullref{ch:conclusion}.
-If the \fullref{ch:background} is not necessary to understand this chapter, it is also a good idea to move it just after the \fullref{ch:introduction}.
-
-\section{Sources}
-
-While doing your review of related work, \myhref{https://scholar.google.com}{Google Scholar}
-is probably the easiest search engine for academic papers. You can be mindful of some
-bibliometric tricks to understand which papers are likely to be most influential in the field.
-You can see on Scholar the number of citations of a paper;
-\myhref{https://portal.core.edu.au/conf-ranks/}{CORE} and
-\myhref{https://www.scimagojr.com}{Scimago} provide rankings of conferences and journals
-respectively. Non-peer-reviewed articles like those published only on
-\myhref{https://arxiv.org}{arXiv} may, of course, be important, but you should be more careful
-and skeptical about them. In case of doubt, ask for guidance from your advisor.
-
-Another tool that you should \emph{use with caution} is \myhref{https://www.semanticscholar.org/}{Semantic Scholar.} It provides you with \acp{LLM}-based tools to synthesize and ask questions about papers. Always double-check, because \acp{LLM} hallucinate and, as usual, you take responsibility for whatever you write in your document: treat \acp{LLM} as a useful tool you shouldn't trust.
-
-Wikipedia is a great source of information, but you shouldn't consider it as reliable.
-Wikipedia articles should always provide the sources of the information they contain; you
-should check it yourself, judge its reliability, and cite the source.
-
-In general, be careful about citing websites: make sure that they're authoritative, and when it's not obvious, justify why you consider them to be worth citing. Unlike this document, which I don't expect readers to print, your thesis must be readable in printed form: hence, make URLs readable in the text.
-
-If a paper is very important for your own piece of work, have a look at the papers
-that cited it, to see if there are more recent works that are relevant to your thesis.
-
-\section{Style}
-
-Here are a few tricks about how to cite other pieces of work:
-\begin{itemize}
-  \item If a paper is available in a peer-reviewed venue (journal or conference), cite that
-  version rather than the non-reviewed one. Sometimes papers are published in two similar
-  versions: one in a conference and an extended one in a journal. In that case, cite the
-  journal.
-  \item Use citations such as ``The Hamiltonian cycle problem is
-  NP-complete~\cite{DBLP:conf/coco/Karp72}'' or ``\textcite{DBLP:conf/coco/Karp72} showed
-  that the Hamiltonian cycle problem is NP-complete''. Do not write
-  ``\cite{DBLP:conf/coco/Karp72} showed that the Hamiltonian cycle problem is NP-complete''. Note, like in this case, that academics pretty much always refer to papers by citing authors' names rather than their titles.\footnote{If you use \LaTeX, check the source code for how to cite paper authors using the \texttt{\textbackslash textcite} command.}
-  \item \myhref{https://dblp.org}{DBLP} is a good source of quality Bibtex records for papers
-  you may want to cite.
-  \item You may have a doubt about whether to put a link in the text or use a reference in the bibliography. Use a reference if it is a document you want to refer to (even if it's not a text document, like a video or audio), use a link if you just want to refer to something but do not use it as a reference document.
-  \item If you decide to leave links, make it so that they're usable even in printed form. The \verb|\myhref| command of this document can be an example of how to do it.
-\end{itemize}
-\end{comment}
+A tool that instead analyzes the evolution of the package is the one by \textcite{zoratti2025valutazione}.
+His research is focused on the identification 
+of specific metrics, such as the whitespace to printable character
+ratio (W/P ratio), to identify \ac{BST} and \ac{HUT} attacks in GitHub repositories.
