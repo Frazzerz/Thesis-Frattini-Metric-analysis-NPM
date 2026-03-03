@@ -1,0 +1,34 @@
+\section{Attack C: Shai-Hulud 1.0}
+\label{sec:attackC}
+
+On September 15, 2025, 187 \ac{NPM} packages, 
+including @ctrl/tinycolor with over two million weekly downloads, 
+were infected with malicious code designed to steal 
+sensitive information such as tokens and 
+authentication keys \cite{oxsecurity2025npm20hack}.
+
+The method of the first infection and the patient zero remained unknown,
+but it could be a case of phishing \cite{kaspersky2025tinycolorshaikuludsupplychainattack}.
+The number of infected packages is so high 
+because the malware automatically publishes 
+a malicious version of every package of the compromised maintainer (of which it has publishing permissions).
+
+The malicious code was inserted into the packages' tarballs
+in the new file bundle.js.
+
+The file weighs approximately 3.7 MB and contains only a single line of code
+3,734,355 characters long.
+
+When the victim finishes installing the package with the infected version,
+the malicious script is executed and downloads a platform-appropriate version of TruffleHog,
+a legitimate tool for searching secrets such as cryptographic keys and \ac{API} tokens
+in local file systems and Git repositories.
+
+After starting and completing the search with TruffleHog, 
+the malicious code publishes the stolen data 
+by creating a public repository named Shai-Hulud 
+(like the worm in the Dune novels) 
+on behalf of the victim using their GitHub token.
+
+In this repository, there is a file data.json containing all
+the collected secrets and system information encoded.

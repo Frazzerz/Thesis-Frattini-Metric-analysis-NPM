@@ -1,0 +1,27 @@
+\section{Attack A: Malicious Windows DLL}
+\label{sec:attackA}
+
+The first attack, which occurred on July 18, 2025,
+infected five \ac{NPM} packages, one of which, eslint-config-prettier, is widely used
+with over thirty million weekly downloads \cite{endorlabs2025eslint}.
+
+A maintainer of this package fell victim 
+to a phishing email, and the attacker, 
+once the account was compromised, published malicious versions of the following packages.
+
+\begin{itemize}
+    \item eslint-config-prettier
+    \item eslint-plugin-prettier
+    \item synckit
+    \item @pkgr/core
+    \item napi-postinstall
+\end{itemize}
+
+Inside the tarball of these malicious versions,
+the attackers added a malicious \ac{DLL}
+weighing 1.2 MB.
+
+Through a script also present within the tarball,
+it executed the malicious \ac{DLL} and gave attackers 
+remote-code execution on Windows machines,
+to, for example, install additional malware or exfiltrate tokens.

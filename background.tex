@@ -1,7 +1,7 @@
 \chapter{Background}
 \label{ch:background}
 
-In this chapter, I provide the fundamental information regarding the \ac{SSC}, \ac{SCCA}, the \ac{NPM} ecosystem and the tarballs.
+In this chapter, I provide the fundamental information regarding the \ac{SSC}, \ac{SSCA}, the \ac{NPM} ecosystem and the tarballs.
 
 
 \section{Software Supply Chain and NPM Ecosystem}
@@ -27,11 +27,21 @@ such as Account Compromise, which refers to compromising accounts of Package Mai
 (those who develop and manage the packages) on the registry portal (like \ac{NPM}), allowing
 the attacker to release malicious versions.
 
-In \ac{SCCA} the victims are developers and users.
+In \ac{SSCA} the victims are developers and users.
 Developers can be exploited 
 directly to steal their credentials or damage their infrastructure,
 and indirectly as a channel to reach users through their applications 
 or services. Users can be exploited to steal their credentials or damage their devices.
+
+Attackers often attempt to mask their malicious code using obfuscation techniques to
+prevent visual detection \cite{ohm2020backstabbersknifecollectionreview}.
+The most common technique is to use a different encoding, such as hexadecimal,
+to hide function or variable names, renaming them with names devoid of semantic meaning like \_0x264994.
+The leading underscore is inserted because in JavaScript,
+and in other programming languages, variable or function names cannot start with a number.
+In the malicious code, however, there are also hexadecimal values without this prefix, 
+used for example to simply represent numbers and constants.
+This approach is simple and effective, as it does not require the use of external dependencies.
 
 All the information regarding \ac{NPM} reported below has been taken from the official documentation \cite{npmdocs2026npmdocumentation}.
 

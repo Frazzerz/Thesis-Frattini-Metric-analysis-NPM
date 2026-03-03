@@ -1,0 +1,51 @@
+\section{Attack B: Crypto attack}
+\label{sec:attackB}
+
+On September 8, 2025, an attacker compromised eighteen popular \ac{NPM} packages, including chalk and debug, 
+respectively the first and third most popular packages 
+(in terms of number of stars) on \ac{NPM} \cite{tristan2026listtop10000npmpackages}.
+
+These eighteen packages collectively see over 2.6 billion downloads each week,
+making the attack one of the most impactful \acp{SSCA} in the recent history 
+of the \ac{NPM} ecosystem \cite{henig2025breakdownwidespreadnpmsupplychainattack}.
+
+Although the attack in terms of financial losses it 
+was limited, as the compromised versions of the packages remained 
+online for a short time (about two hours) before being detected by developers and removed from \ac{NPM}.
+
+The attack was made possible after compromising the account of a maintainer (qix) 
+of one of the packages through a phishing email.
+
+After obtaining the account credentials, 
+the attacker published malicious versions of these packages, 
+which allowed them to steal cryptocurrencies 
+by intercepting and manipulating users' transactions.
+
+The malware's operation can be divided into various phases \cite{matthee2025npmsupplychainattack}.
+
+First, it was checked for the presence
+of a wallet in the browser, such as MetaMask.
+
+Subsequently, if it is present, the malicious code waits 
+for the user to send cryptocurrencies, and in this case,
+hooked the functions used to manage cryptocurrency transactions (signing and sending transactions),
+such as in the Ethereum ecosystem, the function ethsendTransaction,
+while in Solana, the function signAndSendTransaction.
+
+Once one of these functions was hooked,
+the malicious code replaced the transaction's destination address
+with one controlled by the attacker,
+thus redirecting the cryptocurrencies toward a wallet owned by the attacker.
+
+The malicious code was all inserted into the index.js files as a 
+single obfuscated line of code 76,438 characters long, which also increased the file weight.
+
+The obfuscation technique used here is to 
+encode in hexadecimal function names, variables, and constants,
+making the index.js file full of hexadecimal values such as 
+\_0x6fd57a or 0x1c8, compared to the index.js file of benign versions.
+
+The hooking of functions and the replacement of the transaction's destination address
+are behaviors made hidden by obfuscation, and therefore cannot be detected through static analysis.
+
+Instead, the actual addresses of the attacker's wallets are visible in the code, and there are seven of them.
