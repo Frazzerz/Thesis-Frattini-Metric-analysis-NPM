@@ -1,0 +1,64 @@
+\subsection{Download Malicious Tarballs}
+\label{sec:DownloadMaliciousTarballs}
+
+In this subsection, the process and the developed script 
+used to retrieve the tarballs of the malicious versions of the packages specified 
+in \cref{sec:malwareDataset} are described.
+
+\subsection*{Public Repositories of Malicious Packages}
+\label{sec:PublicRepositoriesMaliciousPackages}
+
+The first approach used was to consult public datasets on GitHub, such as
+the one by \textcite{OpenSourceDatasetMaliciousSoftwarePackages}.
+
+These public repositories, which contain malicious versions of packages from a registry, 
+are active and regularly updated.
+Their limitation is that they do not always contain specific malicious versions of compromised packages.
+
+In fact, in our case, the versions of the packages compromised 
+by the attacks in \cref{ch:AnalysisRecentAttacks} that we were looking for 
+were not initially present in the dataset by \textcite{OpenSourceDatasetMaliciousSoftwarePackages}.
+
+\subsection*{Mirror registry}
+\label{sec:MirrorRegistry}
+
+The alternative used was to consult mirror registries, 
+which are servers that replicate the content of official package 
+repositories such as \ac{NPM}, \ac{PyPI}, and RubyGems \cite{guo2023empiricalstudymaliciouscode}.
+
+Some examples of mirror registries include Huaweicloud, npmmirror, Tencent, and Alibaba.
+
+The main characteristic of a mirror is its synchronization frequency with the official registry.
+Such synchronization varies depending on the mirror and can be more or less frequent.
+However, since synchronization does not occur instantaneously,
+mirrors can preserve versions of packages already removed from the official registry for extended periods.
+
+This latency makes mirrors a useful tool for retrieving malicious versions of packages after their removal from official registries.
+
+\subsection*{Script to Download Malicious Tarballs}
+\label{sec:ScriptToDownloadMaliciousTarballs}
+
+To automate the search and download across different mirrors,
+the script \path{downloadpkgnpm.py} was developed.
+
+Implemented in Python and available on GitHub\footnote{\url{https://github.com/Frazzerz/Download-malicious-npm}},
+the script can be invoked from the command line in the following way:
+
+\begin{verbatim}
+python3 downloadpkgnpm.py json_file.json
+\end{verbatim}
+
+The script requires as input a \ac{JSON} file where one can specify
+a list of mirrors to query and a list of packages and versions to download.
+
+For each package, the script sequentially queries the specified mirrors
+in search of the required version.
+
+If the tarball is found, the script proceeds to download it.
+Otherwise, if the search fails on all mirrors, the operation's failure is notified.
+
+In both cases, the execution continues automatically with the search for the next package until the list is exhausted.
+
+With this script, it was possible to retrieve the malicious versions 
+of the compromised packages used in the tool \path{Analyzer-npm-package-releases} (\cref{sec:ToolForAnalyzingNpmPackages}) 
+to create the Malware dataset (\cref{sec:malwareDataset}).

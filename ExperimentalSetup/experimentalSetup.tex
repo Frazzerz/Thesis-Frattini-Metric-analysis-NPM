@@ -2,9 +2,10 @@
 \label{ch:ExperimentalSetup}
 
 This chapter describes the datasets used for the analyses conducted in \cref{ch:metricsAnalysis}
-and the software tools developed for their creation.
+and the software tools developed for their creation \cref{ch:SoftwareTools}.
 
 \section{Datasets}
+\label{sec:datasets}
 
 The two datasets, Goodware dataset \cref{sec:goodwareDataset} and Malware dataset \cref{sec:malwareDataset},
 are a collection of metrics, quantifiable code characteristics, extracted from 
@@ -45,7 +46,7 @@ compromised by one of the four \ac{SSCA} analyzed in
 
 For these 20 packages, the malicious versions related to 
 their respective attack were retrieved,
-as explained in \cref{sec:ToolForDownloadingMaliciousTarballs},
+as explained in \cref{sec:DownloadMaliciousTarballs},
 along with the 19 most recent versions available in the \ac{NPM} registry.
 
 Consequently, this dataset is composed of 20 packages, each with 20 versions:
@@ -93,7 +94,7 @@ The Malware dataset only includes packages with at least 19 versions available i
 
 However in these attacks, there are compromised packages that have fewer than 19 versions. 
 In such case, they were ignored and not included in the dataset.
-Specifically, 2 packages were excluded from attack A and 9 from attack B.
+Specifically, two packages were excluded from attack A and nine from attack B.
 
 Attacks C and D involved a large number of compromised packages, respectively 187 and 1,055.
 For this reason, it was decided to include in the dataset a limited number of 
@@ -103,5 +104,5 @@ specifically those with a high number of weekly downloads (at least over 1,000).
 The purpose of this dataset is to provide a set of metrics for 
 packages compromised by real-world attacks. 
 Therefore, it is not required for these packages to be among the 1,000 most popular in the \ac{NPM} registry.
-In the list, all 9 packages from attack B are among the 1,000 most popular,
+In the list, all nine packages from attack B are among the 1,000 most popular,
 while for the other attacks, none of the compromised packages fall into that category.

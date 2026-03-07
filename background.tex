@@ -15,7 +15,7 @@ These software components are called dependencies,
 and these dependencies in turn can depend on other components, 
 thus constituting the \ac{SSC} \cite{ohm2023sok}.
 
-These components or packages are distributed in Open Source Package Repositories such as \ac{PyPI}, \ac{NPM}, and RubyGems.
+These components or packages are distributed in Open Source Package Repositories such as \ac{NPM}, \ac{PyPI} and RubyGems.
 
 These repositories are often used to carry out attacks on the \ac{SSC},
 as they are open and decentralized systems where anyone can freely publish a package \cite{ohm2020backstabbersknifecollectionreview}. 
@@ -58,10 +58,12 @@ that can be borrowed for use in own projects.
 
 To resolve packages by name and version, \ac{NPM} communicates with the public registry
 (configured by default at \href{https://registry.npmjs.org}{https://registry.npmjs.org}), from 
-which allows users to retrieve any version of a package currently available in the registry. % https://docs.npmjs.com/cli/v11/using-npm/registry
+which allows users to retrieve any version of a package currently available in the registry. 
+% https://docs.npmjs.com/cli/v11/using-npm/registry
 
-A \ac{NPM} tarball is a gzipped package, which is 
-the format used when when packages are uploaded to a registry.
+A \ac{NPM} tarball is a gzipped package,
+the standard format used when packages are uploaded to a registry, and 
+represents a package at a specific version.
 Instead, a Git URL refers to a package in a Git repository. 
 % https://docs.npmjs.com/cli/v11/using-npm/package-spec
 % https://docs.npmjs.com/cli/v11/commands/npm-install

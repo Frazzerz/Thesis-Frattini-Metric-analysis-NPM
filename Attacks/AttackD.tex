@@ -14,17 +14,17 @@ However, this new attack shows differences compared to its previous version \cre
 
 The new versions of these packages, published in the NPM registry, 
 claimed to introduce the Node.js alternative Bun runtime,
-inserting into the tarball a new installation file setup\_\allowbreak bun.js
-and a file bun\_\allowbreak environment.js.
+inserting into the tarball a new installation file setup\_bun.js
+and a file bun\_environment.js.
 
 The first file mimics the code related to the Bun configuration and 
-calls the second file bun\_\allowbreak environment.js.
+calls the second file bun\_environment.js.
 
 The second file, weighing over 10 MB, 
 contains a single obfuscated line of code 10,157,373 characters long.
 
 As in the previous version \cref{sec:attackC}, 
-once the script (bun\_\allowbreak environment.js) is started,
+once the script (bun\_environment.js) is started,
 it downloads and executes a version of TruffleHog
 with the purpose of stealing sensitive information such as \ac{NPM} tokens, 
 \ac{AWS}, \ac{GCP}, and Azure credentials, and environment variables.
@@ -38,7 +38,7 @@ confirming that it is the successor of the previous Shai-Hulud 1.0 attack \cref{
 In this new version of the attack, however, the malicious code
 makes use of an obfuscation technique that encodes 
 in hexadecimal function names, variables, and constants,
-making the bun\_\allowbreak environment.js file full of hexadecimal values.
+making the bun\_environment.js file full of hexadecimal values.
 
 Even though the code is obfuscated, 
 words like "password" and "aws\_secret" are visible 

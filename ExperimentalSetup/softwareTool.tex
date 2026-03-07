@@ -1,0 +1,111 @@
+\section{Software Tools}
+\label{ch:SoftwareTools}
+
+In this section, the developed tool and script will be described, along with the approaches used,
+in order to create the two datasets described in \cref{sec:datasets}.
+
+\subsection{Tool for Analyzing NPM Packages}
+\label{sec:ToolForAnalyzingNpmPackages}
+
+In this subsection, the tool \path{Analyzer-npm-package-releases} 
+is described, which was developed to extract the metrics of \cref{ch:metricsAnalysis} from a set 
+of \ac{NPM} package versions.
+
+Using this tool, it was possible to construct 
+the Goodware dataset (\cref{sec:goodwareDataset}) and the Malware dataset (\cref{sec:malwareDataset}).
+
+Implemented in Python, it is available on GitHub\footnote{\url{https://github.com/Frazzerz/Analyzer-npm-package-releases}},
+and can be invoked from the command line in the following way:
+
+\begin{verbatim}
+python3 main.py --json packages.json [--workers N] [--local]
+\end{verbatim}
+
+The tool requires as input a \ac{JSON} file containing a list of names of \ac{NPM} packages to be analyzed.
+
+The work is executed in a parallel manner using multiprocessing,
+and the \path{--workers} flag allows for specifying the number of processes to be used.
+
+The \path{--local} flag instead allows for including local tarballs of \ac{NPM} package versions in the analysis.
+
+The tool processes one package and one version at a time in increasing chronological order, 
+that is, from the oldest version to the most recent one.
+Instead, multiprocessing is applied at the level of the single package version,
+analyzing the files that compose it in parallel.
+
+The work of the tool is structured into three phases:
+\begin{itemize}
+    \item Version Retrieval
+    \item Metrics Calculation
+    \item CSV Reporter
+\end{itemize}
+
+\subsection*{Version Retrieval}
+\label{sec:VersionRetrieval}
+
+First, the NPMClient component queries the official \ac{NPM} registry 
+to retrieve the package metadata in order to obtain its list of available versions.
+
+From this list, only versions parsable via node-semver \cite{semver} are kept, 
+to make them chronologically sortable.
+
+For the Goodware dataset (\cref{sec:goodwareDataset}),
+the tool selects the 20 most recent valid versions from the list and downloads 
+the related tarballs.
+
+Instead for the Malware dataset (\cref{sec:malwareDataset}),
+the tool selects and downloads the 19 most recent valid tarballs versions.
+
+The twentieth version is the tarball related to the malicious version,
+retrieved as explained in \cref{sec:DownloadMaliciousTarballs} and
+inserted via the \path{--local} flag.
+
+
+\subsection*{Metrics Calculation}
+\label{sec:MetricsCalculation}
+
+In this phase, the metrics are first calculated at the level of the 
+single file of the tarball.
+
+The calculation of each metric is different, and each one is described in 
+depth in its own section in \cref{ch:metricsAnalysis}.
+
+Metrics based on the textual content of the files,
+such as Unique Hexadecimal values (\cref{sec:analysisHexUnique}),
+are calculated only on plain text files, such as JavaScript, TypeScript, \ac{JSON} and Markdown files,
+ignoring binary files such as zip, png or dll.
+
+Furthermore, for these metrics, comments are removed 
+from JavaScript and TypeScript files using the parser from the tree-sitter library \cite{treesitter}.
+
+Subsequently, the metrics calculated on single files are aggregated to form metrics at the package version level.
+
+For example, to calculate the package size metric (\cref{sec:analysisPackageSize}),
+the weights of all files calculated individually first are summed.
+
+Aggregation strategies vary based on the type of metric. 
+For instance, counts and weights are summed, 
+the maximum value among the longest lines of the files is taken,
+and strings are collected into lists.
+
+\subsection*{CSV Reporter}
+\label{sec:CSVReporter}
+
+Finally, for each package, the results are saved incrementally in two CSV files.
+\begin{itemize}
+    \item \path{file_metrics.csv} contains one row for every file of each package version. 
+    The columns represent the metrics at the single file level.
+    \item \path{aggregate_metrics_by_single_version.csv} contains one row for every package version, 
+    and the columns represent the metrics at the package version level.
+\end{itemize}
+
+Incremental saving is performed at the the end of the analysis of each version, 
+and ensures that partial results are preserved even in case of error.
+
+In addition to the CSV files, 
+the tool also produces a log.txt log file, that is also updated incrementally.
+
+Inside the file, there is general information such as the number of packages to analyze and the number of workers that will be used.
+Furthermore, for each package, the file also reports: the number of versions found in the registry,
+the status of the tarball downloads, the progress of the analysis of the selected versions
+and the total time for the analysis of the entire package.
