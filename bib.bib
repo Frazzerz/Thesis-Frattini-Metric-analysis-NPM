@@ -1,47 +1,72 @@
-%---- In order of appearance (sometimes there are repetitions)
-%---- Introduction
-
-@inproceedings{10.1145/3510457.3513044,
-author = {Zahan, Nusrat and Zimmermann, Thomas and Godefroid, Patrice and Murphy, Brendan and Maddila, Chandra and Williams, Laurie},
-title = {What are weak links in the npm supply chain?},
-year = {2022},
-isbn = {9781450392266},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-url = {https://doi.org/10.1145/3510457.3513044},
-doi = {10.1145/3510457.3513044},
-abstract = {Modern software development frequently uses third-party packages, raising the concern of supply chain security attacks. Many attackers target popular package managers, like npm, and their users with supply chain attacks. In 2021 there was a 650\% year-on-year growth in security attacks by exploiting Open Source Software's supply chain. Proactive approaches are needed to predict package vulnerability to high-risk supply chain attacks. The goal of this work is to help software developers and security specialists in measuring npm supply chain weak link signals to prevent future supply chain attacks by empirically studying npm package metadata.In this paper, we analyzed the metadata of 1.63 million JavaScript npm packages. We propose six signals of security weaknesses in a software supply chain, such as the presence of install scripts, maintainer accounts associated with an expired email domain, and inactive packages with inactive maintainers. One of our case studies identified 11 malicious packages from the install scripts signal. We also found 2,818 maintainer email addresses associated with expired domains, allowing an attacker to hijack 8,494 packages by taking over the npm accounts. We obtained feedback on our weak link signals through a survey responded to by 470 npm package developers. The majority of the developers supported three out of our six proposed weak link signals. The developers also indicated that they would want to be notified about weak links signals before using third-party packages. Additionally, we discussed eight new signals suggested by package developers.},
-booktitle = {Proceedings of the 44th International Conference on Software Engineering: Software Engineering in Practice},
-pages = {331–340},
-numpages = {10},
-keywords = {npm, software ecosystem, supply chain security, weak link signal},
-location = {Pittsburgh, Pennsylvania},
-series = {ICSE-SEIP '22}
+% Background
+@inproceedings{ohm2023sok,
+  title={Sok: Practical detection of software supply chain attacks},
+  author={Ohm, Marc and Stuke, Charlene},
+  booktitle={Proceedings of the 18th International Conference on Availability, Reliability and Security},
+  pages={1--11},
+  year={2023}
 }
 
-@inproceedings{10.1109/ASE56229.2023.00135,
-author = {Guo, Wenbo and Xu, Zhengzi and Liu, Chengwei and Huang, Cheng and Fang, Yong and Liu, Yang},
-title = {An Empirical Study of Malicious Code In PyPI Ecosystem},
-year = {2024},
-isbn = {9798350329964},
-publisher = {IEEE Press},
-url = {https://doi.org/10.1109/ASE56229.2023.00135},
-doi = {10.1109/ASE56229.2023.00135},
-abstract = {PyPI provides a convenient and accessible package management platform to developers, enabling them to quickly implement specific functions and improve work efficiency. However, the rapid development of the PyPI ecosystem has led to a severe problem of malicious package propagation. Malicious developers disguise malicious packages as normal, posing a significant security risk to end-users.To this end, we conducted an empirical study to understand the characteristics and current state of the malicious code lifecycle in the PyPI ecosystem. We first built an automated data collection framework and collated a multi-source malicious code dataset containing 4,669 malicious package files. We preliminarily classified these malicious code into five categories based on malicious behaviour characteristics. Our research found that over 50\% of malicious code exhibits multiple malicious behaviours, with information stealing and command execution being particularly prevalent. In addition, we observed several novel attack vectors and anti-detection techniques. Our analysis revealed that 74.81\% of all malicious packages successfully entered end-user projects through source code installation, thereby increasing security risks. A real-world investigation showed that many reported malicious packages persist in PyPI mirror servers globally, with over 72\% remaining for an extended period after being discovered. Finally, we sketched a portrait of the malicious code lifecycle in the PyPI ecosystem, effectively reflecting the characteristics of malicious code at different stages. We also present some suggested mitigations to improve the security of the Python open-source ecosystem.},
-booktitle = {Proceedings of the 38th IEEE/ACM International Conference on Automated Software Engineering},
-pages = {166–177},
-numpages = {12},
-keywords = {PyPi ecosystem, package management, malicious code, mirror source, lifecycle portrait},
-location = {Echternach, Luxembourg},
-series = {ASE '23}
+@misc{ohm2020backstabbersknifecollectionreview,
+      title={Backstabber's Knife Collection: A Review of Open Source Software Supply Chain Attacks}, 
+      author={Marc Ohm and Henrik Plate and Arnold Sykosch and Michael Meier},
+      year={2020},
+      eprint={2005.09535},
+      archivePrefix={arXiv},
+      primaryClass={cs.CR},
+      url={https://arxiv.org/abs/2005.09535}, 
 }
 
-@misc{henig2025breakdownwidespreadnpmsupplychainattack,
-  title        = {Breakdown: Widespread npm Supply Chain Attack Puts Billions of Weekly Downloads at Risk},
-  author       = {Asaf Henig and Cameron hyde},
-  year         = 2025,
-  note         = {\url{https://www.paloaltonetworks.com/blog/cloud-security/npm-supply-chain-attack/}}
+@misc{duan2020measuringsupplychainattacks,
+      title={Towards Measuring Supply Chain Attacks on Package Managers for Interpreted Languages}, 
+      author={Ruian Duan and Omar Alrawi and Ranjita Pai Kasturi and Ryan Elder and Brendan Saltaformaggio and Wenke Lee},
+      year={2020},
+      eprint={2002.01139},
+      archivePrefix={arXiv},
+      primaryClass={cs.CR},
+      url={https://arxiv.org/abs/2002.01139}, 
 }
+
+@misc{npmdocs2026npmdocumentation,
+  title        = {npm Documentation},
+  author       = {npm, Inc.},
+  year         = {2026},
+  note         = {\url{https://docs.npmjs.com/}}
+}
+
+@INPROCEEDINGS{9505063,
+  author={Moog, Marvin and Demmel, Markus and Backes, Michael and Fass, Aurore},
+  booktitle={2021 51st Annual IEEE/IFIP International Conference on Dependable Systems and Networks (DSN)}, 
+  title={Statically Detecting JavaScript Obfuscation and Minification Techniques in the Wild}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={569-580},
+  keywords={Virtual assistants;Pipelines;Loading;Transforms;Static analysis;Syntactics;Particle measurements;Web Security;JavaScript;Obfuscation;Minification;Empirical Study},
+  doi={10.1109/DSN48987.2021.00065}}
+
+@misc{pinckney2023largescaleanalysissemantic,
+      title={A Large Scale Analysis of Semantic Versioning in NPM}, 
+      author={Donald Pinckney and Federico Cassano and Arjun Guha and Jonathan Bell},
+      year={2023},
+      eprint={2304.00394},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2304.00394}, 
+}
+
+@INPROCEEDINGS{9240695,
+  author={Goswami, Pronnoy and Gupta, Saksham and Li, Zhiyuan and Meng, Na and Yao, Daphne},
+  booktitle={2020 IEEE International Conference on Software Maintenance and Evolution (ICSME)}, 
+  title={Investigating The Reproducibility of NPM Packages}, 
+  year={2020},
+  volume={},
+  number={},
+  pages={677-681},
+  keywords={Software maintenance;Manuals;Tools;Packaging;Standards;Open source software;Software development management;NPM packages;reproducibility;JavaScript},
+  doi={10.1109/ICSME46990.2020.00071}}
+
+% Related Work
 
 @misc{huang2024donapimaliciousnpmpackages,
       title={DONAPI: Malicious NPM Packages Detector using Behavior Sequence Knowledge Mapping}, 
@@ -71,53 +96,6 @@ location = {Sacramento, CA, USA},
 series = {ASE '24}
 }
 
-%---- Background
-
-@unknown{unknown,
-author = {Saeidi, Mohammadreza and Thoma, Ethan and Kula, Raula and Rodríguez-Pérez, Gema},
-year = {2025},
-month = {11},
-pages = {},
-title = {What About Our Bug? A Study on the Responsiveness of NPM Package Maintainers},
-doi = {10.48550/arXiv.2511.04986}
-}
-
-@inproceedings{10.5555/3361338.3361407,
-author = {Zimmermann, Markus and Staicu, Cristian-Alexandru and Tenny, Cam and Pradel, Michael},
-title = {Smallworld with high risks: a study of security threats in the npm ecosystem},
-year = {2019},
-isbn = {9781939133069},
-publisher = {USENIX Association},
-address = {USA},
-abstract = {The popularity of JavaScript has lead to a large ecosystem of third-party packages available via the npm software package registry. The open nature of npm has boosted its growth, providing over 800,000 free and reusable software packages. Unfortunately, this open nature also causes security risks, as evidenced by recent incidents of single packages that broke or attacked software running on millions of computers. This paper studies security risks for users of npm by systematically analyzing dependencies between packages, the maintainers responsible for these packages, and publicly reported security issues. Studying the potential for running vulnerable or malicious code due to third-party dependencies, we find that individual packages could impact large parts of the entire ecosystem. Moreover, a very small number of maintainer accounts could be used to inject malicious code into the majority of all packages, a problem that has been increasing over time. Studying the potential for accidentally using vulnerable code, we find that lack of maintenance causes many packages to depend on vulnerable code, even years after a vulnerability has become public. Our results provide evidence that npm suffers from single points of failure and that unmaintained packages threaten large code bases. We discuss several mitigation techniques, such as trusted maintainers and total first-party security, and analyze their potential effectiveness.},
-booktitle = {Proceedings of the 28th USENIX Conference on Security Symposium},
-pages = {995–1010},
-numpages = {16},
-location = {Santa Clara, CA, USA},
-series = {SEC'19}
-}
-
-@misc{gokkaya2023softwaresupplychainreview,
-      title={Software supply chain: review of attacks, risk assessment strategies and security controls}, 
-      author={Betul Gokkaya and Leonardo Aniello and Basel Halak},
-      year={2023},
-      eprint={2305.14157},
-      archivePrefix={arXiv},
-      primaryClass={cs.CR},
-      url={https://arxiv.org/abs/2305.14157}, 
-}
-
-@misc{ohm2020backstabbersknifecollectionreview,
-      title={Backstabber's Knife Collection: A Review of Open Source Software Supply Chain Attacks}, 
-      author={Marc Ohm and Henrik Plate and Arnold Sykosch and Michael Meier},
-      year={2020},
-      eprint={2005.09535},
-      archivePrefix={arXiv},
-      primaryClass={cs.CR},
-      url={https://arxiv.org/abs/2005.09535}, 
-}
-
-%---- Related Work
 
 @misc{zahan2025leveraginglargelanguagemodels,
       title={Leveraging Large Language Models to Detect npm Malicious Packages}, 
@@ -128,7 +106,6 @@ series = {SEC'19}
       primaryClass={cs.CR},
       url={https://arxiv.org/abs/2403.12196}, 
 }
-
 
 @article{article,
 author = {Wang, Jian and Li, Zhen and Qu, Jixiang and Zou, Deqing and Xu, Shouhuai and Xu, Ziteng and Wang, Zhenwei and Jin, Hai},
@@ -154,15 +131,114 @@ doi = {10.1109/TIFS.2025.3580336}
    year={2025},
    month=apr, pages={1–28} }
 
-@misc{li2024surveyhonestylargelanguage,
-      title={A Survey on the Honesty of Large Language Models}, 
-      author={Siheng Li and Cheng Yang and Taiqiang Wu and Chufan Shi and Yuji Zhang and Xinyu Zhu and Zesen Cheng and Deng Cai and Mo Yu and Lemao Liu and Jie Zhou and Yujiu Yang and Ngai Wong and Xixin Wu and Wai Lam},
-      year={2024},
-      eprint={2409.18786},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2409.18786}, 
+@article{zoratti2025valutazione,
+  title={Valutazione di Metriche per il Rilevamento di Attacchi al Codice Sorgente},
+  author={Zoratti, Marco},
+  year={2025},
+  publisher={Universit{\`a} degli studi di Genova},
+  url={https://unire.unige.it/handle/123456789/12801}
 }
+
+
+% Attack Analysis
+
+@online{endorlabs2025eslint,
+  author={Endor Labs},
+  title={CVE-2025-54313: eslint-config-prettier Compromise — High Severity but Windows-Only},
+  year={2025},
+  url={https://www.endorlabs.com/learn/cve-2025-54313-eslint-config-prettier-compromise----high-severity-but-windows-only}
+}
+
+@online{henig2025breakdownwidespreadnpmsupplychainattack,
+  title        = {Breakdown: Widespread npm Supply Chain Attack Puts Billions of Weekly Downloads at Risk},
+  author       = {Asaf Henig and Cameron Hyde},
+  year         = 2025,
+  note         = {\url{https://www.paloaltonetworks.com/blog/cloud-security/npm-supply-chain-attack/}}
+}
+
+@online{tristan2026listtop10000npmpackages,
+  author={Tristan F.-R.},
+  title={List of top 10000 NPM packages},
+  year={2026},
+  url={https://tristan-f-r.github.io/npm-rank/PACKAGES.html}
+}
+
+@misc{matthee2025npmsupplychainattack,
+  title        = {The npm Supply Chain Attack of September 2025},
+  author       = {Nicolas Matthee},
+  year         = 2025,
+  url          = {\url{https://www.prventi.com/blog/the-npm-supply-chain-attack-of-september-2025}}
+}
+
+
+@online{oxsecurity2025npm20hack,
+  title        = {180+ NPM Packages Hit in Major Supply Chain Attack},
+  author       = {Moshe Siman Tov Bustan and Alexander Chailytko},
+  year         = 2025,
+  url          = {https://www.ox.security/blog/npm-2-0-hack-40-npm-packages-hit-in-major-supply-chain-attack/}
+}
+
+
+@online{kaspersky2025tinycolorshaikuludsupplychainattack,
+  title        = {npm registry attacked by secret-stealing worm},
+  author       = {Editorial Team},
+  year         = 2025,
+  url          = {https://www.kaspersky.com/blog/tinycolor-shai-hulud-supply-chain-attack/54315/}
+}
+
+@misc{helixguard2025malicioussha1hulud,
+  title        = {Shai-Hulud Returns: Over 1K NPM Packages and 27K+ Github Repos infected via Fake Bun Runtime Within Hours},
+  author       = {HelixGuard Team},
+  year         = 2025,
+  url          = {\url{https://helixguard.ai/blog/malicious-sha1hulud-2025-11-24/}}
+}
+
+@misc{cutolo2025shaihulud20,
+  title        = {Shai-Hulud 2.0: Aggressive, Automated, and Fast Spreading},
+  author       = {Gianpietro Cutolo},
+  year         = 2025,
+  url          = {\url{https://www.netskope.com/blog/shai-hulud-2-0-aggressive-automated-one-of-fastest-spreading-npm-supply-chain-attacks-ever-observed}}
+}
+
+
+% Tool for Analyzing NPM Packages
+
+@misc{semver,
+  title        = {Semantic Versioning 2.0.0},
+  author       = {Tom Preston-Werner},
+  url          = {\url{https://semver.org/}}
+}
+
+@misc{treesitter,
+  title        = {Tree-sitter},
+  author       = {Max Brunsfeld},
+  url          = {\url{https://tree-sitter.github.io/tree-sitter/}}
+}
+
+% Download Malicious Tarballs
+
+@misc{OpenSourceDatasetMaliciousSoftwarePackages, 
+    month     = Mar,
+    day       = 20,
+    date      = 2023,
+    journal   = {Open-Source Dataset of Malicious Software Packages},
+    publisher = {Datadog Security Labs},
+    author    = {Datadog},
+    url       = {https://github.com/datadog/malicious-software-packages-dataset}, 
+}
+
+@misc{guo2023empiricalstudymaliciouscode,
+      title={An Empirical Study of Malicious Code In PyPI Ecosystem}, 
+      author={Wenbo Guo and Zhengzi Xu and Chengwei Liu and Cheng Huang and Yong Fang and Yang Liu},
+      year={2023},
+      eprint={2309.11021},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2309.11021}, 
+}
+
+
+% Metrics Analysis
 
 @article{weissberg2025llm,
   title={LLM-based Vulnerability Discovery through the Lens of Code Metrics},
@@ -171,33 +247,11 @@ doi = {10.1109/TIFS.2025.3580336}
   year={2025}
 }
 
-%---- threatModeling
 
-@misc{matthee2025npmsupplychainattack,
-  title        = {The npm Supply Chain Attack of September 2025},
-  author       = {Nicolas Matthee},
-  year         = 2025,
-  note         = {\url{https://www.prventi.com/blog/the-npm-supply-chain-attack-of-september-2025}}
-}
+%- File Type
 
-@misc{helixguard2025malicioussha1hulud,
-  title        = {Shai-Hulud Returns: Over 1K NPM Packages and 27K+ Github Repos infected via Fake Bun Runtime Within Hours},
-  author       = {HelixGuard Team},
-  year         = 2025,
-  note         = {\url{https://helixguard.ai/blog/malicious-sha1hulud-2025-11-24/}}
-}
-
-@misc{ravie2025secondsha1hulud,
-  title        = {Second Sha1-Hulud Wave Affects 25,000+ Repositories via npm Preinstall Credential Theft},
-  author       = {Ravie Lakshmanan},
-  year         = 2025,
-  note         = {\url{https://thehackernews.com/2025/11/second-sha1-hulud-wave-affects-25000.html}}
-}
-
-%---- metrics
-@techreport{cordey2023software,
-  title={Software supply chain attacks: An illustrated typological review},
-  author={Cordey, Sean},
-  year={2023},
-  institution={ETH Zurich}
+@misc{magika,
+  title        = {Magika},
+  author       = {Google},
+  url          = {\url{https://github.com/google/magika}}
 }

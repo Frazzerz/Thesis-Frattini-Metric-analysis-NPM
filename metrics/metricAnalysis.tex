@@ -1,0 +1,107 @@
+\chapter{Metrics Analysis}
+\label{ch:metricsAnalysis}
+
+In this chapter, we present the metrics of this study,
+the analysis of their behavior in the datasets (\cref{sec:datasets})
+and evaluate their effectiveness in detecting the attacks (\cref{ch:AnalysisRecentAttacks}).
+
+There are countless metrics based on code analysis \cite{weissberg2025llm}.
+For example, in the study conducted by \textcite{weissberg2025llm} 
+to identify vulnerabilities in C and C++ code,
+they considered metrics related to:
+\begin{itemize}
+    \item Code Smell such as the number of goto statements and number of function pointers
+    \item Complexity metrics such as the number of loops and number of local variables
+    \item Metrics on memory management operations
+    \item \ac{AST} metrics
+\end{itemize}
+
+For this study, we defined and analyzed a series of metrics developed 
+based on the most relevant characteristics of one or more \ac{SSCA} (\cref{ch:AnalysisRecentAttacks}).
+
+We discuss each metric in a dedicated subsection, where:
+\begin{enumerate}
+    \item we define the metric and explain how it was calculated.
+    \item we analyze the behavior of the packages in the Goodware dataset (\cref{sec:goodwareDataset}) 
+    for that metric, and examine the nature of packages that assume anomalous values.
+    \item we analyze the behavior of the packages in the Malware dataset (\cref{sec:malwareDataset})
+    for the metric, comparing it with the behavior of the Goodware dataset.
+    Our goal is to verify the effectiveness of the metric in detecting attacks (\cref{ch:AnalysisRecentAttacks}).
+\end{enumerate}
+
+In this study, we use figures with the same 
+characteristics (unless otherwise specified) to represent the behavior of the metrics.
+Below, we explain how to interpret them.
+
+\section*{Figure Behavior of the Goodware dataset for a Metric and Outlier Analysis}
+\label{sec:Figure1}
+
+This figure illustrates the trend across 20 versions of the metric in the
+Goodware dataset (\cref{sec:goodwareDataset}),
+after excluding the packages that are not significant in this metric.
+
+The x-axis reports the package versions, from the least recent (-19) to the latest available (0), 
+while the y-axis represents the number of occurrences of the metric in a logarithmic scale.
+
+The heights of the vertical black bars represent the confidence intervals,
+specifically, the intervals containing 95\% of the package population for a given version.
+Packages positioned within one of these intervals have a number of 
+occurrences ranging between the minimum value and the 95th percentile of the population for that version.
+
+Instead, the gray dots represent the outlier values, 
+which are the remaining 5\% of the population positioned outside the confidence interval.
+
+A package assumes outlier values for a version when its number of values in that version 
+exceeds the 95th percentile value of that confidence interval.
+
+We have highlighted with colored lines the packages that have outlier values or 
+values that are the upper limit of a confidence interval for one or more versions.
+
+These packages, and their relative outlier values, exhibit atypical behavior compared to the majority of the population.
+For this reason, they have been analyzed individually to understand 
+their nature and the reasons leading to such high values.
+
+The highlighted packages may show an increasing, decreasing, or stable trend,
+and for better visualization,
+if there are many highlighted packages, 
+we provide separate figures for each trend.
+
+The red dashed line represents the median value calculated for each package version.
+Unlike the mean, the median is not influenced by outlier values and therefore does not distort the 
+actual behavior of the metric.
+
+The median and the y-axis logarithmic scale were 
+used to highlight heterogeneous between packages in the dataset,
+as there are packages with a low number of values and packages 
+with a number of values that exceed those of the majority of the population by several orders of magnitude.
+
+\section*{Figure Comparison of Malware and Goodware Datasets Behavior for a Metric}
+\label{sec:Figure2}
+
+The figure illustrates the trend across 20 versions of the metric in the
+Malware dataset (\cref{sec:malwareDataset}) compared with the Goodware dataset (\cref{sec:goodwareDataset}).
+
+The x-axis reports the package versions, from the least recent (-19) to the latest available (0), 
+while the y-axis represents the number of occurrences of the metric in a logarithmic scale.
+
+The figures show the packages of the Malware dataset  
+for each of the four attacks with colored lines and
+their compromised malicious versions with red crosses.
+
+Furthermore, the figures show the confidence intervals (vertical black bars) 
+and the outlier values (gray dots) explained in \cref{sec:Figure1}, 
+calculated on the Goodware dataset across the 20 versions.
+
+If the packages of the Malware dataset overlap 
+for a specific attack, we provide a separate figure 
+for each package of that attack to ensure better visualization.
+
+In these figures, one can see if the 
+metric is sensitive enough to detect the compromised versions of the packages.
+
+To make malicious versions identifiable, they must be placed among the outlier values.
+
+If however, the malicious versions have a number of occurrences 
+to fall within the confidence intervals,
+the metric will not be indicative for detecting that attack, 
+since the versions would be indistinguishable from the legitimate ones.

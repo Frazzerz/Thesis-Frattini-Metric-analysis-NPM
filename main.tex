@@ -16,7 +16,7 @@
 
 \begin{document}
 
-\title{Metrics analysis to identify anomalous releases in the NPM ecosystem's Software Supply Chain}
+\title{Metric-based analysis to identify anomalous releases in the NPM ecosystem Software Supply Chain}
 
 \author{Michele Frattini}
 
@@ -38,11 +38,25 @@
 
 \include{related}
 
-\include{threatModeling}
-\include{metrics}
-\include{ExperimentalSetup}
+\input{Attacks/AnalysisRecentAttacks}
+\input{Attacks/AttackA}
+\input{Attacks/AttackB}
+\input{Attacks/AttackC}
+\include{Attacks/AttackD}
 
-\include{analysis}
+\input{ExperimentalSetup/experimentalSetup}
+\input{ExperimentalSetup/softwareTool}
+\input{ExperimentalSetup/downloadMaliciousTarballs}
+
+\include{metrics/metricAnalysis}
+
+%\include{metrics/filetype}
+%\include{metrics/packageSize}
+%\include{metrics/LongestLineLenght}
+%\include{metrics/hex}
+%\include{metrics/sensitiveKeywords}
+%\include{metrics/cryptoAdd}
+%\include{metrics/wrapUp}
 
 \include{conclusion}
 
