@@ -3,32 +3,50 @@
 
 On September 15, 2025, 187 \ac{NPM} packages, 
 including @ctrl/tinycolor with over two million weekly downloads, 
-were infected with malicious code designed to steal 
-sensitive information such as tokens and 
-authentication keys \cite{oxsecurity2025npm20hack}.
+were infected by the \ac{SSCA} called Shai-Hulud 1.0 \cite{oxsecurity2025npm20hack}.
+
+The goal of this attack is to steal sensitive information from developers and \ac{NPM} maintainers, such as:
+\begin{itemize}
+    \item Github and \ac{NPM} authentication tokens
+    \item Access keys for Cloud services such as \ac{AWS}, \ac{GCP} and Azure
+    \item System data
+\end{itemize}
+
+Its operation can be divided into these phases:
+\begin{enumerate}
+    \item When the victim finishes installing or updating a package compromised by this attack,
+    the malicious script is executed which downloads, installs and runs a 
+    platform-appropriate version of TruffleHog \cite{trufflehog}.
+
+    TruffleHog is a legitimate tool, used for example to prevent the leak of secrets in code.
+    However in this case, it is used 
+    for maliciously search for secrets in the victim's local file systems.
+
+    \item After completing the search with TruffleHog,
+    the malware checks if the keys related to \ac{NPM} and Github are valid and working.
+    \begin{enumerate}
+
+        \item If the malware finds valid \ac{NPM} credentials with publish privileges, 
+        it publishes a new version for every package managed by the victim maintainer,
+        adding this malicious code.
+
+        In this way, the malware propagates automatically,
+        behaving like a worm. 
+        This is the reason why so many packages were infected.
+        
+        \item
+        If the malware finds valid Github keys, 
+        it creates a public repository on the victim's account
+        called Shai-Hulud (like the worm in the Dune novels),
+        containing a data.json file with all the stolen information encoded.
+    \end{enumerate}
+
+    
+\end{enumerate}
 
 The method of the first infection and the patient zero remained unknown,
 but it could be a case of phishing \cite{kaspersky2025tinycolorshaikuludsupplychainattack}.
-The number of infected packages is so high 
-because the malware automatically publishes 
-a malicious version of every package of the compromised maintainer (of which it has publishing permissions).
 
 The malicious code was inserted into the packages' tarballs
-in the new file bundle.js.
-
-The file weighs approximately 3.7 MB and contains only a single line of code
-3,734,355 characters long.
-
-When the victim finishes installing the package with the infected version,
-the malicious script is executed and downloads a platform-appropriate version of TruffleHog,
-a legitimate tool for searching secrets such as cryptographic keys and \ac{API} tokens
-in local file systems and Git repositories.
-
-After starting and completing the search with TruffleHog, 
-the malicious code publishes the stolen data 
-by creating a public repository named Shai-Hulud 
-(like the worm in the Dune novels) 
-on behalf of the victim using their GitHub token.
-
-In this repository, there is a file data.json containing all
-the collected secrets and system information encoded.
+in the new file bundle.js, weighs approximately 3.7 MB 
+and contains only a single line of code 3,734,355 characters long.

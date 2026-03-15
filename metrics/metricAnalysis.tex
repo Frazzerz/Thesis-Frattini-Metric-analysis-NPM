@@ -1,46 +1,52 @@
 \chapter{Metrics Analysis}
 \label{ch:metricsAnalysis}
+In this chapter, we present the metrics defined for this study and the analysis of their behavior on the datasets detailed in \cref{sec:datasets}.
+Our goal is to evaluate their effectiveness in detecting the \acp{SSCA} discussed in \cref{ch:AnalysisRecentAttacks}.
 
-In this chapter, we present the metrics of this study,
-the analysis of their behavior in the datasets (\cref{sec:datasets})
-and evaluate their effectiveness in detecting the attacks (\cref{ch:AnalysisRecentAttacks}).
+\section{Methodology}
+\label{sec:metricsMethodology}
 
-There are countless metrics based on code analysis \cite{weissberg2025llm}.
-For example, in the study conducted by \textcite{weissberg2025llm} 
-to identify vulnerabilities in C and C++ code,
-they considered metrics related to:
-\begin{itemize}
-    \item Code Smell such as the number of goto statements and number of function pointers
-    \item Complexity metrics such as the number of loops and number of local variables
-    \item Metrics on memory management operations
-    \item \ac{AST} metrics
-\end{itemize}
+In this context, a metric is a computed measure on an \ac{NPM} package version.
 
-For this study, we defined and analyzed a series of metrics developed 
-based on the most relevant characteristics of one or more \ac{SSCA} (\cref{ch:AnalysisRecentAttacks}).
+While the literature offers a broad range of metrics based on code analysis and file characteristics \cite{zoratti2025valutazione, weissberg2025llm},
+we focused on and used a set of metrics developed ad-hoc 
+based on the most relevant characteristics of the \acp{SSCA} considered.
 
-We discuss each metric in a dedicated subsection, where:
+For this reason, we excluded metrics unrelated to the analyzed attacks, such as the number of files present in the tarball, 
+or those related to attack characteristics hidden by obfuscation techniques, such as the hooking of wallet-specific \acp{API}.
+
+Each metric is discussed in a dedicated section, structured as follows:
 \begin{enumerate}
-    \item we define the metric and explain how it was calculated.
-    \item we analyze the behavior of the packages in the Goodware dataset (\cref{sec:goodwareDataset}) 
-    for that metric, and examine the nature of packages that assume anomalous values.
-    \item we analyze the behavior of the packages in the Malware dataset (\cref{sec:malwareDataset})
-    for the metric, comparing it with the behavior of the Goodware dataset.
-    Our goal is to verify the effectiveness of the metric in detecting attacks (\cref{ch:AnalysisRecentAttacks}).
+    \item \textbf{Metric Definition:}
+    We defined the metric and explained how it was computed.
+    
+    \item \textbf{Goodware Dataset Analysis:}
+    We analyzed the distribution and evolutionary patterns 
+    of the metric within the Goodware dataset explained in \cref{sec:goodwareDataset}.
+    This allows us to define a baseline for the metric, that is its behavior under normal development conditions.
+    And then, we investigated the nature of those packages that exhibit outliers values.
+
+    \item \textbf{Comparison with Malware Dataset:}
+    Finally, we evaluated the metric's sensitivity by analyzing
+    the values (the peaks) of the compromised versions of the packages in the Malware dataset explained in \cref{sec:malwareDataset}.
+    We compare these values with the baseline of the Goodware dataset, 
+    to verify the effectiveness of the metric in detecting the \acp{SSCA} considered.
+
 \end{enumerate}
 
-In this study, we use figures with the same 
-characteristics (unless otherwise specified) to represent the behavior of the metrics.
+Unless otherwise specified, to show the Goodware Dataset Analysis and the Comparison with Malware Dataset, 
+we use figures with the same characteristics.
 Below, we explain how to interpret them.
 
-\section*{Figure Behavior of the Goodware dataset for a Metric and Outlier Analysis}
+\subsection{Figure Goodware Dataset Analysis}
 \label{sec:Figure1}
 
 This figure illustrates the trend across 20 versions of the metric in the
-Goodware dataset (\cref{sec:goodwareDataset}),
-after excluding the packages that are not significant in this metric.
+Goodware dataset explained in \cref{sec:goodwareDataset},
+after excluding any packages that are not significant in this metric, 
+i.e. those that have a number of occurrences equal to zero in all versions.
 
-The x-axis reports the package versions, from the least recent (-19) to the latest available (0), 
+The x-axis shows the package versions, from the least recent (-19) to the latest available (0), 
 while the y-axis represents the number of occurrences of the metric in a logarithmic scale.
 
 The heights of the vertical black bars represent the confidence intervals,
@@ -51,13 +57,16 @@ occurrences ranging between the minimum value and the 95th percentile of the pop
 Instead, the gray dots represent the outlier values, 
 which are the remaining 5\% of the population positioned outside the confidence interval.
 
-A package assumes outlier values for a version when its number of values in that version 
-exceeds the 95th percentile value of that confidence interval.
+A package is classified as an outlier in a version when its values 
+exceeds the 95th percentile of that confidence interval.
+
+Following the approach of \textcite{article2}, we heuristically chose to use the 95th 
+percentile to define the outliers.
 
 We have highlighted with colored lines the packages that have outlier values or 
 values that are the upper limit of a confidence interval for one or more versions.
 
-These packages, and their relative outlier values, exhibit atypical behavior compared to the majority of the population.
+These packages, and their corresponding outlier values, exhibit atypical behavior compared to the majority of the population.
 For this reason, they have been analyzed individually to understand 
 their nature and the reasons leading to such high values.
 
@@ -71,17 +80,17 @@ Unlike the mean, the median is not influenced by outlier values and therefore do
 actual behavior of the metric.
 
 The median and the y-axis logarithmic scale were 
-used to highlight heterogeneous between packages in the dataset,
+used to highlight the heterogeneity among packages in the dataset,
 as there are packages with a low number of values and packages 
 with a number of values that exceed those of the majority of the population by several orders of magnitude.
 
-\section*{Figure Comparison of Malware and Goodware Datasets Behavior for a Metric}
+\subsection{Figure Comparison with Malware Dataset}
 \label{sec:Figure2}
 
-The figure illustrates the trend across 20 versions of the metric in the
-Malware dataset (\cref{sec:malwareDataset}) compared with the Goodware dataset (\cref{sec:goodwareDataset}).
+This figure illustrates the trend across 20 versions of the metric in the
+Malware dataset (explained in \cref{sec:malwareDataset}) compared with the Goodware dataset (explained in \cref{sec:goodwareDataset}).
 
-The x-axis reports the package versions, from the least recent (-19) to the latest available (0), 
+The x-axis shows the package versions, from the least recent (-19) to the latest available (0), 
 while the y-axis represents the number of occurrences of the metric in a logarithmic scale.
 
 The figures show the packages of the Malware dataset  
@@ -96,12 +105,12 @@ If the packages of the Malware dataset overlap
 for a specific attack, we provide a separate figure 
 for each package of that attack to ensure better visualization.
 
-In these figures, one can see if the 
+In these figures, we can evaluate if the 
 metric is sensitive enough to detect the compromised versions of the packages.
 
 To make malicious versions identifiable, they must be placed among the outlier values.
 
-If however, the malicious versions have a number of occurrences 
-to fall within the confidence intervals,
+If, however, the number of occurrences in 
+malicious versions falls within the confidence intervals,
 the metric will not be indicative for detecting that attack, 
 since the versions would be indistinguishable from the legitimate ones.

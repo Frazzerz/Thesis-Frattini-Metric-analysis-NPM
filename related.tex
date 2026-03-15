@@ -1,12 +1,12 @@
 \chapter{Related Work}
 \label{ch:related}
 
-To counter \ac{SSCA}, several detection tools have been developed
-to detect malicious code in \ac{NPM} packages. 
+Several detection tools have been developed to 
+identify malicious \ac{NPM} packages and counter \acp{SSCA}.
 
-DONAPI \cite{huang2024donapimaliciousnpmpackages} is one of these tools, 
+One of these tools is DONAPI \cite{huang2024donapimaliciousnpmpackages}, 
 which uses a combination of static analysis, based on a predefined database of sensitive \acp{API}, 
-and dynamic analysis, to extract behavioral patterns in order to detect and classify malicious packages.
+and dynamic analysis, to extract behavioral patterns also in order to classify malicious packages.
 
 Another tool is SpiderScan \cite{10.1145/3691620.3695492},
 which is based on graph-based behavior modeling and matching.
@@ -19,7 +19,7 @@ These two tools are not open source and have some limitations.
 For example the dynamic analysis in DONAPI risks hindering its 
 practical usefulness in real-world scenarios due to its heavyweight nature and increased slowness \cite{10.1145/3691620.3695492}.
 
-In SpiderScan, instead, the use of prompt engineering methods that 
+Instead in SpiderScan, the use of prompt engineering methods that 
 leverage the capability of \ac{LLM} to detect 
 maliciousness can be highly expensive to use in real-world scenarios.
 
@@ -29,5 +29,15 @@ to obtain a vision of the evolution of the package over time.
 
 A tool that instead analyzes the evolution of the package is the one by \textcite{zoratti2025valutazione}.
 His research is focused on the identification 
-of specific metrics, such as the whitespace to printable character
-ratio (W/P ratio), to identify \ac{BST} and \ac{HUT} attacks in GitHub repositories.
+of specific metrics, such as the ratio of whitespace to printable character, 
+to identify \ac{BST} and \ac{HUT} attacks in GitHub repositories.
+
+There are countless metrics based on code analysis and file characteristics.
+In addition to those proposed by \textcite{zoratti2025valutazione},
+the study conducted by \textcite{weissberg2025llm} uses others metrics related to:
+\begin{itemize}
+    \item Code Smell, such as the number of goto statements and number of function pointers
+    \item Complexity metrics, such as the number of loops and number of local variables
+    \item Metrics on memory management operations
+    \item \ac{AST} metrics
+\end{itemize}

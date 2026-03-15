@@ -2,24 +2,22 @@
 \label{ch:ExperimentalSetup}
 
 This chapter describes the datasets used for the analyses conducted in \cref{ch:metricsAnalysis}
-and the software tools developed for their creation \cref{ch:SoftwareTools}.
+and the software tools developed to create these datasets.
 
 \section{Datasets}
 \label{sec:datasets}
 
-The two datasets, Goodware dataset \cref{sec:goodwareDataset} and Malware dataset \cref{sec:malwareDataset},
-are a collection of metrics, quantifiable code characteristics, extracted from 
-a set of \ac{NPM} packages, each with 20 versions.
+To carry out the analyses conducted in \cref{ch:metricsAnalysis}, we created two datasets:
+one Goodware (\cref{sec:goodwareDataset}) and one Malware (\cref{sec:malwareDataset}).
 
-The metrics are identical for both datasets, and
-to extract this data, a software tool was developed, 
-which is described in \cref{sec:ToolForAnalyzingNpmPackages}.
-The rationale behind the selection of these metrics and their analysis
-is explained for each metric in its own section in \cref{ch:metricsAnalysis}.
+These two datasets are a collection of metrics from a set of \ac{NPM} packages.
 
-The packages selected for the two datasets are different.
-However, for both datasets, 20 versions were collected for each package
-to study how they behave and evolve across versions.
+The metrics considered, discussed in the relevant section in \cref{ch:metricsAnalysis}, are identical for both datasets.
+To compute this metric from the \ac{NPM} packages, we developed a software tool described in \cref{sec:ToolForAnalyzingNpmPackages}.
+
+Instead, the set of \ac{NPM} packages and their collection are different for the two datasets.
+However, both datasets always have 20 versions for each package. 
+This was done to study their behavior and evolution across versions.
 
 The two datasets are comparable to each other 
 as they are homogeneous, since both have packages with the same number of versions (20).
@@ -34,7 +32,10 @@ in the \ac{NPM} registry, in terms of number of stars \cite{tristan2026listtop10
 Out of these 1,000 packages, 371 have less than 20 versions 
 available in the \ac{NPM} registry.
 Therefore, the dataset includes the 
-remaining 629 packages, with their 20 most recent available versions.
+remaining 629 packages, with their 20 most recent available versions parsable via node-semver \cite{semver}.
+
+To automatically obtain these versions of these packages, we used the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}),
+specifying the first 1,000 packages names from list of \textcite{tristan2026listtop10000npmpackages} in a JSON file as input.
 
 \subsection{Malware dataset}
 \label{sec:malwareDataset}
@@ -44,25 +45,21 @@ This dataset is composed of 20 \ac{NPM} packages
 compromised by one of the four \ac{SSCA} analyzed in 
 \cref{ch:AnalysisRecentAttacks}.
 
-For these 20 packages, the malicious versions related to 
-their respective attack were retrieved,
-as explained in \cref{sec:DownloadMaliciousTarballs},
-along with the 19 most recent versions available in the \ac{NPM} registry.
+Each of these packages has 20 versions: one malicious and 19 legitimate.
 
-Consequently, this dataset is composed of 20 packages, each with 20 versions:
-one malicious and 19 legitimate.
-
+To obtain the malicious versions of these packages, we used the developed script 
+explained in \cref{sec:DownloadMaliciousTarballs}.
 
 The list below reports the compromised packages in the Malware dataset for each attack,
 including the specific malicious version number.
 \begin{itemize}
-    \item For the attack A \cref{sec:attackA} there are 3 packages:
+    \item For the attack A (\cref{sec:attackA}) there are 3 packages:
     \begin{itemize}
         \item eslint-config-prettier, version 10.1.7
         \item eslint-plugin-prettier, version 4.2.3
         \item synckit, version 0.11.9
     \end{itemize}
-    \item For the attack B \cref{sec:attackB} there are 9 packages:
+    \item For the attack B (\cref{sec:attackB}) there are 9 packages:
     \begin{itemize}
         \item ansi-regex, version 6.2.1
         \item ansi-styles, version 6.2.2
@@ -74,14 +71,14 @@ including the specific malicious version number.
         \item strip-ansi, version 7.1.1
         \item wrap-ansi, version 9.0.1
     \end{itemize}
-    \item For the attack C \cref{sec:attackC} there are 4 packages:
+    \item For the attack C (\cref{sec:attackC}) there are 4 packages:
         \begin{itemize}
             \item @ctrl/deluge, version 7.2.1
             \item @ctrl/shared-torrent, version 6.3.2
             \item @ctrl/tinycolor, version 4.1.2
             \item ember-browser-services, version 5.0.3
         \end{itemize}
-    \item For the attack D \cref{sec:attackD} there are 4 packages:
+    \item For the attack D (\cref{sec:attackD}) there are 4 packages:
         \begin{itemize}
             \item @asyncapi/avro-schema-parser, version 3.0.26
             \item @asyncapi/bundler, version 0.6.6
@@ -90,19 +87,18 @@ including the specific malicious version number.
         \end{itemize}
 \end{itemize}
 
-The Malware dataset only includes packages with at least 19 versions available in the \ac{NPM} registry.
-
-However in these attacks, there are compromised packages that have fewer than 19 versions. 
-In such case, they were ignored and not included in the dataset.
-Specifically, two packages were excluded from attack A and nine from attack B.
-
 Attacks C and D involved a large number of compromised packages, respectively 187 and 1,055.
 For this reason, it was decided to include in the dataset a limited number of 
 the most relevant packages for both attacks,
 specifically those with a high number of weekly downloads (at least over 1,000).
 
-The purpose of this dataset is to provide a set of metrics for 
-packages compromised by real-world attacks. 
-Therefore, it is not required for these packages to be among the 1,000 most popular in the \ac{NPM} registry.
-In the list, all nine packages from attack B are among the 1,000 most popular,
+The Malware dataset only includes packages with at least 19 legitimate versions available in the \ac{NPM} registry.
+
+However in these attacks, there are compromised packages that have fewer than 19 versions. 
+In such case, they were ignored and not included in the dataset (nor are they present in the list above).
+Specifically, two packages were excluded from attack A and nine from attack B.
+
+For the purpose of this dataset and its analysis conducted in \cref{ch:metricsAnalysis},
+it is not necessary that its packages are among the 1,000 most popular in the \ac{NPM} registry.
+Anyway in the list, all nine packages from attack B are among the 1,000 most popular,
 while for the other attacks, none of the compromised packages fall into that category.

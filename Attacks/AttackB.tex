@@ -5,47 +5,75 @@ On September 8, 2025, an attacker compromised eighteen popular \ac{NPM} packages
 respectively the first and third most popular packages 
 (in terms of number of stars) on \ac{NPM} \cite{tristan2026listtop10000npmpackages}.
 
-These eighteen packages collectively see over 2.6 billion downloads each week,
-making the attack one of the most impactful \acp{SSCA} in the recent history 
-of the \ac{NPM} ecosystem \cite{henig2025breakdownwidespreadnpmsupplychainattack}.
+These eighteen packages collectively have over 2.6 billion downloads each week,
+making this attack one of the most impactful in the recent history 
+of the \ac{NPM} ecosystem \cite{matthee2025npmsupplychainattack}.
 
-Although the attack in terms of financial losses it 
-was limited, as the compromised versions of the packages remained 
+Fortunately, the attack was limited in terms of financial losses,
+as the compromised versions of the packages remained 
 online for a short time (about two hours) before being detected by developers and removed from \ac{NPM}.
 
-The attack was made possible after compromising the account of a maintainer (qix) 
-of one of the packages through a phishing email.
+The attack was made possible by compromising a package maintainer's account (qix) via a phishing email.
 
 After obtaining the account credentials, 
 the attacker published malicious versions of these packages, 
 which allowed them to steal cryptocurrencies 
 by intercepting and manipulating users' transactions.
 
-The malware's operation can be divided into various phases \cite{matthee2025npmsupplychainattack}.
+The malware's operation can be broken into several phases \cite{henig2025breakdownwidespreadnpmsupplychainattack}:
 
-First, it was checked for the presence
-of a wallet in the browser, such as MetaMask.
+\begin{enumerate}
+    \item \textbf{Injection into the Browser:}
+    The malware integrates itself directly into the browser environment, 
+    hooking critical functions such as fetch and XMLHttpRequest
+    (the core \acp{API} responsible for web data transfer), 
+    and wallet-specific \acp{API} like window.ethereum.
+    This allows it to intercept web traffic and wallet interactions in real time.
 
-Subsequently, if it is present, the malicious code waits 
-for the user to send cryptocurrencies, and in this case,
-hooked the functions used to manage cryptocurrency transactions (signing and sending transactions),
-such as in the Ethereum ecosystem, the function ethsendTransaction,
-while in Solana, the function signAndSendTransaction.
+    \item \textbf{Monitoring for sensitive data:}
+    Once active, the code scans network responses and transaction payloads for 
+    cryptocurrency wallet addresses and transaction details. 
+    It can recognize multiple formats including Ethereum, Bitcoin, Solana, Tron, Litecoin and Bitcoin Cash.
 
-Once one of these functions was hooked,
-the malicious code replaced the transaction's destination address
-with one controlled by the attacker,
-thus redirecting the cryptocurrencies toward a wallet owned by the attacker.
+    \item \textbf{Transaction Manipulation:} 
+    When a transaction is identified, for instance when the user is about to send cryptocurrency to a specific address,
+    the malware replaces the legitimate destination address with one controlled by the attacker. 
+    It uses lookalike addresses via string-matching to make substitutions 
+    less obvious, increasing the likelihood of successful theft.
 
-The malicious code was all inserted into the index.js files as a 
-single obfuscated line of code 76,438 characters long, which also increased the file weight.
+    In addition to replacing the destination address,
+    the malware can also modify other transaction parameters, 
+    such as approvals or allowances, before the user's signature.
+
+    For example, if the user interacts with a smart contract, such as to swap tokens,
+    the malware can routes funds to the attacker's address,
+    even if the user interface appears correct.
+
+    To achieve this, the malicious code contains the addresses of several popular smart contracts:
+    \begin{itemize}
+        \item Uniswap V2: 0x7a250d5630b4cf539739df2c5dacb4c659f2488d
+        \item Uniswap V3: 0xe592427a0aece92de3edee1f18e0157c05861564
+        \item Uniswap V4: 0x66a9893cC07D91D95644AEDD05D03f95e1dBA8Af
+        \item PancakeSwap V2: 0x10ed43c718714eb63d5aa57b78b54704e256024e
+        \item PancakeSwap V3: 0x13f4ea83d0bd40e75c8222255bc855a974568dd4
+        \item 1inch: 0x1111111254eeb25477b68fb85ed929f73a960582
+        \item SushiSwap: 0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f
+    \end{itemize}
+    
+\end{enumerate}
+
+The malicious code is in the index.js file, written as a 
+single obfuscated line of code 76,438 characters long, which also increased the file size.
 
 The obfuscation technique used here is to 
 encode in hexadecimal function names, variables, and constants,
 making the index.js file full of hexadecimal values such as 
-\_0x6fd57a or 0x1c8, compared to the index.js file of benign versions.
+0x1c8 or \_0x6fd57a, compared to the index.js file of benign versions.
 
-The presence of a wallet in the browser, the hooking of functions and the replacement of the transaction's destination address
-are behaviors made hidden by obfuscation, and therefore cannot be detected through static analysis.
+Due to this, many behaviors and characteristics of the malware are hidden, such as
+the hooking of critical functions and wallet-specific \acp{API}, 
+the replacement of the transaction's destination address and the attacker's wallets.
+Consequently, these cannot be detected through static analysis.
 
-Instead, the actual addresses of the attacker's wallets are visible in the code, and there are seven of them.
+The only detectable features in plain text are the seven smart contract addresses,
+which are not hidden as they are known, public, and legitimate addresses.
