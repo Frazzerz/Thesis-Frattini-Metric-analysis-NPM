@@ -19,6 +19,11 @@ Instead, the set of \ac{NPM} packages and their collection are different for the
 However, both datasets always have 20 versions for each package. 
 This was done to study their behavior and evolution across versions.
 
+Consequently, these datasets consist of a collection of CSV files, one for each metric, 
+conteining the values of that specific metric for every version of every package included in the dataset.
+We used the tool described in \cref{sec:ToolForAnalyzingNpmPackages} to generate both 
+datasets, available on GitHub\footnote{\url{https://github.com/Frazzerz/Datasets-NPM-Analysis}}.
+
 The two datasets are comparable to each other 
 as they are homogeneous, since both have packages with the same number of versions (20).
 
@@ -27,12 +32,12 @@ as they are homogeneous, since both have packages with the same number of versio
 
 
 This dataset is composed of packages ranked among the 1,000 most popular 
-in the \ac{NPM} registry, in terms of number of stars \cite{tristan2026listtop10000npmpackages}.
+in the \ac{NPM} registry, in terms of number of stars~\cite{tristan2026listtop10000npmpackages}.
 
 Out of these 1,000 packages, 371 have less than 20 versions 
 available in the \ac{NPM} registry.
 Therefore, the dataset includes the 
-remaining 629 packages, with their 20 most recent available versions parsable via node-semver \cite{semver}.
+remaining 629 packages, with their 20 most recent available versions parsable via node-semver~\cite{semver}.
 
 To automatically obtain these versions of these packages, we used the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}),
 specifying the first 1,000 packages names from list of \textcite{tristan2026listtop10000npmpackages} in a JSON file as input.

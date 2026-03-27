@@ -3,7 +3,7 @@
 
 On September 15, 2025, 187 \ac{NPM} packages, 
 including @ctrl/tinycolor with over two million weekly downloads, 
-were infected by the \ac{SSCA} called Shai-Hulud 1.0 \cite{oxsecurity2025npm20hack}.
+were infected by the \ac{SSCA} called Shai-Hulud~1.0~\cite{oxsecurity2025npm20hack}.
 
 The goal of this attack is to steal sensitive information from developers and \ac{NPM} maintainers, such as:
 \begin{itemize}
@@ -16,7 +16,7 @@ Its operation can be divided into these phases:
 \begin{enumerate}
     \item When the victim finishes installing or updating a package compromised by this attack,
     the malicious script is executed which downloads, installs and runs a 
-    platform-appropriate version of TruffleHog \cite{trufflehog}.
+    platform-appropriate version of TruffleHog~\cite{trufflehog}.
 
     TruffleHog is a legitimate tool, used for example to prevent the leak of secrets in code.
     However in this case, it is used 
@@ -45,7 +45,7 @@ Its operation can be divided into these phases:
 \end{enumerate}
 
 The method of the first infection and the patient zero remained unknown,
-but it could be a case of phishing \cite{kaspersky2025tinycolorshaikuludsupplychainattack}.
+but it could be a case of phishing~\cite{kaspersky2025tinycolorshaikuludsupplychainattack}.
 
 The malicious code was inserted into the packages' tarballs
 in the new file bundle.js, weighs approximately 3.7 MB 

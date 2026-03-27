@@ -1,2 +1,75 @@
 \section{Wrap up Analysis Metrics}
 \label{sec:wrapUpAnalysisMetrics}
+
+In this section we summarize the results of the analysis conducted on the five metrics
+of \cref{ch:metricsAnalysis}, evaluating their overall effectiveness in detecting the four attacks considered.
+
+% \fullcirc[2ex] per pallino più grande
+% C'è anche mezzo cerchio arancione \halfcirc
+\begin{table}[H]
+  \centering
+  \caption{Summary of Metrics Analysis}
+  \begin{tabular}{lcccccc}
+    \toprule
+     & Metric 1 & Metric 2 & Metric 3 & Metric 4 & Metric 5\\
+    \midrule
+    Attack A & \fullcirc & \emptycirc & \emptycirc & \emptycirc & \emptycirc \\
+    Attack B & \emptycirc & \emptycirc & \emptycirc & \fullcirc & \fullcirc \\
+    Attack C & \emptycirc & \fullcirc & \fullcirc & \emptycirc & \emptycirc  \\
+    Attack D & \emptycirc & \fullcirc & \fullcirc & \fullcirc & \emptycirc \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:summaryTableMetricsAnalysis}
+\end{table}
+
+\cref{tab:summaryTableMetricsAnalysis} visually summarizes the detection capability
+of each metric for every attack.
+A filled green circle (\fullcirc) indicates that the metric proved effective in detecting
+the attack, while an empty red circle (\emptycirc) indicates that the metric was not
+indicative for that attack.
+
+From the analysis it can be observed that every attack is detectable by at least one
+of the defined metrics, but no single metric is capable of detecting all four attacks simultaneously.
+This follows from the fact that each metric focuses on specific characteristics that are
+not necessarily shared across all the malicious versions analyzed.
+
+We report below the effectiveness of each metric.
+\begin{itemize}
+    \item \textbf{Metric 1 - File Types} (\cref{sec:analysisFileTypes}):
+    This metric proves effective in detecting attacks where the attacker introduces or modify file types 
+    rarely found in \ac{NPM} packages, such as \ac{PE} files, as in the case of Attack A (\cref{sec:attackA}).
+
+    It is instead not indicative for attacks that introduce or modify file types 
+    commonly found in \ac{NPM} packages, such as JavaScript files, as in the case of Attacks B, C, and D 
+    (\cref{sec:attackB}, \cref{sec:attackC}, \cref{sec:attackD}).
+
+    \item \textbf{Metric 2 - Package Size} (\cref{sec:analysisPackageSize}):
+    This metric proves effective for attacks that introduce malicious files of considerable
+    size, as in the case of Attacks C and D (\cref{sec:attackC}, \cref{sec:attackD}).
+
+    It is instead not indicative for attacks that introduce smaller files or that make modifications 
+    which do not significantly increase the package size, as in the case of Attacks A and B (\cref{sec:attackA}, \cref{sec:attackB}).
+
+    \item \textbf{Metric 3 - Longest Line Length} (\cref{sec:analysisLLL}):
+    This metric proves effective for attacks that introduce extremely long lines of code, 
+    as in the case of Attacks C and D (\cref{sec:attackC}, \cref{sec:attackD}).
+
+    It is instead not indicative for attacks that introduce shorter lines of code or 
+    that do not modify any plain text file, 
+    as in the case of Attacks A and B (\cref{sec:attackA}, \cref{sec:attackB}).
+
+    \item \textbf{Metric 4 - Unique Hexadecimal Values} (\cref{sec:analysisHex}):
+    This metric proves effective for attacks that introduce obfuscated code making extensive use of 
+    hexadecimal values to encode variable and function names, such as in the case of Attacks B and D (\cref{sec:attackB}, \cref{sec:attackD}).
+
+    It is instead not indicative for attacks that do not introduce obfuscated code, 
+    as in the case of Attacks A and C (\cref{sec:attackA}, \cref{sec:attackC}).
+
+    \item \textbf{Metric 5 - Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}):
+    This metric proves effective for attacks whose goal falls within the domain of 
+    cryptojacking and wallet theft, as in the case of Attack B (\cref{sec:attackB}).
+    
+    It is instead not indicative for attacks that have different purposes, 
+    as in the case of Attacks A, C, and D (\cref{sec:attackA}, \cref{sec:attackC}, \cref{sec:attackD}).
+
+\end{itemize}

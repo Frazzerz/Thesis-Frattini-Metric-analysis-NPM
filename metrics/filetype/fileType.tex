@@ -1,0 +1,52 @@
+\section{Analysis Metric 1: File Types}
+\label{sec:analysisFileTypes}
+
+\subsection{Metric Definition}
+\label{sec:metricFileTypesDefinition}
+
+The first metric we analyzed concerns the file types of \ac{NPM} packages.
+
+To compute this metric, the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}) uses 
+\texttt{Magika}, a deep learning-based content-type detection tool developed by Google~\cite{magika}.
+
+The developed tool first determines the type of each file present in the package version 
+and then constructs a list of all unique file types found.
+
+This metric was taken into consideration 
+because the attack A described in \cref{sec:attackA} introduces a malicious Windows \ac{DLL} 
+into the compromised package versions.
+
+
+\subsection{Goodware Dataset Analysis}
+\label{sec:analysisFileTypesGoodware}
+
+For this metric, the Goodware dataset (explained in \cref{sec:goodwareDataset}) contains 
+20 lists of file types, one for each version of every package.
+
+We used heatmaps, \cref{fig:fig1ComFileTypes} and \cref{fig:fig1RareFileTypes},
+to visualize the distribution and evolutionary patterns 
+of the file types of the packages in the Goodware dataset across versions.
+
+In the heatmaps, the x-axis shows the package versions, from the least recent (-19) to the latest available (0),
+while the y-axis represents the file extensions.
+
+The numbers inside the cells are the relative frequency
+of the extensions respect to the total number of packages in the dataset.
+
+A value like 1.000 indicates that all packages in the dataset (100\%) have at least one file of that type in that version.
+Conversely, a value such as 0.010 indicates that only 1\% of the packages have that extension among their files.
+
+Therefore, this number also indicates how common it is to find a given extension in the packages.
+
+The heatmaps use dark color shades for high values and light shades for low values.
+
+The \cref{fig:fig1ComFileTypes} and \cref{fig:fig1RareFileTypes} show all 71 file types found 
+in the dataset, ordered from the most common to the rarest.
+
+We used two heatmaps to better visualize the analysis:
+\begin{enumerate}
+    \item \textbf{Common File Types:} \cref{fig:fig1ComFileTypes} is the heatmap showing file types 
+    that have a relative frequency higher than 1\% in at least one version.
+    \item \textbf{Rare File Types:} \cref{fig:fig1RareFileTypes} is the heatmap showing all remaining types, 
+    which have a relative frequency that does not exceed 1\% across the versions.
+\end{enumerate}

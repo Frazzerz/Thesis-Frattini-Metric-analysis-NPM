@@ -3,11 +3,11 @@
 
 On September 8, 2025, an attacker compromised eighteen popular \ac{NPM} packages, including chalk and debug, 
 respectively the first and third most popular packages 
-(in terms of number of stars) on \ac{NPM} \cite{tristan2026listtop10000npmpackages}.
+(in terms of number of stars) on \ac{NPM}~\cite{tristan2026listtop10000npmpackages}.
 
 These eighteen packages collectively have over 2.6 billion downloads each week,
 making this attack one of the most impactful in the recent history 
-of the \ac{NPM} ecosystem \cite{matthee2025npmsupplychainattack}.
+of the \ac{NPM} ecosystem~\cite{matthee2025npmsupplychainattack}.
 
 Fortunately, the attack was limited in terms of financial losses,
 as the compromised versions of the packages remained 
@@ -20,7 +20,7 @@ the attacker published malicious versions of these packages,
 which allowed them to steal cryptocurrencies 
 by intercepting and manipulating users' transactions.
 
-The malware's operation can be broken into several phases \cite{henig2025breakdownwidespreadnpmsupplychainattack}:
+The malware's operation can be broken into several phases~\cite{henig2025breakdownwidespreadnpmsupplychainattack}:
 
 \begin{enumerate}
     \item \textbf{Injection into the Browser:}
@@ -49,7 +49,7 @@ The malware's operation can be broken into several phases \cite{henig2025breakdo
     the malware can routes funds to the attacker's address,
     even if the user interface appears correct.
 
-    To achieve this, the malicious code contains the addresses of several popular smart contracts:
+    To achieve this, the malicious code contains the Ethereum addresses of several popular smart contracts:
     \begin{itemize}
         \item Uniswap V2: 0x7a250d5630b4cf539739df2c5dacb4c659f2488d
         \item Uniswap V3: 0xe592427a0aece92de3edee1f18e0157c05861564
@@ -75,5 +75,5 @@ the hooking of critical functions and wallet-specific \acp{API},
 the replacement of the transaction's destination address and the attacker's wallets.
 Consequently, these cannot be detected through static analysis.
 
-The only detectable features in plain text are the seven smart contract addresses,
+The only detectable features in plain text are the seven smart contract Ethereum addresses,
 which are not hidden as they are known, public, and legitimate addresses.

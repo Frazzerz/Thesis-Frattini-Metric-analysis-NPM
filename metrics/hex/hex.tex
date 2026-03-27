@@ -1,0 +1,120 @@
+\section{Analysis Metric 4: Unique Hexadecimal Values}
+\label{sec:analysisHex}
+
+\subsection{Metric Definition}
+\label{sec:metricHexDefinition}
+
+The fourth metric we analyzed is the number of unique hexadecimal values
+found in the plain text files of the \ac{NPM} packages.
+
+To compute this metric and identify strings that represent hexadecimal values, 
+the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}) uses the following pattern regular expression:
+\begin{verbatim}
+_?0x[0-9a-fA-F]+
+\end{verbatim}
+The \texttt{?} indicates that the string may optionally begin with an underscore, 
+while \texttt{[0-9a-fA-F]+} indicates that it must be followed by a sequence of one 
+or more hexadecimal characters (i.e., digits 0 to 9 and letters a to f, both lowercase and uppercase).
+
+This flexible pattern allows the tool to find hexadecimal values even when they 
+are part of function calls or other code structures, where strict boundaries,
+like those used in \cref{sec:metricEthAddDefinition} for Unique Ethereum Addresses metric, would miss them.
+
+The tool identifies these values in each plain text file of a package version, 
+ignores duplicates within that version to ensure the values are unique, and then 
+sums the counts to obtain the total number of unique hexadecimal values for the entire package version.
+
+This metric was taken into consideration because attacks B (\cref{sec:attackB}) 
+and D (\cref{sec:attackD}) introduce obfuscated code that makes extensive use of hexadecimal values to hide malicious operations.
+
+\subsection{Goodware Dataset Scenario}
+\label{sec:goodwareHex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/hex/hex_plot1.pdf}
+    \caption{Goodware dataset Trend for the Unique Hexadecimal values Metric}
+    \label{fig:fig1Hex}
+\end{figure}
+
+For this metric, the Goodware dataset (\cref{sec:goodwareDataset}) contains the 
+total count of unique hexadecimal values for each of the 20 versions of every package.
+
+We used four figures, \cref{fig:fig1Hex} \cref{fig:fig1HexIncreasing} \cref{fig:fig1HexDecreasing} and \cref{fig:fig1HexStable}, 
+to visualize the trend of this metric across 20 versions in the Goodware dataset (explained in \cref{sec:goodwareDataset}).
+The caracteristics of these figures are described in \cref{sec:Figure1}.
+
+These figures report the 109 packages in the Goodware dataset that had at least one positive hexadecimal value in at least one of the 20 versions.
+The remaining 520 packages in the Goodware dataset did not have any hexadecimal value in any of their 20 versions.
+Therefore, they were excluded from these figures as they were not significant for this specific metric (they did not have any value to analyze).
+The median, calculated on the 109 packages, remains constant at one in each version.
+
+We studied the 10 packages that had outlier values or 
+values that are the upper limit of a confidence interval for one or more versions.
+
+We highlighted these packages with solid colored lines, categorizing them into the following figures based on their observed trends:
+\begin{itemize}
+    \item \textbf{Increasing Trend:} \cref{fig:fig1HexIncreasing} shows highlighted packages with an increasing trend over time.
+    \item \textbf{Decreasing Trend:} \cref{fig:fig1HexDecreasing} shows highlighted packages with a decreasing trend.
+    \item \textbf{Stable Trend:} \cref{fig:fig1HexStable} shows highlighted packages with a stable trend.
+\end{itemize}
+
+
+\subsection*{Analysis Outliers Packages: Increasing Trend}
+\label{sec:analysisHexIncreasing}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/hex/hex_plot1_Increasing_Trend.pdf}
+    \caption{Outliers package Increasing Trend for the Unique Hexadecimal Values Metric in Goodware dataset}
+    \label{fig:fig1HexIncreasing}
+\end{figure}
+
+The packages that experienced an increase significant enough to make their number of unique hexadecimal values an outlier 
+from one version to the next were: \texttt{crypto-js}, \texttt{polished}, and \texttt{xml2js}.
+
+\begin{itemize}
+    
+    \item \textbf{crypto-js:} This package is related to cryptography and implements 
+    cryptographic primitives, such as encryption algorithms and digital signatures~\cite{crypto-js}.
+
+    Rapresented by the solid green line in \cref{fig:fig1HexIncreasing},
+    the package used decimal values to implement its cryptographic primitives
+    in its first three versions (from 13 years ago, version 3.1.2 to 3.1.2-2).
+    Since it had no hexadecimal values, the metric for these versions was 0 (versions -19 to -17).
+    
+    In the subsequent release (3.1.2-3), as shown at point 1 in \cref{fig:fig1HexIncreasing}, 
+    the developers converted these values into hexadecimal format to align with standard cryprographic implementations pratices 
+    (like \ac{SHA}~\cite{gallagher1995secure}).
+    This update increased the number of unique hexadecimal values to 546,
+    rapresenting an outlier also for subsequent versions.
+    The further increase visible at point 2 
+    is due to the introduction of the \texttt{Blowfish} encryption algorithm in version 4.2.0,
+    where the count of unique hexadecimal values reached 1588, 
+    representing the most extreme outlier for the latest version.
+
+    \item \textbf{Polished:} Rapresented by the solid pink line in \cref{fig:fig1HexIncreasing},
+    \texttt{polished} is used for styling in JavaScript~\cite{polished}.
+    As seen at point 3, 
+    it had a massive increase in unique hexadecimal values, jumping from 0 to 2208
+    in version 4.0.0-beta.2, representing the most extreme outlier for four consecutive versions.
+    In these versions, as mentioned in \cref{sec:analysisPackageSizeIncreasing},
+    the developers erroneously included a \texttt{.yarn} cache directory
+    in the final tarball distributed to the public.
+    The directory contained numerous files, including a generated bundle JavaScript file 
+    containing many hexadecimal values.
+
+    In version 4.0.4 the folder was removed from the tarball, as reported in the release notes on GitHub~\cite{polished_release_notes},
+    and the number of unique hexadecimal values dropped back to 0 (version -11).
+    
+    \item \textbf{xml2js:} Rappresented by the solid blue line in \cref{fig:fig1HexIncreasing},
+    \texttt{xml2js} had a considerable increase at point 4, moving from 0 to 96 unique hexadecimal values.
+
+    This increase occurred because, starting from version 0.6.1, 
+    the developers included a generated JavaScript script in the package.
+    The file was originally written in OCaml, but to ensure its execution in Node.js environments,
+    the code was automatically converted to JavaScript using the \texttt{js\_of\_ocaml} compiler.
+    For efficiency, the compilation process produces a script that makes extensive use of hexadecimal constants.
+    The generated JavaScript file remained in the package tarball for the subsequent version 0.6.2.
+
+\end{itemize}

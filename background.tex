@@ -13,19 +13,19 @@ rather than implementing them from scratch.
 
 These software components are called dependencies, 
 and these dependencies in turn can depend on other components, 
-thus constituting a \ac{SSC} \cite{ohm2023sok}.
+thus constituting a \ac{SSC}~\cite{ohm2023sok}.
 
 These components or packages are distributed in Open Source Package Repositories such as \ac{NPM}, \ac{PyPI} and RubyGems.
 
 These repositories are often used to carry out attacks,
-as they are open and decentralized systems where anyone can freely publish a package \cite{ohm2020backstabbersknifecollectionreview}. 
+as they are open and decentralized systems where anyone can freely publish a package~\cite{ohm2020backstabbersknifecollectionreview}. 
 An attacker may inject malicious code into a legitimate package update, in order to compromise 
 in this way all projects and packages that depend on it.
 
 This type of attack on the \ac{SSC} is called \ac{SSCA} and has become 
-increasingly common in recent years \cite{ohm2020backstabbersknifecollectionreview}.
+increasingly common in recent years~\cite{ohm2020backstabbersknifecollectionreview}.
 
-Several attack vectors are possible \cite{duan2020measuringsupplychainattacks},
+Several attack vectors are possible~\cite{duan2020measuringsupplychainattacks},
 such as Account Compromise, which refers to compromising accounts of Package Maintainers 
 (those who develop and manage the packages) on the registry portal (like \ac{NPM}), allowing
 the attacker to release malicious versions.
@@ -37,22 +37,22 @@ and indirectly as a channel to reach users through their applications
 or services. Users can be exploited to steal their credentials or damage their devices.
 
 Attackers often attempt to mask their malicious code using obfuscation techniques to
-prevent visual detection \cite{ohm2020backstabbersknifecollectionreview}.
-The most common technique is to use a different encoding, such as hexadecimal,
-to hide function or variable names, renaming them with names devoid of semantic meaning, like \_0x264994.
-The leading underscore is inserted because in JavaScript,
-and in other programming languages, variable or function names cannot start with a number.
-In the malicious code, however, there are also hexadecimal values without this prefix, 
-used for example to simply represent numbers and constants.
+prevent visual detection~\cite{ohm2020backstabbersknifecollectionreview}.
+The most common technique involves using a different encoding, such as hexadecimal,
+to hide function or variable names by renaming them with names devoid of semantic meaning, such as \_0x26499F.
+In JavaScript, hexadecimal numeric literals must begin with a leading zero followed by a lowercase or uppercase letter x (0x or 0X)~\cite{hexadecimalsyntax}.
+However, the leading underscore is inserted because JavaScript identifiers (variable or function names) cannot start with a digit.
+Controversely, the malicious code also has hexadecimal values without the underscore prefix when they 
+are used simply to represent numbers and constants.
 This approach is simple and effective, as it does not require the use of external dependencies.
 
 \section{NPM Ecosystem}
 \label{sec:NPMEcosystem}
 
-All the information regarding \ac{NPM} reported below has been taken from the official documentation \cite{npmdocs2026npmdocumentation}.
+All the information regarding \ac{NPM} reported below has been taken from the official documentation~\cite{npmdocs2026npmdocumentation}.
 
 For the JavaScript and Node.js ecosystem, \ac{NPM} is one of the largest and most active Open source package repositories, 
-with over two million packages available \cite{9505063}.
+with over two million packages available~\cite{9505063}.
 
 The public \ac{NPM} registry is a database of JavaScript packages, where developers 
 can share and download packages. % https://docs.npmjs.com/about-the-public-npm-registry
@@ -87,7 +87,7 @@ Therefore, to ensure a fair and symmetrical comparison, it is necessary to analy
 \label{sec:tarballContent}
 
 A tarball can contain any type of file, however, 
-the following types of files are typically found within it \cite{pinckney2023largescaleanalysissemantic}:
+the following types of files are typically found within it~\cite{pinckney2023largescaleanalysissemantic}:
 
 \begin{itemize}
     \item \textbf{Configuration files and Metadata:}
@@ -121,15 +121,18 @@ the following types of files are typically found within it \cite{pinckney2023lar
 
     \item \textbf{Code files and Build Artifacts:}
 
-    The tarball generally includes JavaScript and/or TypeScript code files, 
-    which constitute the functional logic of the package.
+    The tarball generally contains JavaScript and TypeScript files, 
+    which define the package's functional logic, but it may 
+    also include build artifacts~\cite{9240695}.
 
-    Build artifacts are often found within the tarball \cite{9240695}.
     These files are the final product of the transformation and compilation process of a package's source code.
     They are optimized versions of the original code automatically generated, rather than written directly by developers.
-
-    Through processes such as minification, these artifacts reduce the size of the files
-    and improving application performance.
+    Through processes such as minification, these artifacts reduce file sizes
+    while improving application performance.
+    An example of such artifacts are Source Maps, files with a .map extension 
+    that maps between minified or transformed code 
+    and its original unmodified form, allowing the original code to be reconstructed 
+    and used when debugging~\cite{sourceMap}.
 
     Furthermore, this also ensures compatibility, as the code transformation during the build allows the software to run 
     across different environments and runtimes without the end user needing to worry about the original syntax.

@@ -27,8 +27,9 @@
 
 \maketitle
 
-%\begin{abstract}
-%\end{abstract}
+\begin{abstract}
+\input{abstract}
+\end{abstract}
 
 \tableofcontents
 
@@ -49,12 +50,15 @@
 \input{ExperimentalSetup/downloadMaliciousTarballs}
 
 \include{metrics/metricAnalysis}
-
-\include{metrics/filetype}
-\include{metrics/packageSize}
-\include{metrics/LongestLineLenght}
-\include{metrics/hex}
-\include{metrics/cryptoAdd}
+\input{metrics/filetype/fileType}
+\input{metrics/filetype/analysisFT}
+\include{metrics/packageSize/packageSize}
+\input{metrics/packageSize/analysisPS}
+\include{metrics/LongestLineLength/LongestLineLength}
+\input{metrics/LongestLineLength/analysisLLL}
+\include{metrics/hex/hex}
+\input{metrics/hex/analysisHex}
+\include{metrics/ethAdd/ethAdd}
 \include{metrics/wrapUp}
 
 \include{conclusion}

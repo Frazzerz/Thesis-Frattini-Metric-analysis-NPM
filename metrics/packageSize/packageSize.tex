@@ -1,0 +1,116 @@
+\section{Analysis Metric 2: Package Size}
+\label{sec:analysisPackageSize}
+
+\subsection{Metric Definition}
+\label{sec:metricPackageSizeDefinition}
+
+The second metric we analyzed is the size of the \ac{NPM} packages, expressed in bytes.
+
+This metric represents the uncompressed size of the package contents.
+To compute this, the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}) first computes
+the size of each extracted file, and then sums all the individual sizes to obtain the total size of the package version.
+
+This metric was taken into consideration because all four analyzed attacks (\cref{ch:AnalysisRecentAttacks})
+introduce or modify files that increase the package size.
+Specifically, attack A (\cref{sec:attackA}) introduces a malicious \ac{DLL} weighing 1.2 MB,
+attack B (\cref{sec:attackB}) increases the size of existing \texttt{index.js} file by adding a malicious line of 76,438 characters,
+attack C (\cref{sec:attackC}) adds a malicious file weighing approximately 3.7 MB, 
+and attack D (\cref{sec:attackD}) introduces a malicious file weighing over 10 MB.
+
+\subsection{Goodware Dataset Scenario}
+\label{sec:goodwarePackageSize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/packageSize/PS_plot1.pdf}
+    \caption{Goodware dataset Trend for the Package Size Metric}
+    \label{fig:fig1PackageSize}
+\end{figure}
+
+For this metric, the Goodware dataset (\cref{sec:goodwareDataset}) contains the 
+size for each of the 20 versions of every package.
+
+We used four figures, \cref{fig:fig1PackageSize} \cref{fig:fig1PackageSizeIncreasing} \cref{fig:fig1PackageSizeDecreasing} and \cref{fig:fig1PackageSizeStable}, 
+to visualize the trend of this metric across 20 versions in the Goodware dataset.
+The caracteristics of these figures are described in \cref{sec:Figure1}.
+
+The median grows progressively across the versions, starting from a total package size of approximately 71 KB in the older versions, 
+up to a total size of approximately 84 KB in the most recent versions.
+
+We studied several packages that had outlier values for one or more versions.
+We highlighted these 9 packages with solid colored lines, categorizing them into the following figures based on their observed trends:
+\begin{itemize}
+    \item \textbf{Increasing Trend:} \cref{fig:fig1PackageSizeIncreasing} shows highlighted packages with an increasing trend over time.
+    \item \textbf{Decreasing Trend:} \cref{fig:fig1PackageSizeDecreasing} shows highlighted packages with a decreasing trend.
+    \item \textbf{Stable Trend:} \cref{fig:fig1PackageSizeStable} shows highlighted packages with a stable trend.
+\end{itemize}
+
+
+\subsection*{Analysis Outliers Packages: Increasing Trend}
+\label{sec:analysisPackageSizeIncreasing}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/packageSize/PS_plot1_Increasing_Trend.pdf}
+    \caption{Outliers package Increasing Trend for the Package Size Metric in Goodware dataset}
+    \label{fig:fig1PackageSizeIncreasing}
+\end{figure}
+
+These four packages, 
+\texttt{polished}, \texttt{moment-timezone}, \texttt{figlet} and \texttt{date-fns},
+had outlier values and also experienced a significant increase in size from one version to the next.
+
+\begin{itemize}
+
+    \item \textbf{Polished:} Rapresented by the solid pink line in \cref{fig:fig1PackageSizeIncreasing},
+    \texttt{polished} is used for styling styling in JavaScript~\cite{polished}.
+    As seen at point 1 in the figure,
+    it had a massive increase in package size, going from about 2.7 MB to 9.2 MB 
+    starting from version 4.0.0-beta.2 for four consecutive versions.
+    In these versions, as previously seen in \cref{sec:analysisRareFileTypesOutliers}, 
+    the developers erroneously included a \texttt{.yarn} cache directory 
+    in the final tarball distributed to the public, which contained numerous files.
+    In version 4.0.4, the folder was removed from the tarball, as reported in the release notes on GitHub~\cite{polished_release_notes}, 
+    returning to its previous dimensions.
+    
+    \item \textbf{moment-timezone:} Rapresented by the solid green line in \cref{fig:fig1PackageSizeIncreasing},
+    the \texttt{moment-timezone} package at point 2 in the figure experienced a significant increase in size, 
+    skyrocketing from about 1.6 MB to 211 MB.
+    As previously seen in \cref{sec:analysisRareFileTypesOutliers},
+    in version 0.5.36, the developers erroneously included a temporary folder containing various files, 
+    making this version the heaviest in the entire Goodware dataset.
+    In the subsequent update, the folder was removed, returning to its previous size.
+
+    \item \textbf{figlet:} Rapresented by the solid blue line in \cref{fig:fig1PackageSizeIncreasing},
+    \texttt{figlet} is used to create ASCII art text from normal text strings,
+    trasforming letters into large stylized characters composed of ASCII symbols~\cite{figlet}.
+    As seen at point 3 in the figure,
+    it had a significant increase in size from about 6.2 MB to 17.5 MB.
+    In version 1.9.0, it underwent a heavy refactory to use TypeScript and modern tooling, 
+    adding approximately 300 files, as reported in the release notes on GitHub~\cite{figlet_release_notes}.
+    
+    \item \textbf{date-fns:} Rapresented by the solid orange line in \cref{fig:fig1PackageSizeIncreasing},
+    \texttt{date-fns} provides a toolset for manipulating JavaScript dates in a browser and Node.js~\cite{date-fns}.
+    As seen at point 4 in the figure, it had a significant increase in size from about 5 MB to 22 MB.
+    In version 3.6.0, the developers added 400 new files for compatibility reasons with older browsers,
+    according to GitHub release notes~\cite{date-fns_release_notes}.
+
+\end{itemize}
+
+\subsection*{Analysis Outliers Packages: Decreasing Trend}
+\label{sec:analysisPackageSizeDecreasing}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/packageSize/PS_plot1_Decreasing_Trend.pdf}
+    \caption{Outliers package Decreasing Trend for the Package Size Metric in Goodware dataset}
+    \label{fig:fig1PackageSizeDecreasing}
+\end{figure}
+
+Only the \texttt{punycode} package had a decrease sufficient to move from an outlier value to a value within 
+the confidence interval from one version to the next.
+As can be seen in \cref{fig:fig1PackageSizeDecreasing},
+\texttt{punycode} (the green line) in the first three versions had a total package size 
+of 15.5 MB, and contained about 600 files.
+Starting at point 1 in the figure, the package has been optimized over the releases to include only the essential files,
+reducing its overall size, and containing only five files for a total size of about 33 KB in the latest versions.
