@@ -42,7 +42,7 @@ total count of unique hexadecimal values for each of the 20 versions of every pa
 
 We used four figures, \cref{fig:fig1Hex} \cref{fig:fig1HexIncreasing} \cref{fig:fig1HexDecreasing} and \cref{fig:fig1HexStable}, 
 to visualize the trend of this metric across 20 versions in the Goodware dataset (explained in \cref{sec:goodwareDataset}).
-The caracteristics of these figures are described in \cref{sec:Figure1}.
+The characteristics of these figures are described in \cref{sec:Figure1}.
 
 These figures report the 109 packages in the Goodware dataset that had at least one positive hexadecimal value in at least one of the 20 versions.
 The remaining 520 packages in the Goodware dataset did not have any hexadecimal value in any of their 20 versions.
@@ -78,13 +78,13 @@ from one version to the next were: \texttt{crypto-js}, \texttt{polished}, and \t
     \item \textbf{crypto-js:} This package is related to cryptography and implements 
     cryptographic primitives, such as encryption algorithms and digital signatures~\cite{crypto-js}.
 
-    Rapresented by the solid green line in \cref{fig:fig1HexIncreasing},
+    Represented by the solid green line in \cref{fig:fig1HexIncreasing},
     the package used decimal values to implement its cryptographic primitives
     in its first three versions (from 13 years ago, version 3.1.2 to 3.1.2-2).
     Since it had no hexadecimal values, the metric for these versions was 0 (versions -19 to -17).
     
     In the subsequent release (3.1.2-3), as shown at point 1 in \cref{fig:fig1HexIncreasing}, 
-    the developers converted these values into hexadecimal format to align with standard cryprographic implementations pratices 
+    the developers converted these values into hexadecimal format to align with standard cryptographic implementations practices 
     (like \ac{SHA}~\cite{gallagher1995secure}).
     This update increased the number of unique hexadecimal values to 546,
     rapresenting an outlier also for subsequent versions.
@@ -93,7 +93,7 @@ from one version to the next were: \texttt{crypto-js}, \texttt{polished}, and \t
     where the count of unique hexadecimal values reached 1588, 
     representing the most extreme outlier for the latest version.
 
-    \item \textbf{Polished:} Rapresented by the solid pink line in \cref{fig:fig1HexIncreasing},
+    \item \textbf{Polished:} Represented by the solid pink line in \cref{fig:fig1HexIncreasing},
     \texttt{polished} is used for styling in JavaScript~\cite{polished}.
     As seen at point 3, 
     it had a massive increase in unique hexadecimal values, jumping from 0 to 2208

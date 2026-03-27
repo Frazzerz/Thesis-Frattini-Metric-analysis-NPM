@@ -58,7 +58,7 @@ Consequently, the metric is not able to detect this specific attacks and results
     \label{fig:fig2PackageSizeAttackB}
 \end{figure}
 
-Attach B (\cref{sec:attackB}) increases the size of existing \texttt{index.js} file by adding a malicious line of 76,438 characters.
+Attack B (\cref{sec:attackB}) increases the size of existing \texttt{index.js} file by adding a malicious line of 76,438 characters.
 Even in this case, the increase in size of the versions of the nine packages compromised by this attack 
 is not sufficient to be among the outlier values, as can be seen in \cref{fig:fig2PackageSizeAttackB}, 
 For this reason, the metric is not indicative for detecting this specific attack, as the malicious versions are indistinguishable from legitimate ones.
@@ -74,7 +74,7 @@ For this reason, the metric is not indicative for detecting this specific attack
 \end{figure}
 
 The attack C (\cref{sec:attackC}) which adds a malicious file weighing approximately 3.7 MB,
-succeeds in placeing the compromised versions of the packages affected by this attack among the outlier values, 
+succeeds in placing the compromised versions of the packages affected by this attack among the outlier values, 
 as can be seen in \cref{fig:fig2PackageSizeAttackC}.
 Therefore, the metric is effective for detecting this specific attack.
 
@@ -94,8 +94,8 @@ the metric is indicative for detecting this specific attack, as can be seen in \
 \subsection*{Summary of Comparison with Malware Dataset}
 \label{sec:analysisPackageSizeSummaryComparisonMalware}
 
-In summary, the metric is efficient in detecting the attack C (Shai-Hulud~1.0 \cref{sec:analysisPackageSizeAttackC}) 
-and the attack D (Shai-Hulud~2.0 \cref{sec:analysisPackageSizeAttackD})
+In summary, the metric is efficient in detecting the attack C (\texttt{Shai-Hulud}~1.0 \cref{sec:analysisPackageSizeAttackC}) 
+and the attack D (\texttt{Shai-Hulud}~2.0 \cref{sec:analysisPackageSizeAttackD})
 because, in both cases, the malicious versions have a package size that qualifies as outlier values.
 
 Instead, the metric is not indicative for detecting the attack A (Malicious Windows DLL \cref{sec:analysisPackageSizeAttackA}) 

@@ -54,7 +54,7 @@
 % macros
 \newcommand*{\latex}{\LaTeX \xspace}
 
-\usepackage{hyperref}
+%\usepackage{hyperref}
 \newcommand{\myhref}[2]{#2\footnote{\url{#1}}}
 
 % tracking changes using the todonotes package
@@ -76,6 +76,7 @@
 \usepackage[T1]{fontenc}
 
 %Per cerchi colorati nella tabella in wrapUp
+\usepackage{tikz}
 \newcommand*\emptycirc[1][1ex]{\tikz\draw[thick, red] (0,0) circle (#1);} 
 \newcommand*\halfcirc[1][1ex]{
   \begin{tikzpicture}

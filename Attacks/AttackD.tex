@@ -1,9 +1,9 @@
 \section{Attack D: Shai-Hulud 2.0}
 \label{sec:attackD}
 
-Just two months after the Shai-Hulud~1.0 attack (\cref{sec:attackC}), 
+Just two months after the \texttt{Shai-Hulud}~1.0 attack (\cref{sec:attackC}), 
 on November 24, 2025, a new more aggressive version 
-of the attack was identified under the name Shai-Hulud~2.0~\cite{cutolo2025shaihulud20}.
+of the attack was identified under the name \texttt{Shai-Hulud}~2.0~\cite{cutolo2025shaihulud20}.
 
 This time, this \ac{SSCA} infected 1,055 \ac{NPM} packages within hours~\cite{cutolo2025shaihulud20}.
 
@@ -12,7 +12,7 @@ which is to steal sensitive information such as Github and \ac{NPM} authenticati
 access keys for Cloud services, and system data.
 
 Its operation also remained unaltered, in fact as explained in \cref{sec:attackC},
-the attack is based on the automated execution of TruffleHog, 
+the attack is based on the automated execution of \texttt{TruffleHog}~\cite{trufflehog}, 
 searching for secrets in the victim's local file systems.
 
 Subsequently, if it finds valid tokens for \ac{NPM} and Github,
@@ -27,24 +27,24 @@ However, this attack shows some differences and introduces several improvements~
 
     \item \textbf{Malicious Files:}
     In the tarball of the compromised packages, there are two new files: 
-    a Bun configuration file setup\_bun.js and bun\_environment.js.
+    a Bun configuration file \texttt{setup\_bun.js} and \texttt{bun\_environment.js}.
 
-    The first file calls bun\_environment.js, which weighs over 10 MB and 
+    The first file calls \texttt{bun\_environment.js}, which weighs over 10 MB and 
     contains the malicious code in a single obfuscated line of code 10,157,373 characters long.
 
     \item \textbf{Obfuscated Code:}
     The malicious code use an obfuscation technique that encodes 
     in hexadecimal function names, variables, and constants,
-    making the bun\_environment.js file full of hexadecimal values
-    and hiding the caracteristics of the attack.
+    making the \texttt{bun\_environment.js} file full of hexadecimal values
+    and hiding the characteristics of the attack.
 
     \item \textbf{Repository Name:}
     The repository created to publish the stolen information 
     has a name of 18 random characters, with the fixed description 
     "Sha1-Hulud: The Second Coming",
-    confirming that it is the successor of the previous Shai-Hulud~1.0 attack.
+    confirming that it is the successor of the previous \texttt{Shai-Hulud}~1.0 attack.
 
-    \item \textbf{Desctructive Behavior:}
+    \item \textbf{Destructive Behavior:}
     Finally, if the malware fails to exfiltrate data or replicate itself,
     for example because it does not find valid credentials,
     it attempts to completely delete the user's home folder, destroying all local files.

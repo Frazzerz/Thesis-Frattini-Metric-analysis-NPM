@@ -1,7 +1,7 @@
 \section{Attack B: Crypto attack}
 \label{sec:attackB}
 
-On September 8, 2025, an attacker compromised eighteen popular \ac{NPM} packages, including chalk and debug, 
+On September 8, 2025, an attacker compromised eighteen popular \ac{NPM} packages, including \texttt{chalk} and \texttt{debug}, 
 respectively the first and third most popular packages 
 (in terms of number of stars) on \ac{NPM}~\cite{tristan2026listtop10000npmpackages}.
 
@@ -25,9 +25,9 @@ The malware's operation can be broken into several phases~\cite{henig2025breakdo
 \begin{enumerate}
     \item \textbf{Injection into the Browser:}
     The malware integrates itself directly into the browser environment, 
-    hooking critical functions such as fetch and XMLHttpRequest
+    hooking critical functions such as \texttt{fetch} and \texttt{XMLHttpRequest}
     (the core \acp{API} responsible for web data transfer), 
-    and wallet-specific \acp{API} like window.ethereum.
+    and wallet-specific \acp{API} like \texttt{window.ethereum}.
     This allows it to intercept web traffic and wallet interactions in real time.
 
     \item \textbf{Monitoring for sensitive data:}
@@ -46,7 +46,7 @@ The malware's operation can be broken into several phases~\cite{henig2025breakdo
     such as approvals or allowances, before the user's signature.
 
     For example, if the user interacts with a smart contract, such as to swap tokens,
-    the malware can routes funds to the attacker's address,
+    the malware can route funds to the attacker's address,
     even if the user interface appears correct.
 
     To achieve this, the malicious code contains the Ethereum addresses of several popular smart contracts:
@@ -62,13 +62,13 @@ The malware's operation can be broken into several phases~\cite{henig2025breakdo
     
 \end{enumerate}
 
-The malicious code is in the index.js file, written as a 
+The malicious code is in the \texttt{index.js} file, written as a 
 single obfuscated line of code 76,438 characters long, which also increased the file size.
 
 The obfuscation technique used here is to 
 encode in hexadecimal function names, variables, and constants,
-making the index.js file full of hexadecimal values such as 
-0x1c8 or \_0x6fd57a, compared to the index.js file of benign versions.
+making the \texttt{index.js} file full of hexadecimal values such as 
+\texttt{\_0x1c8} or \texttt{\_0x6fd57a}, compared to the \texttt{index.js} file of benign versions.
 
 Due to this, many behaviors and characteristics of the malware are hidden, such as
 the hooking of critical functions and wallet-specific \acp{API}, 

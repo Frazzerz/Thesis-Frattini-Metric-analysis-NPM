@@ -4,27 +4,27 @@
 Several detection tools have been developed to 
 identify malicious \ac{NPM} packages and counter \acp{SSCA}.
 
-One of these tools is DONAPI~\cite{huang2024donapimaliciousnpmpackages}, 
+One of these tools is \texttt{DONAPI}~\cite{huang2024donapimaliciousnpmpackages}, 
 which uses a combination of static analysis, based on a predefined database of sensitive \acp{API}, 
 and dynamic analysis, to extract behavioral patterns also in order to classify malicious packages.
 
-Another tool is SpiderScan~\cite{10.1145/3691620.3695492},
+Another tool is \texttt{SpiderScan}~\cite{10.1145/3691620.3695492},
 which is based on graph-based behavior modeling and matching.
 It uses an \ac{LLM} for various tasks, including the identification of sensitive \acp{API} and the analysis of shell commands. 
-SpiderScan is not the only tool that uses \acp{LLM}, as many others exist
+\texttt{SpiderScan} is not the only tool that uses \acp{LLM}, as many others exist
 \cite{zahan2025leveraginglargelanguagemodels, article, Zhang_2025}.
 
 These two tools are not open source and have some limitations.
 
-For example the dynamic analysis in DONAPI risks hindering its 
+For example the dynamic analysis in \texttt{DONAPI} risks hindering its 
 practical usefulness in real-world scenarios due to its heavyweight nature and increased slowness~\cite{10.1145/3691620.3695492}.
 
-Instead in SpiderScan, the use of prompt engineering methods that 
+Instead in \texttt{SpiderScan}, the use of prompt engineering methods that 
 leverage the capability of \ac{LLM} to detect 
 maliciousness can be highly expensive to use in real-world scenarios.
 
 Furthermore, these tools analyze only the last published 
-release of the packages, without considering the anlysis of more release 
+release of the packages, without considering the analysis of more releases 
 to obtain a vision of the evolution of the package over time.
 
 A tool that instead analyzes the evolution of the package is the one by \textcite{zoratti2025valutazione}.

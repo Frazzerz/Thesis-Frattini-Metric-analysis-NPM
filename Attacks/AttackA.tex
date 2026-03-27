@@ -2,28 +2,28 @@
 \label{sec:attackA}
 
 The first attack, which occurred on July 18, 2025,
-infected five \ac{NPM} packages, one of which, eslint-config-prettier, is widely used
+infected five \ac{NPM} packages, one of which, \texttt{eslint-config-prettier}, is widely used
 with over thirty million weekly downloads~\cite{endorlabs2025eslint}.
 
 A maintainer of this package fell victim 
 to a phishing email, and the attacker, 
 once the account was compromised, published malicious versions of the following packages:
 \begin{itemize}
-    \item eslint-config-prettier
-    \item eslint-plugin-prettier
-    \item synckit
-    \item @pkgr/core
-    \item napi-postinstall
+    \item \texttt{eslint-config-prettier}
+    \item \texttt{eslint-plugin-prettier}
+    \item \texttt{synckit}
+    \item \texttt{@pkgr/core}
+    \item \texttt{napi-postinstall}
 \end{itemize}
 
-The tarball of these malicious versions contains a new file called install.js
-and a \ac{DLL} called node-gyp.dll, weighing 1.2 MB.
+The tarball of these malicious versions contains a new file called \texttt{install.js}
+and a \ac{DLL} called \texttt{node-gyp.dll}, weighing 1.2 MB.
 
 During the installation or update of one
 of these compromised packages,
-the install.js script is executed, which invokes rundll32.exe.
+the \texttt{install.js} script is executed, which invokes \texttt{rundll32.exe}.
 
-The latter loads the node-gyp.dll into memory,
+The latter loads the \texttt{node-gyp.dll} into memory,
 allowing the attacker to perform remote code execution
 on Windows systems, enabling for example the installation of 
 additional malware.

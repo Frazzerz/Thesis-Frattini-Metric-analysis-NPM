@@ -12,7 +12,7 @@ From \cref{fig:fig1ComFileTypes}, we can observe that:
 \begin{itemize}
     \item 
     At least one JSON file is always present in all packages across all versions.
-    This is because an \ac{NPM} package must contain a package.json file in order to be published to the \ac{NPM} registry~\cite{npmdocs2026npmdocumentation}.
+    This is because an \ac{NPM} package must contain a \texttt{package.json} file in order to be published to the \ac{NPM} registry~\cite{npmdocs2026npmdocumentation}.
     
     \item A JavaScript file is not always present.
     This can occur for several reasons:
@@ -42,8 +42,8 @@ From \cref{fig:fig1ComFileTypes}, we can observe that:
 
     \end{itemize}
 
-    \item Other prevalent file types include markdown files, typically README and CHANGELOG,
-    and text files, usually LICENSE. Small variations in their presence are due to maintainer forgetfulness.
+    \item Other prevalent file types include markdown files, typically \texttt{README} and \texttt{CHANGELOG},
+    and text files, usually \texttt{LICENSE}. Small variations in their presence are due to maintainer forgetfulness.
     
     \item There is a constant growth in the presence of TypeScript files, 
     which increase from a relative frequency of approximately 50\% in older versions to about 70\% in recent ones.
@@ -115,7 +115,7 @@ As shown in \cref{fig:fig1RareFileTypes}, the Goodware dataset contains two pack
 \begin{itemize}
     \item The \texttt{nodemon} package is a tool that helps develop Node.js based applications 
     by automatically restarting the node application when file changes in the directory are detected~\cite{nodemon}.
-    Specifically, it includes \texttt{windows-kill.exe} to ensure singal event (like CTRL+C) work correctly on Windows, 
+    Specifically, it includes \texttt{windows-kill.exe} to ensure signal event (like CTRL+C) work correctly on Windows, 
     for instance, to allow a clean process shutdown.
 
     \item In contrast, the \texttt{moment-timezone} included a \ac{PE} file by mistake within a temporary folder,

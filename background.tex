@@ -39,10 +39,11 @@ or services. Users can be exploited to steal their credentials or damage their d
 Attackers often attempt to mask their malicious code using obfuscation techniques to
 prevent visual detection~\cite{ohm2020backstabbersknifecollectionreview}.
 The most common technique involves using a different encoding, such as hexadecimal,
-to hide function or variable names by renaming them with names devoid of semantic meaning, such as \_0x26499F.
-In JavaScript, hexadecimal numeric literals must begin with a leading zero followed by a lowercase or uppercase letter x (0x or 0X)~\cite{hexadecimalsyntax}.
+to hide function or variable names by renaming them with names devoid of semantic meaning, such as \texttt{\_0x26499F}.
+In JavaScript, hexadecimal numeric literals must begin with a leading zero followed by a lowercase or uppercase letter x 
+(\texttt{0x} or \texttt{0X})~\cite{hexadecimalsyntax}.
 However, the leading underscore is inserted because JavaScript identifiers (variable or function names) cannot start with a digit.
-Controversely, the malicious code also has hexadecimal values without the underscore prefix when they 
+Conversely, the malicious code also has hexadecimal values without the underscore prefix when they 
 are used simply to represent numbers and constants.
 This approach is simple and effective, as it does not require the use of external dependencies.
 
@@ -78,8 +79,8 @@ The content of the tarball may differ from the content of the Git repository, ev
 %https://docs.npmjs.com/cli/v11/commands/npm-publish
 %https://docs.npmjs.com/cli/v11/configuring-npm/package-json
 
-In fact, through the optional "files" field of package.json, 
-it is possible to include only the specified files, or exclude them if the .npmignore file is present.
+In fact, through the optional \texttt{files} field of \texttt{package.json}, 
+it is possible to include only the specified files, or exclude them if the \texttt{.npmignore} file is present.
 
 Therefore, to ensure a fair and symmetrical comparison, it is necessary to analyze the same type of artifact.
 
@@ -92,11 +93,11 @@ the following types of files are typically found within it~\cite{pinckney2023lar
 \begin{itemize}
     \item \textbf{Configuration files and Metadata:}
     
-    The package.json file describes the package's file or directory, 
-    and a package must contain a package.json file in order to be published to the \ac{NPM} registry.
+    The \texttt{package.json} file describes the package's file or directory, 
+    and a package must contain a \texttt{package.json} file in order to be published to the \ac{NPM} registry.
     %https://docs.npmjs.com/about-packages-and-modules
     
-    In package.json, the name and version fields are required, and together they form an identifier that is assumed to be completely unique.
+    In \texttt{package.json}, the name and version fields are required, and together they form an identifier that is assumed to be completely unique.
     %https://docs.npmjs.com/cli/v11/configuring-npm/package-json
 
     Once a package is published with a given name and version, that specific combination can 
@@ -116,7 +117,7 @@ the following types of files are typically found within it~\cite{pinckney2023lar
     \item \textbf{Documentation and general information:}
 
     Frequently, documentation files, 
-    such as Markdown files like README.md and CHANGELOG.md, and the LICENSE text file 
+    such as Markdown files like \texttt{README.md} and \texttt{CHANGELOG.md}, and the \texttt{LICENSE} text file 
     used to specify copyright, are included inside the tarball.
 
     \item \textbf{Code files and Build Artifacts:}
@@ -129,7 +130,7 @@ the following types of files are typically found within it~\cite{pinckney2023lar
     They are optimized versions of the original code automatically generated, rather than written directly by developers.
     Through processes such as minification, these artifacts reduce file sizes
     while improving application performance.
-    An example of such artifacts are Source Maps, files with a .map extension 
+    An example of such artifacts are Source Maps, files with a \texttt{.map} extension 
     that maps between minified or transformed code 
     and its original unmodified form, allowing the original code to be reconstructed 
     and used when debugging~\cite{sourceMap}.

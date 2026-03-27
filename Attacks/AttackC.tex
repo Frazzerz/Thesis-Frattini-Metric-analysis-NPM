@@ -2,8 +2,8 @@
 \label{sec:attackC}
 
 On September 15, 2025, 187 \ac{NPM} packages, 
-including @ctrl/tinycolor with over two million weekly downloads, 
-were infected by the \ac{SSCA} called Shai-Hulud~1.0~\cite{oxsecurity2025npm20hack}.
+including \texttt{@ctrl/tinycolor} with over two million weekly downloads, 
+were infected by the \ac{SSCA} called \texttt{Shai-Hulud}~1.0~\cite{oxsecurity2025npm20hack}.
 
 The goal of this attack is to steal sensitive information from developers and \ac{NPM} maintainers, such as:
 \begin{itemize}
@@ -16,13 +16,13 @@ Its operation can be divided into these phases:
 \begin{enumerate}
     \item When the victim finishes installing or updating a package compromised by this attack,
     the malicious script is executed which downloads, installs and runs a 
-    platform-appropriate version of TruffleHog~\cite{trufflehog}.
+    platform-appropriate version of \texttt{TruffleHog}~\cite{trufflehog}.
 
-    TruffleHog is a legitimate tool, used for example to prevent the leak of secrets in code.
+    \texttt{TruffleHog} is a legitimate tool, used for example to prevent the leak of secrets in code.
     However in this case, it is used 
     for maliciously search for secrets in the victim's local file systems.
 
-    \item After completing the search with TruffleHog,
+    \item After completing the search with \texttt{TruffleHog},
     the malware checks if the keys related to \ac{NPM} and Github are valid and working.
     \begin{enumerate}
 
@@ -37,8 +37,8 @@ Its operation can be divided into these phases:
         \item
         If the malware finds valid Github keys, 
         it creates a public repository on the victim's account
-        called Shai-Hulud (like the worm in the Dune novels),
-        containing a data.json file with all the stolen information encoded.
+        called \texttt{Shai-Hulud} (like the worm in the Dune novels),
+        containing a \texttt{data.json} file with all the stolen information encoded.
     \end{enumerate}
 
     
@@ -48,5 +48,5 @@ The method of the first infection and the patient zero remained unknown,
 but it could be a case of phishing~\cite{kaspersky2025tinycolorshaikuludsupplychainattack}.
 
 The malicious code was inserted into the packages' tarballs
-in the new file bundle.js, weighs approximately 3.7 MB 
+in the new file \texttt{bundle.js}, weighs approximately 3.7 MB 
 and contains only a single line of code 3,734,355 characters long.
