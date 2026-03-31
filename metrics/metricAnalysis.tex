@@ -3,7 +3,7 @@
 \setcounter{section}{-1} % Per farlo partire da 6.0
 
 In this chapter, we present the metrics defined for this study and the analysis of their behavior on the datasets detailed in \cref{sec:datasets}.
-Our goal is to evaluate their effectiveness in detecting the \acp{SSCA} discussed in \cref{ch:AnalysisRecentAttacks}.
+Our goal is to evaluate the effectiveness of these metrics in detecting the \acp{SSCA} discussed in \cref{ch:AnalysisRecentAttacks}.
 
 \section{Methodology}
 \label{sec:metricsMethodology}
@@ -26,24 +26,33 @@ Each metric is discussed in a dedicated section, structured as follows:
     We analyzed the distribution and evolutionary patterns 
     of the metric within the Goodware dataset explained in \cref{sec:goodwareDataset}.
     This allows us to define a baseline for the metric, that is its behavior under normal development conditions.
-    And then, we investigated the nature of those packages that exhibit outliers values.
+    And then, we investigated the nature of those packages that exhibit outlier values.
 
     \item \textbf{Comparison with Malware Dataset:}
     Finally, we evaluated the metric's sensitivity by analyzing
-    the values (the peaks) of the compromised versions of the packages in the Malware dataset explained in \cref{sec:malwareDataset}.
+    the values (peaks) in the compromised versions of the packages in the Malware dataset explained in \cref{sec:malwareDataset}.
     We compare these values with the baseline of the Goodware dataset, 
     to verify the effectiveness of the metric in detecting the \acp{SSCA} considered.
 
 \end{enumerate}
 
-Unless otherwise specified, to show the Goodware Dataset Analysis and the Comparison with Malware Dataset, 
-we use figures with the same characteristics.
-Below, we explain how to interpret them.
+Except for the File Types metric in \cref{sec:analysisFileTypes} and the Unique Ethereum Addresses metric in \cref{sec:analysisEthAdd},
+we employ figures with the same characteristics
+to show the Goodware Dataset Analysis and the Comparison with Malware Dataset. 
+To illustrate how to read these figures, we use the example figures below,
+which are constructed with fictional data and are not based on any real package or metric.
 
 \subsection{Figure Goodware Dataset Analysis}
 \label{sec:Figure1}
 
-This figure illustrates the trend across 20 versions of the metric in the
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/Example_plot1.pdf}
+    \caption{Example Goodware dataset Trend for a Metric}
+    \label{fig:fig1Example}
+\end{figure}
+
+This type of figure, like the example \cref{fig:fig1Example}, illustrates the trend across 20 versions of the metric in the
 Goodware dataset explained in \cref{sec:goodwareDataset},
 after excluding any packages that are not significant in this metric, 
 i.e. those that have a number of occurrences equal to zero in all versions.
@@ -61,18 +70,20 @@ which are the remaining 5\% of the population positioned outside the confidence 
 
 A package is classified as an outlier in a version when its values 
 exceeds the 95th percentile of that confidence interval.
+We heuristically chose to use the 95th percentile to define the outliers,
+following the approach of \textcite{article2}.
 
-Following the approach of \textcite{article2}, we heuristically chose to use the 95th 
-percentile to define the outliers.
-
-We have highlighted with colored lines the packages that have outlier values or 
-values that are the upper limit of a confidence interval for one or more versions.
+We have highlighted with colored lines some of the packages that have outlier values or 
+values that are the upper limit of a confidence interval for one or more versions. 
+An example of these highlighted packages are the \texttt{package1}, \texttt{package2}, 
+and \texttt{package3} in example \cref{fig:fig1Example}.
 
 These packages, and their corresponding outlier values, exhibit atypical behavior compared to the majority of the population.
 For this reason, they have been analyzed individually to understand 
 their nature and the reasons leading to such high values.
 
-The highlighted packages may show an increasing, decreasing, or stable trend,
+The highlighted packages may show an increasing (\texttt{package1} in \cref{fig:fig1Example}), 
+decreasing (\texttt{package2}), or stable (\texttt{package3}) trend,
 and for better visualization,
 if there are many highlighted packages, 
 we provide separate figures for each trend.
@@ -89,7 +100,22 @@ with a number of values that exceed those of the majority of the population by s
 \subsection{Figure Comparison with Malware Dataset}
 \label{sec:Figure2}
 
-This figure illustrates the trend across 20 versions of the metric in the
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/Example_plot2_detectable.pdf}
+    \caption{Example Comparison with Malware Metric - detectable attack}
+    \label{fig:fig2ExampleDetectable}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{metrics/Example_plot2_not_detectable.pdf}
+    \caption{Example Comparison with Malware Metric - not detectable attack}
+    \label{fig:fig2ExampleNotDetectable}
+\end{figure}
+
+This type of figure, like the example \cref{fig:fig2ExampleDetectable} and the example \cref{fig:fig2ExampleNotDetectable},
+illustrates the trend across 20 versions of the metric in the
 Malware dataset (explained in \cref{sec:malwareDataset}) compared with the Goodware dataset (explained in \cref{sec:goodwareDataset}).
 
 The x-axis shows the package versions, from the least recent (-19) to the latest available (0), 
@@ -110,9 +136,9 @@ for each package of that attack to ensure better visualization.
 In these figures, we can evaluate if the 
 metric is sensitive enough to detect the compromised versions of the packages.
 
-To make malicious versions identifiable, they must be placed among the outlier values.
+To make malicious versions identifiable, they must be placed among the outlier values, like in \cref{fig:fig2ExampleDetectable}.
 
-If, however, the number of occurrences in 
-malicious versions falls within the confidence intervals,
-the metric will not be indicative for detecting that attack, 
+However, if the number of occurrences in 
+malicious versions falls within the confidence intervals, as shown in \cref{fig:fig2ExampleNotDetectable},
+the metric will not be indicative in detecting that attack, 
 since the versions would be indistinguishable from the legitimate ones.

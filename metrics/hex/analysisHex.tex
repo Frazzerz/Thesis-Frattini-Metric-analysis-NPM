@@ -8,37 +8,36 @@
     \label{fig:fig1HexDecreasing}
 \end{figure}
 
-The packages that had a considerable decrease from one version to the next are: \texttt{buffer-crc32} and \texttt{object-hash}.
+The packages that had a considerable decrease from one version to the next are: \texttt{buffer-\\crc32} and \texttt{object-hash}.
 
 \begin{itemize}
      \item \textbf{buffer-crc32:} The \texttt{buffer-crc32} package implements the \ac{CRC32} algorithm, 
     primarily used to detect accidental errors in data transmission or storage~\cite{buffer-crc32}.
     It is represented by the solid green line in \cref{fig:fig1HexDecreasing}.
 
-    To make the data integrity check fast and efficient, the algorithm uses a CRC table: 
+    To make the data integrity check fast and efficient, the algorithm uses a CRC table, 
     a matrix of 256 pre-calculated values that prevents the processor from performing complex mathematical calculations 
     on every single byte.
-    The package representing the values of the CRC table in hexadecimal format until 
-    version 0.2.13 (version -9 in \cref{fig:fig1HexDecreasing}).
+    Specifically, until version 0.2.13 (the version before point 1 in \cref{fig:fig1HexDecreasing}), 
+    the package stored these CRC table values in hexadecimal format.
 
     As shown at point 1 in \cref{fig:fig1HexDecreasing}, starting from version 1.0.0-RC1, 
-    the developers decided to optimize the package space by including  
-    the CRC table file generated using automatic build tools, such as minifiers, in the tarball.
+    the developers optimized the package space by including in the tarball 
+    the CRC table file generated using automatic build tools, such as minifiers.
     In this automated process, these build tools choose to convert the hexadecimal values into decimal format because it is more compact.
     While the mathematical value of the constants remained unchanged, 
     the number of unique hexadecimal values dropped from 256 to 0.
 
 
     \item \textbf{object-hash:} The \texttt{object-hash} package generates a hash from JavaScript objects and values~\cite{object-hash}.
-    It is represented by the solid blue line in \cref{fig:fig1HexDecreasing}.
-    As seen in the figure, from version -19 to -17 (1.1.0 to 1.1.2),
+    In \cref{fig:fig1HexDecreasing} (solid blue line), it can be observed that from version -19 to -17 (1.1.0 to 1.1.2),
     the package represented the upper limit of the confidence intervals for those versions, having 78 unique hexadecimal values.
     These values were all located in a test file, \texttt{object\_hash\_test.js}, which contained various tests to verify the package's correct operation.
 
     As shown at point 2 in \cref{fig:fig1HexDecreasing}, starting from version 1.1.7,
-    the developers decided to optimize the package space by excluding the test file from the tarball.
-    Since the file was not essential for the operation of the package, this exclusion reduced the package size.
-    This update caused the number of unique hexadecimal values to drop from 78 to 0.
+    the developers optimized the package space by excluding the test file from the tarball,
+    as it is not essential for its functionality.
+    The removal of this file caused the number of unique hexadecimal values to drop from 78 to 0.
 
 \end{itemize}
 
@@ -60,16 +59,16 @@ The packages exhibiting this trend are: \texttt{node-forge}, \texttt{tweetnacl},
     \begin{itemize}
         \item \textbf{node-forge and tweetnacl:} Both packages are related to cryptography~\cite{node-forge, tweetnacl} and
         implement cryptographic primitives that use hexadecimal constants for their internal functioning,
-        like \texttt{crypto-js} seen previously in \cref{sec:analysisHexIncreasing}.
+        like \texttt{crypto-js} seen in \cref{sec:analysisHexIncreasing}.
 
         In \cref{fig:fig1HexStable}, \texttt{node-forge} (solid green line) has 406 unique hexadecimal values, 
-        representing an outlier across all versions,
+        representing an outlier across all versions;
         while \texttt{tweetnacl} (solid blue line) has 177 unique hexadecimal values, representing the upper limit 
         of the confidence intervals for versions -16 and from -11 to -9, and representing an outlier for the remaining versions.
 
-        \item \textbf{chardet:} This package detects character encoding and, to function, utilizes 
+        \item \textbf{chardet:} This package detects character encoding, and uses 
         tables and byte maps in the form of hexadecimal constants,
-        primarily located in the file \texttt{/lib/encoding/sbcs.js}~\cite{chardet}.
+        primarily located in the file \texttt{/lib/encoding/\\sbcs.js}~\cite{chardet}.
 
         Represented in \cref{fig:fig1HexStable} by the solid pink line,
         the package assumes 972 unique hexadecimal values, representing the most extreme 
@@ -78,8 +77,8 @@ The packages exhibiting this trend are: \texttt{node-forge}, \texttt{tweetnacl},
 
         \item \textbf{next and aws-sdk:} Finally, the \texttt{next} and \texttt{aws-sdk} packages contain 
         numerous JavaScript files in their tarballs that are
-        generated by build tools and make use of hexadecimal values.
-        This behavior is the same as previously seen for the \texttt{polished} in \cref{sec:analysisHexIncreasing}
+        generated by build tools and containing hexadecimal values.
+        This behavior is the same as seen for the \texttt{polished} in \cref{sec:analysisHexIncreasing}
         and \texttt{buffer-crc32} packages in \cref{sec:analysisHexDecreasing}.
 
         In detail: the \texttt{next} package, a React full-stack framework~\cite{next} represented by 
@@ -97,7 +96,8 @@ The packages exhibiting this trend are: \texttt{node-forge}, \texttt{tweetnacl},
 \label{sec:analysisHexComparisonMalware}
 
 We analyzed when this metric is effective for detecting these four attacks (described in \cref{ch:AnalysisRecentAttacks}) and when it is not indicative.
-To do so, we used a specific figure for each attack, as explained in \cref{sec:Figure2}.
+To do so, we used a specific figure for each attack, \cref{fig:fig2HexAttackA}, \cref{fig:fig2HexAttackB}, 
+\cref{fig:fig2HexAttackC} and \cref{fig:fig2HexAttackD}, as explained in \cref{sec:Figure2}.
 
 
 \subsection*{Attack A: Malicious Windows DLL}
@@ -110,9 +110,9 @@ To do so, we used a specific figure for each attack, as explained in \cref{sec:F
     \label{fig:fig2HexAttackA}
 \end{figure}
 
-In the first attack, the attacker inserted a malicious \ac{DLL} into the tarball (\cref{sec:attackA}),
-therefore the number of hexadecimal values in the package remained unchanged at 0, as shown in \cref{fig:fig2HexAttackA}.
-Consequently, the metric is not indicative for detecting this specific attack.
+In attack A (\cref{sec:attackA}), the attacker did not introduce any new hexadecimal values. 
+Therefore, the metric remained unchanged compared to previous versions, as shown in \cref{fig:fig2HexAttackA}.
+Consequently, this metric is not indicative for detecting this specific attack.
 
 
 \subsection*{Attack B: Crypto attack}
@@ -125,8 +125,8 @@ Consequently, the metric is not indicative for detecting this specific attack.
     \label{fig:fig2HexAttackB}
 \end{figure}
 
-In the second analyzed attack, the attacker introduced an obfuscated line 
-of code into an existing file (\cref{sec:attackB}), increasing the number of unique hexadecimal values to 455.
+In the attack B (\cref{sec:attackB}), the attacker introduced an obfuscated line 
+of code into an existing file, increasing the number of unique hexadecimal values to 455.
 As shown in \cref{fig:fig2HexAttackB}, 
 this value positions the malicious versions of the packages among the outlier values. 
 Therefore, the metric is effective for detecting this specific attack.
@@ -142,13 +142,12 @@ Therefore, the metric is effective for detecting this specific attack.
     \label{fig:fig2HexAttackC}
 \end{figure}
 
-In the third attack, the attacker introduced a malicious file in clear text named \texttt{bundle.js} (\cref{sec:attackC}),
-therefore the number of unique hexadecimal values did not increase in the package.
-As shown in \cref{fig:fig2HexAttackC}, the malicious versions has a number of unique hexadecimal values 
-that positions them within the confidence intervals.
-For this reason, the metric is not indicative for detecting this specific attack,
-as the malicious versions are indistinguishable from legitimate ones.
-
+In the attack C (\cref{sec:attackC}), the attacker introduced a malicious clear-text file 
+containing only one unique hexadecimal value.
+As shown in \cref{fig:fig2HexAttackC}, this marginal increase is insufficient to position the malicious versions 
+of the packages outside the confidence intervals.
+Consequently, the metric is not indicative for detecting this specific attack, 
+as the compromised versions remain indistinguishable from legitimate ones.
 
 \subsection*{Attack D: Shai-Hulud 2.0}
 \label{sec:analysisHexAttackD}
@@ -160,9 +159,9 @@ as the malicious versions are indistinguishable from legitimate ones.
     \label{fig:fig2HexAttackD}
 \end{figure}
 
-Finally, in the fourth attack, the attacker introduces an obfuscated malicious file named \texttt{setup\_bun.js} (\cref{sec:attackD}).
+Finally, in the attack D (\cref{sec:attackD}), the attacker introduces an obfuscated malicious file.
 As shown in \cref{fig:fig2HexAttackD}, the packages 
-with the compromised version have a number of unique hexadecimal values that skyrockets to 122535, 
+with the compromised version have a number of unique hexadecimal values that skyrockets to 122,535, 
 far exceeding the maximum outlier values.
 Therefore, the metric is effective for detecting this attack.
 

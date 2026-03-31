@@ -13,8 +13,8 @@ the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}) uses the following p
 _?0x[0-9a-fA-F]+
 \end{verbatim}
 The \texttt{?} indicates that the string may optionally begin with an underscore, 
-while \texttt{[0-9a-fA-F]+} indicates that it must be followed by a sequence of one 
-or more hexadecimal characters (i.e., digits 0 to 9 and letters a to f, both lowercase and uppercase).
+this is followed by \texttt{0x} and a sequence of one or more hexadecimal characters, as specified by \texttt{[0-9a-fA-F]+} 
+(i.e., digits 0 to 9 and letters a to f, both lowercase and uppercase).
 
 This flexible pattern allows the tool to find hexadecimal values even when they 
 are part of function calls or other code structures, where strict boundaries,
@@ -49,7 +49,7 @@ The remaining 520 packages in the Goodware dataset did not have any hexadecimal 
 Therefore, they were excluded from these figures as they were not significant for this specific metric (they did not have any value to analyze).
 The median, calculated on the 109 packages, remains constant at one in each version.
 
-We studied the 10 packages that had outlier values or 
+We studied the ten packages that had outlier values or 
 values that are the upper limit of a confidence interval for one or more versions.
 
 We highlighted these packages with solid colored lines, categorizing them into the following figures based on their observed trends:
@@ -71,6 +71,7 @@ We highlighted these packages with solid colored lines, categorizing them into t
 \end{figure}
 
 The packages that experienced an increase significant enough to make their number of unique hexadecimal values an outlier 
+or to be the upper limit of a confidence interval
 from one version to the next were: \texttt{crypto-js}, \texttt{polished}, and \texttt{xml2js}.
 
 \begin{itemize}
@@ -80,7 +81,7 @@ from one version to the next were: \texttt{crypto-js}, \texttt{polished}, and \t
 
     Represented by the solid green line in \cref{fig:fig1HexIncreasing},
     the package used decimal values to implement its cryptographic primitives
-    in its first three versions (from 13 years ago, version 3.1.2 to 3.1.2-2).
+    in its first three versions (from thirteen years ago, version 3.1.2 to 3.1.2-2).
     Since it had no hexadecimal values, the metric for these versions was 0 (versions -19 to -17).
     
     In the subsequent release (3.1.2-3), as shown at point 1 in \cref{fig:fig1HexIncreasing}, 

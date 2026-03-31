@@ -3,7 +3,8 @@
 
 We analyzed when this metric is effective for detecting these four attacks 
 (described in \cref{ch:AnalysisRecentAttacks}) and when it is not indicative.
-To do so, we used a specific figure for each attack, as explained in \cref{sec:Figure2}.
+To do so, we used a specific figure for each attack, \cref{fig:fig2LLLAttackA}, \cref{fig:fig2LLLAttackB}, 
+\cref{fig:fig2LLLAttackC} and \cref{fig:fig2LLLAttackD}, as explained in \cref{sec:Figure2}.
 
 \subsection*{Attack A: Malicious Windows DLL}
 \label{sec:analysisLLLAttackA}
@@ -15,12 +16,12 @@ To do so, we used a specific figure for each attack, as explained in \cref{sec:F
     \label{fig:fig2LLLAttackA}
 \end{figure}
 
-In the first attack, the attacker inserted a malicious \ac{DLL} into the tarball (\cref{sec:attackA}),
-without modifying or adding any plain text file.
-Therefore, the longest line length remained unchanged compared to the legitimate versions,
-as shown in \cref{fig:fig2LLLAttackA}.
-Consequently, the metric is not indicative for detecting this specific attack.
-
+In the attack A (\cref{sec:attackA}), the attacker included a plain text file, 
+\texttt{install.js}, which however did not contain the longest line in the compromised versions.
+Conversely, the malicious \ac{DLL} added to the tarball was correctly excluded 
+from the longest line length computation, as it is not a plain text file.
+Consequently, the longest line length of the compromised versions remained unchanged compared 
+to the legitimate versions, as shown in \cref{fig:fig2LLLAttackA}, making this metric ineffective for detecting this specific attack.
 
 \subsection*{Attack B: Crypto attack}
 \label{sec:analysisLLLAttackB}
@@ -48,8 +49,8 @@ malicious versions are indistinguishable from legitimate ones.
     \label{fig:fig2LLLAttackC}
 \end{figure}
 
-In the third attack, the attacker introduced a malicious file named \texttt{bundle.js} 
-(\cref{sec:attackC}) containing a single line of 3,734,355 characters.
+In the attack C (\cref{sec:attackC}), the attacker introduced a malicious file named \texttt{bundle.js}  
+containing a single line of 3,734,355 characters.
 As shown in \cref{fig:fig2LLLAttackC}, the malicious versions succeed in placing themselves 
 among the outlier values, therefore the metric is effective for detecting this specific attack.
 
@@ -63,8 +64,8 @@ among the outlier values, therefore the metric is effective for detecting this s
     \label{fig:fig2LLLAttackD}
 \end{figure}
 
-Finally, in the fourth attack, the attacker introduces a malicious file named 
-\texttt{setup\_bun.js} containing a single line of 10,157,373 characters (\cref{sec:attackD}).
+Finally, in the attack D (\cref{sec:attackD}), the attacker introduces a malicious file named 
+\texttt{setup\_bun.js} containing a single line of 10,157,373 characters.
 As shown in \cref{fig:fig2LLLAttackD}, the malicious versions not only reach the outlier 
 range but far exceed the maximum outlier values of the Goodware dataset.
 Therefore, the metric is effective for detecting this attack.
@@ -78,8 +79,7 @@ and the attack D (\texttt{Shai-Hulud}~2.0 \cref{sec:analysisLLLAttackD}), becaus
 malicious versions introduce a malicious line whose length is sufficient to place them among 
 the outlier values.
 
-Instead, the metric is not indicative for detecting the attack A (Malicious Windows DLL \cref{sec:analysisLLLAttackA}),
-because in this case the attacker did not modify or add any plain text file.
-Furthermore, the metric is also not indicative for detecting the attack B (Crypto attack \cref{sec:analysisLLLAttackB}),
-because in this case the malicious versions introduce a malicious line that is not 
+Instead, the metric is not indicative for detecting the attack A (Malicious Windows DLL \cref{sec:analysisLLLAttackA})
+and the attack B (Crypto attack \cref{sec:analysisLLLAttackB})
+because in these cases the malicious versions introduce a malicious line that is not 
 long enough to place them among the outlier values, rendering them indistinguishable from legitimate versions.

@@ -30,7 +30,7 @@ such as Account Compromise, which refers to compromising accounts of Package Mai
 (those who develop and manage the packages) on the registry portal (like \ac{NPM}), allowing
 the attacker to release malicious versions.
 
-In \acp{SSCA} the victims are developers and users.
+In \acp{SSCA} the victims are developers and users~\cite{duan2020measuringsupplychainattacks}.
 Developers can be exploited 
 directly to steal their credentials or damage their infrastructure,
 and indirectly as a channel to reach users through their applications 
@@ -50,10 +50,10 @@ This approach is simple and effective, as it does not require the use of externa
 \section{NPM Ecosystem}
 \label{sec:NPMEcosystem}
 
-All the information regarding \ac{NPM} reported below has been taken from the official documentation~\cite{npmdocs2026npmdocumentation}.
-
 For the JavaScript and Node.js ecosystem, \ac{NPM} is one of the largest and most active Open source package repositories, 
 with over two million packages available~\cite{9505063}.
+
+All the information regarding \ac{NPM} reported below has been taken from the official documentation~\cite{npmdocs2026npmdocumentation}.
 
 The public \ac{NPM} registry is a database of JavaScript packages, where developers 
 can share and download packages. % https://docs.npmjs.com/about-the-public-npm-registry
@@ -82,7 +82,8 @@ The content of the tarball may differ from the content of the Git repository, ev
 In fact, through the optional \texttt{files} field of \texttt{package.json}, 
 it is possible to include only the specified files, or exclude them if the \texttt{.npmignore} file is present.
 
-Therefore, to ensure a fair and symmetrical comparison, it is necessary to analyze the same type of artifact.
+Therefore, to ensure a fair and symmetrical comparison across packages, rather than 
+mixing tarballs with Git repository contents, it is necessary to analyze the same type of artifact.
 
 \section{Tarball content}
 \label{sec:tarballContent}
@@ -106,9 +107,9 @@ the following types of files are typically found within it~\cite{pinckney2023lar
 
     Other common optional fields include the description, license, repository and dependencies
     on other packages.
+
     It is important to note that specifying a reference (a link) 
     to a GitHub repository for a package is optional.
-
     \textcite{duan2020measuringsupplychainattacks} highlight that this lack of mandatory 
     link represents a significant security gap because it prevents registries from verifying 
     that the distributed package actually matches its public source code, allowing attackers to inject malicious 
@@ -126,7 +127,7 @@ the following types of files are typically found within it~\cite{pinckney2023lar
     which define the package's functional logic, but it may 
     also include build artifacts~\cite{9240695}.
 
-    These files are the final product of the transformation and compilation process of a package's source code.
+    Build artifacts are the final product of the transformation and compilation process of a package's source code~\cite{9240695}.
     They are optimized versions of the original code automatically generated, rather than written directly by developers.
     Through processes such as minification, these artifacts reduce file sizes
     while improving application performance.

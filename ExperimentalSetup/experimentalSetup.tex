@@ -35,8 +35,9 @@ This dataset is composed of packages ranked among the 1,000 most popular
 in the \ac{NPM} registry, in terms of number of stars~\cite{tristan2026listtop10000npmpackages}.
 
 Out of these 1,000 packages, 371 have less than 20 versions 
-available in the \ac{NPM} registry.
-Therefore, the dataset includes the 
+available in the \ac{NPM} registry and were therefore excluded.
+
+The dataset includes the 
 remaining 629 packages, with their 20 most recent available versions parsable via node-semver~\cite{semver}.
 
 To automatically obtain these versions of these packages, we used the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}),

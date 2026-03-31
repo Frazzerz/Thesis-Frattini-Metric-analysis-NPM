@@ -21,9 +21,10 @@ and a \ac{DLL} called \texttt{node-gyp.dll}, weighing 1.2 MB.
 
 During the installation or update of one
 of these compromised packages,
-the \texttt{install.js} script is executed, which invokes \texttt{rundll32.exe}.
-
+the \texttt{install.js} script is executed.
+This script checks the victim's operating system and, if it detects a Windows environment,
+it invokes \texttt{rundll32.exe}.
 The latter loads the \texttt{node-gyp.dll} into memory,
-allowing the attacker to perform remote code execution
-on Windows systems, enabling for example the installation of 
+allowing the attacker to perform remote code execution,
+enabling for example the installation of 
 additional malware.

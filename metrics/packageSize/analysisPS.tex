@@ -9,12 +9,9 @@
 \end{figure}
 
 The remaining three highlighted packages had outlier values that remained constant across all 20 versions, without significant increases or decreases.
-The packages exhibiting this trend are: \texttt{typescript}, \texttt{next}, and \texttt{aws-sdk}.
+The packages exhibiting this trend are: \texttt{next}, \texttt{aws-sdk} and \texttt{typescript}.
 
 \begin{itemize}
-
-    \item \textbf{typescript:} This package provides the official compiler and toolset for the TypeScript language~\cite{typescript}.
-    Represented by the solid green line in \cref{fig:fig1PackageSizeStable}, it maintains a constant size of 23.7 MB across all versions.
 
     \item \textbf{next:} This package is a React full-stack framework~\cite{next}.
     Represented by the solid orange line in \cref{fig:fig1PackageSizeStable}, the package has a size of 140 MB across all versions.
@@ -24,6 +21,9 @@ The packages exhibiting this trend are: \texttt{typescript}, \texttt{next}, and 
     \item \textbf{aws-sdk:} This is the official package for interacting with \ac{AWS} cloud services~\cite{aws-sdk}.
     Represented by the solid purple line in \cref{fig:fig1PackageSizeStable}, the package has a size of 98 MB across all versions.
 
+    \item \textbf{typescript:} This package provides the official compiler and toolset for the TypeScript language~\cite{typescript}.
+    Represented by the solid green line in \cref{fig:fig1PackageSizeStable}, it maintains a constant size of 23.7 MB across all versions.
+
 \end{itemize}
 
 
@@ -31,7 +31,8 @@ The packages exhibiting this trend are: \texttt{typescript}, \texttt{next}, and 
 \label{sec:analysisPackageSizeComparisonMalware}
 
 We analyzed when this metric is effective for detecting these four attacks (described in \cref{ch:AnalysisRecentAttacks}) and when it is not indicative.
-To do so, we used a specific figure for each attack, as explained in \cref{sec:Figure2}.
+To do so, we used a specific figure for each attack, \cref{fig:fig2PackageSizeAttackA}, \cref{fig:fig2PackageSizeAttackB},
+\cref{fig:fig2PackageSizeAttackC} and \cref{fig:fig2PackageSizeAttackD}, as explained in \cref{sec:Figure2}.
 
 \subsection*{Attack A: Malicious Windows DLL}
 \label{sec:analysisPackageSizeAttackA}
@@ -43,7 +44,7 @@ To do so, we used a specific figure for each attack, as explained in \cref{sec:F
     \label{fig:fig2PackageSizeAttackA}
 \end{figure}
 
-In the first attack, the attacker inserted a malicious \ac{DLL} weighing 1.2 MB into the tarball (\cref{sec:attackA}),
+In the attack A (\cref{sec:attackA}), the attacker inserted a malicious \ac{DLL} weighing 1.2 MB into the tarball.
 As shown in \cref{fig:fig2PackageSizeAttackA},
 the compromised versions of the three packages from the Malware dataset affected by this attack do not reach outlier values.
 Consequently, the metric is not able to detect this specific attacks and results as not indicative.
@@ -60,7 +61,7 @@ Consequently, the metric is not able to detect this specific attacks and results
 
 Attack B (\cref{sec:attackB}) increases the size of existing \texttt{index.js} file by adding a malicious line of 76,438 characters.
 Even in this case, the increase in size of the versions of the nine packages compromised by this attack 
-is not sufficient to be among the outlier values, as can be seen in \cref{fig:fig2PackageSizeAttackB}, 
+is not sufficient to be among the outlier values, as can be seen in \cref{fig:fig2PackageSizeAttackB}.
 For this reason, the metric is not indicative for detecting this specific attack, as the malicious versions are indistinguishable from legitimate ones.
 
 \subsection*{Attack C: Shai-Hulud 1.0}

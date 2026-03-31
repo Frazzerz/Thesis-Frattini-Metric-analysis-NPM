@@ -15,12 +15,12 @@ the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}) uses the following p
 
 The regex uses a lookbehind \texttt{(?<![{\textbackslash}w{\textbackslash}-/\_])}
 and a lookahead \texttt{(?![{\textbackslash}w{\textbackslash}-/\_])}
-to ensure that the address is neither preceded nor followed by alphanumeric characters,
+to ensure that the address is neither preceded nor followed by words,
 hyphens, underscores or slashes.
 This avoids, for example, capturing a string that is part of a URL or a file path,
 reducing false positives.
 Unlike word boundaries \texttt{{\textbackslash}b},
-this solution also correctly handles the typical path separators (\texttt{/} and \texttt{-}).
+this solution also correctly handles the typical path separators, like slashes and hyphens.
 
 A valid Ethereum address consists of exactly 40 hexadecimal characters
 (i.e., digits 0 to 9 and letters a to f, both lowercase and uppercase) 

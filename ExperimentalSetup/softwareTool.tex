@@ -17,16 +17,16 @@ Implemented in Python, it is available on GitHub\footnote{\url{https://github.co
 and can be invoked from the command line in the following way:
 
 \begin{verbatim}
-python3 main.py --json packages.json [--workers N] [--local]
+python3 main.py --json <input_file>.json [--workers N] [--local]
 \end{verbatim}
 
 The tool requires as input a JSON file containing a list of \ac{NPM} packages names you want to analyze.
 
-Instead, the \texttt{--local} flag allows local tarballs of \ac{NPM} package versions to be include in the analysis.
+Optionally, the \texttt{-{}-local} flag allows local tarballs of \ac{NPM} package versions to be include in the analysis.
 
 The tool processes one package and one version at a time, from the oldest version to the most recent one.
 Instead, the analysis and computation of metrics for individual files within in a version are performed in parallel, using multiprocessing.
-The \texttt{--workers} flag allows for specifying the number of processes to be used.
+The \texttt{-{}-workers} flag allows for specifying the number of processes to be used.
 
 The tool's workflow can be divided into four phases:
 \begin{enumerate}
@@ -45,7 +45,7 @@ Instead, the tool selects and downloads the 19 most recent valid tarballs versio
 for the Malware dataset (\cref{sec:malwareDataset}).
 In this case, the twentieth version is the tarball related to the malicious version,
 retrieved with the developed script (\cref{sec:DownloadMaliciousTarballs}) 
-and included using the \texttt{--local} flag.
+and included using the \texttt{-{}-local} flag.
 
     \item \textbf{Metrics Computation:}
 
@@ -57,13 +57,13 @@ depth in its own section in \cref{ch:metricsAnalysis}.
 Metrics based on the textual content of the files
 (Longest Line Length (\cref{sec:analysisLLL}), Unique Hexadecimal values (\cref{sec:analysisHex}) 
 and Unique Ethereum Addresses (\cref{sec:analysisEthAdd}))
-are computed only on plain text files, such as JavaScript, TypeScript, JSON and Markdown files,
+are computed only on plain text files, such as JavaScript and TypeScript files, 
 ignoring binary files such as zip, png or \ac{DLL}.
 
 To identify plain text files (and compute these metrics on it), 
 the tool first determines the type of the file using \texttt{Magika}, 
 a deep learning-based content-type detection tool developed by Google~\cite{magika}.
-Then, the tool checks whether the detected file type is in a predefined whitelist.
+Then, the tool checks whether the detected file type is on a predefined whitelist.
 If not, the tool simply does not compute these metrics on that file.
 
 Furthermore, for these metrics, the tool removes comments 
@@ -76,11 +76,11 @@ These regex patterns are precompiled using the \texttt{re.compile} function from
 Pre-compilation improves performance by parsing the pattern once and reusing the resulting object,
 eliminating overhead across multiple files.
 Furthermore, this approach allows to specified flags, such as re.IGNORECASE to make regex case-insensitive,
-for instance to match both \texttt{0x} and \texttt{0X} in Unique Hexadecimal values.
+for instance to match both \texttt{0x} and \texttt{0X} in Unique Hexadecimal values metric.
 
 To find all matches of a pattern within a file's content, 
 the tool uses the \texttt{finditer} method on the compiled pattern,
-which returns an iterator over all matches, and is more memory-efficient than collecting all results at once.
+which returns an iterator over all matches, and is more memory efficient than collecting all results at once.
 
 Subsequently, these metrics computed on individual files are aggregated to form metrics at the package version level.
 For example, to compute the package size metric (\cref{sec:analysisPackageSize}),
@@ -108,7 +108,7 @@ In addition to the CSV files,
 the tool produces a \texttt{log.txt} log file, which is also updated incrementally
 and serves as a copy of the terminal output.
 
-Inside the file, there is general information such as the number of packages to analyze and the number of workers that will be used.
+Inside the \texttt{log.txt} file, there is general information such as the number of packages to analyze and the number of workers that will be used.
 Furthermore, for each package, the file also reports: the number of versions found in the registry,
 the status of the tarball downloads, the progress of the analysis of the selected versions
 and the total time for the analysis of the entire package.
