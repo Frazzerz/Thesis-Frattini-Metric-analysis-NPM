@@ -73,19 +73,21 @@ We analyze both packages to understand the reason for this presence.
 \subsection{Comparison with Malware Dataset}
 \label{sec:analysisEthAddComparisonMalware}
 
-Although the metric has a very small reference sample in the Goodware dataset (\cref{sec:goodwareDataset}),
-it proves effective in detecting attack B (\cref{sec:attackB}).
-In fact, in the compromised versions of this attack, seven known smart contract Ethereum addresses are introduced into the packages.
-These addresses are correctly identified by the tool (\cref{sec:ToolForAnalyzingNpmPackages}), 
-placing the malicious versions among outlier values.
+Although the Goodware dataset (\cref{sec:goodwareDataset}) contains very few packages with Ethereum addresses,
+as discussed in \cref{sec:goodwareEthAdd}, 
+the metric nonetheless proves effective in detecting attack B (\cref{sec:attackB}).
+The compromised versions of this attack introduce seven known smart contract Ethereum addresses into the packages, 
+which the tool (\cref{sec:ToolForAnalyzingNpmPackages}) correctly identifies.
+Given that only two packages in the Goodware dataset contain even a single Ethereum address, 
+a count of seven qualifies the malicious versions as outliers.
 
-However, the metric is not indicative for the other three attacks.
-For attack A (\cref{sec:attackA}), the malicious \ac{DLL} introduced in the tarball is not a plain 
-text file and therefore does not contain Ethereum addresses, so the count remains 
-unchanged compared to legitimate versions.
-For attacks C and D (\cref{sec:attackC} and \cref{sec:attackD}), 
-the malicious code introduced is aimed at stealing credentials and access keys to cloud services, 
-not at manipulating cryptocurrency transactions. 
-Consequently, the malicious files \texttt{bundle.js} and \texttt{bun\_environment.js} do not contain any Ethereum addresses 
-and the count remains unchanged compared to the legitimate versions.
-Therefore, the malicious versions of these three attacks are indistinguishable from legitimate ones for this metric.
+However, the metric is not indicative for the remaining three attacks.
+For attack A (\cref{sec:attackA}), the malicious \ac{DLL} is a binary file 
+and is therefore excluded from this computation of the metric, 
+leaving the Ethereum addresses count unchanged with respect to the legitimate versions.
+For attacks C (\cref{sec:attackC}) and D (\cref{sec:attackD}),
+the malicious code targets the theft of credentials and cloud services access keys, 
+rather than manipulating cryptocurrency transactions.
+As a result, neither \texttt{bundle.js} nor \texttt{bun\_environment.js} 
+contains any Ethereum addresses, and the count remains unchanged compared to the legitimate versions.
+In all three cases, the compromised versions are therefore indistinguishable from the legitimate ones under this metric.

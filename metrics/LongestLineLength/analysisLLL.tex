@@ -16,7 +16,7 @@ To do so, we used a specific figure for each attack, \cref{fig:fig2LLLAttackA}, 
     \label{fig:fig2LLLAttackA}
 \end{figure}
 
-In the attack A (\cref{sec:attackA}), the attacker included a plain text file, 
+In attack A (\cref{sec:attackA}), the attacker included a plain text file, 
 \texttt{install.js}, which however did not contain the longest line in the compromised versions.
 Conversely, the malicious \ac{DLL} added to the tarball was correctly excluded 
 from the longest line length computation, as it is not a plain text file.
@@ -49,7 +49,7 @@ malicious versions are indistinguishable from legitimate ones.
     \label{fig:fig2LLLAttackC}
 \end{figure}
 
-In the attack C (\cref{sec:attackC}), the attacker introduced a malicious file named \texttt{bundle.js}  
+In attack C (\cref{sec:attackC}), the attacker introduced a malicious file named \texttt{bundle.js}  
 containing a single line of 3,734,355 characters.
 As shown in \cref{fig:fig2LLLAttackC}, the malicious versions succeed in placing themselves 
 among the outlier values, therefore the metric is effective for detecting this specific attack.
@@ -64,7 +64,7 @@ among the outlier values, therefore the metric is effective for detecting this s
     \label{fig:fig2LLLAttackD}
 \end{figure}
 
-Finally, in the attack D (\cref{sec:attackD}), the attacker introduces a malicious file named 
+Finally, in attack D (\cref{sec:attackD}), the attacker introduces a malicious file named 
 \texttt{setup\_bun.js} containing a single line of 10,157,373 characters.
 As shown in \cref{fig:fig2LLLAttackD}, the malicious versions not only reach the outlier 
 range but far exceed the maximum outlier values of the Goodware dataset.
