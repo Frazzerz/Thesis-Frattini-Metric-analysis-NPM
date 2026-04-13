@@ -415,9 +415,10 @@
                     {\vskip 0\p@\large (Draft Copy)}{}\vskip 40\p@}
                     {\LARGE   \bfseries\@title \vskip 60\p@}
          {\Large 
-           \@author \vskip 60\p@
-Advisor: \@advisor  \hskip \fill  Examiner: \@examiner \vskip 10\p@
-         }     
+          \@author \vskip 60\p@
+          Advisor: \@advisor \\ 
+          Examiner: \@examiner \vskip 10\p@
+        }    
       \vfill
           {\Large \@submitmonth, \@submityear}
       \end{center}\end{titlepage}
