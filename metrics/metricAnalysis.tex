@@ -1,144 +1,86 @@
 \chapter{Metrics Analysis}
 \label{ch:metricsAnalysis}
-%\setcounter{section}{-1} % Per farlo partire da 6.0
 
-In this chapter, we present the metrics defined for this study and the analysis of their behavior on the datasets detailed in \cref{sec:datasets}.
-Our goal is to evaluate the effectiveness of these metrics in detecting the \acp{SSCA} discussed in \cref{ch:AnalysisRecentAttacks}.
+This chapter defines the five metrics used in this study
+and evaluates their effectiveness in detecting the \acp{SSCA} discussed in \cref{ch:AnalysisRecentAttacks}.
+\cref{sec:metricsMethodology} describes the methodology, 
+how each metric is analyzed, how the baseline is established, and how to read the figures.
+\cref{sec:analysisFileTypes} through \cref{sec:analysisEthAdd}
+each cover one metric in full, from definition to comparison with the Malware dataset.
+\cref{sec:wrapUpAnalysisMetrics} synthesizes the results and discusses the overall effectiveness, 
+limitations, and cost of the proposed approach.
 
 \section{Methodology}
 \label{sec:metricsMethodology}
 
-In this context, a metric is a computed measure on an \ac{NPM} package version.
+In this context, a metric is a measure computed from a specific version of an \ac{NPM} package.
 
-While the literature offers a broad range of metrics based on code analysis and file characteristics~\cite{zoratti2025valutazione, weissberg2025llm},
-we focused on and used a set of metrics developed ad-hoc 
-based on the most relevant characteristics of the \acp{SSCA} considered.
+While the literature offers a broad range of metrics based on code analysis~\cite{zoratti2025valutazione, weissberg2025llm},
+we focused on a set of metrics defined ad hoc derived from the most relevant characteristics of the four \acp{SSCA} selected as case studies.
+Metrics unrelated to these attacks, such as the total number of files in the tarball,
+or \ac{API}-call patterns hidden behind obfuscation, were excluded.
+The five selected metrics are: 
+\emph{File Types} (\cref{sec:analysisFileTypes}),
+\emph{Package Size} (\cref{sec:analysisPackageSize}),
+\emph{Longest Line Length} (\cref{sec:analysisLLL}),
+\emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}),
+and \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}).
+Each metric is discussed in a dedicated section:
+first, its definition and the motivation behind its choice are presented;
+then two analyses follow, structured as follows.
 
-For this reason, we excluded metrics unrelated to the analyzed attacks, such as the number of files present in the tarball, 
-or those related to attack characteristics hidden by obfuscation techniques, such as the hooking of wallet-specific \acp{API}.
+\subsection{Analysis of the Evolution of a Package}
+\label{subsec:analysisEvolutionPackage}
 
-Each metric is discussed in a dedicated section, structured as follows:
-\begin{enumerate}
-    \item \textbf{Metric Definition:}
-    We defined the metric and explained how it was computed.
-    
-    \item \textbf{Goodware Dataset Analysis:}
-    We analyzed the distribution and evolutionary patterns 
-    of the metric within the Goodware dataset explained in \cref{sec:goodwareDataset}.
-    This allows us to define a baseline for the metric, that is its behavior under normal development conditions.
-    And then, we investigated the nature of those packages that exhibit outlier values.
+We analyzed the distribution and evolutionary patterns of the metric within the Goodware dataset (\cref{subsec:goodwareDataset}),
+with the goal of establishing a baseline for normal development conditions.
+Understanding how a package evolves across versions is fundamental to evaluating potential attacks.
+Tracking a metric across consecutive releases allows identifying anomalies that would be invisible in a single-version snapshot. 
+A sudden deviation from an otherwise stable trend is precisely the signature left by the \acp{SSCA} analyzed in \cref{ch:AnalysisRecentAttacks}.
+Moreover, this longitudinal perspective helps distinguish malicious injections from legitimate development events, 
+such as the addition of build artifacts or a major refactoring, 
+that can also produce outlier values but are traceable to documented development decisions.
 
-    \item \textbf{Comparison with Malware Dataset:}
-    Finally, we evaluated the metric's sensitivity by analyzing
-    the values (peaks) in the compromised versions of the packages in the Malware dataset explained in \cref{sec:malwareDataset}.
-    We compare these values with the baseline of the Goodware dataset, 
-    to verify the effectiveness of the metric in detecting the \acp{SSCA} considered.
+Except for the \emph{File Types} metric (\cref{sec:analysisFileTypes}), 
+which requires specialized representations, all remaining metrics share the same figure format for the Goodware dataset analysis.
+A concrete example of this figure is \cref{fig:fig1PackageSize},
+which shows the evolution of the Package Size metric across 20 versions.
+The x-axis shows the package versions from the least recent (-19) to the latest available (0), 
+and the y-axis shows the value of the metric on a logarithmic scale.
+The vertical black bars mark the 95th-percentile confidence intervals, computed following an established statistical approach~\cite{article2}:
+packages within the interval exhibit values consistent with normal behavior, 
+while the gray dots above the bar represent the outlier values of the remaining 5\% of the population.
+The red dashed line is the median, calculated for each package version and used instead of the mean to avoid distortion from extreme values.
+Packages of particular interest are highlighted with colored lines,
+for instance, \cref{fig:fig1PackageSizeIncreasing} (discussed in \cref{sec:analysisPackageSize}) 
+shows the \texttt{moment-timezone} package (solid green) exhibiting a sudden jump at point~2, caused by the accidental inclusion of a temporary folder;
+while in \cref{fig:fig1PackageSizeStable} \texttt{next} (solid orange) is a stable outlier across all versions
+due to the large build artifacts it bundles by design.
+Comparing these two cases already illustrates the core challenge of this analysis:
+both produce outlier values, but for entirely different reasons,
+and distinguishing a legitimate anomaly from a malicious one requires examining
+the nature and history of the change.
 
-\end{enumerate}
+\subsection{Effectiveness Analysis Against the Malware Dataset}
+\label{subsec:analysisEffectivenessMetric}
 
-Except for the File Types metric in \cref{sec:analysisFileTypes} and the Unique Ethereum Addresses metric in \cref{sec:analysisEthAdd},
-we employ figures with the same characteristics
-to show the Goodware Dataset Analysis and the Comparison with Malware Dataset. 
-To illustrate how to read these figures, we use the example figures below,
-which are constructed with fictional data and are not based on any real package or metric.
+Finally, we evaluated the effectiveness of each metric by comparing the values of the
+compromised versions in the Malware dataset (\cref{subsec:malwareDataset}) against the Goodware baseline established above.
+A metric is considered effective for a given attack if the compromised version produces
+a value that falls among the outlier values of the Goodware distribution,
+making it distinguishable from a legitimate release.
+If the malicious version falls within the confidence interval,
+the metric is not indicative of that attack,
+since the compromised version is indistinguishable from legitimate ones.
 
-\subsection{Figure Goodware Dataset Analysis}
-\label{sec:Figure1}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{metrics/Example_plot1.pdf}
-    \caption{Example Goodware dataset Trend for a Metric.}
-    \label{fig:fig1Example}
-\end{figure}
-
-This type of figure, like the example \cref{fig:fig1Example}, illustrates the trend across 20 versions of the metric in the
-Goodware dataset explained in \cref{sec:goodwareDataset},
-after excluding any packages that are not significant in this metric, 
-i.e. those that have a number of occurrences equal to zero in all versions.
-
-The x-axis shows the package versions, from the least recent (-19) to the latest available (0), 
-while the y-axis represents the number of occurrences of the metric in a logarithmic scale.
-
-The heights of the vertical black bars represent the confidence intervals,
-specifically, the intervals containing 95\% of the package population for a given version.
-Packages positioned within one of these intervals have a number of 
-occurrences ranging between the minimum value and the 95th percentile of the population for that version.
-
-Instead, the gray dots represent the outlier values, 
-which are the remaining 5\% of the population positioned outside the confidence interval.
-
-A package is classified as an outlier in a version when its values 
-exceeds the 95th percentile of that confidence interval.
-We heuristically chose to use the 95th percentile to define the outliers,
-following the approach of \textcite{article2}.
-
-We have highlighted with colored lines some of the packages that have outlier values or 
-values that are the upper limit of a confidence interval for one or more versions. 
-An example of these highlighted packages are the \texttt{package1}, \texttt{package2}, 
-and \texttt{package3} in example \cref{fig:fig1Example}.
-
-These packages, and their corresponding outlier values, exhibit atypical behavior compared to the majority of the population.
-For this reason, they have been analyzed individually to understand 
-their nature and the reasons leading to such high values.
-
-The highlighted packages may show an increasing (\texttt{package1} in \cref{fig:fig1Example}), 
-decreasing (\texttt{package2}), or stable (\texttt{package3}) trend,
-and for better visualization,
-if there are many highlighted packages, 
-we provide separate figures for each trend.
-
-The red dashed line represents the median value calculated for each package version.
-Unlike the mean, the median is not influenced by outlier values and therefore does not distort the 
-actual behavior of the metric.
-
-The median and the y-axis logarithmic scale were 
-used to highlight the heterogeneity among packages in the dataset,
-as there are packages with a low number of values and packages 
-with a number of values that exceed those of the majority of the population by several orders of magnitude.
-
-\subsection{Figure Comparison with Malware Dataset}
-\label{sec:Figure2}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{metrics/Example_plot2_detectable.pdf}
-    \caption{Example Comparison with Malware Metric - detectable attack.}
-    \label{fig:fig2ExampleDetectable}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{metrics/Example_plot2_not_detectable.pdf}
-    \caption{Example Comparison with Malware Metric - not detectable attack.}
-    \label{fig:fig2ExampleNotDetectable}
-\end{figure}
-
-This type of figure, like the example \cref{fig:fig2ExampleDetectable} and the example \cref{fig:fig2ExampleNotDetectable},
-illustrates the trend across 20 versions of the metric in the
-Malware dataset (explained in \cref{sec:malwareDataset}) compared with the Goodware dataset (explained in \cref{sec:goodwareDataset}).
-
-The x-axis shows the package versions, from the least recent (-19) to the latest available (0), 
-while the y-axis represents the number of occurrences of the metric in a logarithmic scale.
-
-The figures show the packages of the Malware dataset  
-for each of the four attacks with colored lines and
-their compromised malicious versions with red crosses.
-
-Furthermore, the figures show the confidence intervals (vertical black bars) 
-and the outlier values (gray dots) explained in \cref{sec:Figure1}, 
-calculated on the Goodware dataset across the 20 versions.
-
-If the packages of the Malware dataset overlap 
-for a specific attack, we provide a separate figure 
-for each package of that attack to ensure better visualization.
-
-In these figures, we can evaluate if the 
-metric is sensitive enough to detect the compromised versions of the packages.
-
-To make malicious versions identifiable, they must be placed among the outlier values, like in \cref{fig:fig2ExampleDetectable}.
-
-However, if the number of occurrences in 
-malicious versions falls within the confidence intervals, as shown in \cref{fig:fig2ExampleNotDetectable},
-the metric will not be indicative in detecting that attack, 
-since the versions would be indistinguishable from the legitimate ones.
+Except for the \emph{File Types} metric, all remaining metrics share the same figure format for this comparison.
+Two concrete examples are \cref{fig:fig2PackageSizeAttackD} and \cref{fig:fig2PackageSizeAttackB}, both for the \emph{Package Size} metric.
+In \cref{fig:fig2PackageSizeAttackD}, the red crosses, marking the compromised versions of packages from Attack~D, 
+fall among the outlier dots of the Goodware distribution, showing that the metric successfully detects this attack.
+In \cref{fig:fig2PackageSizeAttackB}, by contrast, the red crosses remain within the confidence intervals; 
+the malicious versions of Attack~B are indistinguishable from legitimate ones under this metric, 
+which is therefore not indicative of that attack.
+In both figures, the colored lines show the evolution of the compromised packages across the versions, 
+providing the longitudinal context needed to see how sudden the anomaly introduced by the malicious version actually is.
+When packages from the same attack overlap visually, separate figures are provided
+per package for clarity, as in \cref{fig:fig2HexAttackA}.
