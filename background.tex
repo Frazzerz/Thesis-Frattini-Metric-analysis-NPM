@@ -3,13 +3,13 @@
 
 This chapter provides the foundational concepts needed to understand how the \ac{SSC} works and how attackers exploit it. 
 \cref{sec:SSCAndSSCA} introduces the notion of \ac{SSC}, 
-describes the principal attack vectors through which \acp{SSCA} are carried out (\cref{subsec:AttackVectors}),
-examines both the categories of victims typically targeted (\cref{subsec:VictimsAndImpact}),
-and discusses the obfuscation techniques used to hide malicious code (\cref{subsec:ObfuscationTechniques}). 
+describes the principal attack vectors through which \acp{SSCA} are carried out,
+examines both the categories of victims typically targeted,
+and discusses the obfuscation strategies used to hide malicious code. 
 \cref{sec:NPMEcosystem} presents the \ac{NPM} ecosystem, 
-the package registry at the center of all attacks analyzed in \cref{ch:AnalysisRecentAttacks}, 
+the package registry at the center of all attacks considered in this work,  
 and \cref{sec:tarballContent} describes the internal structure of \ac{NPM} tarballs, 
-the artifact distributed to end users and the primary subject of analysis throughout this work.
+the artifact distributed to end users and the primary subject of analysis.
 
 \section{Software Supply Chain and Software Supply Chain Attacks}
 \label{sec:SSCAndSSCA}
@@ -18,21 +18,26 @@ Modern software development rarely starts from scratch.
 Developers routinely incorporate ready-made components into their projects
 to handle common functionalities such as date parsing, HTTP request handling, or UI rendering,
 rather than reimplementing them manually.
-These reusable components are called \emph{dependencies}, 
-and they can in turn depend on other components,
-forming a graph of interconnected software artifacts known as the \ac{SSC}~\cite{ohm2023sok}.
+These reusable units, commonly called \emph{packages},
+can in turn depend on other components, 
+forming part of a broader ecosystem of software artifacts, tools, processes, 
+and human actors involved in their lifecycle, collectively referred to as the \acf{SSC}~\cite{softwareSupplyChain}.
 
-Such components (also known as \emph{packages}) are distributed through open-source package repositories such as \ac{NPM}, \ac{PyPI} and RubyGems,
-which together host millions of packages used by developers worldwide. 
+Such components are distributed through open-source registries such as \ac{NPM}, \ac{PyPI} and RubyGems,
+which together host millions of software modules used by developers worldwide. 
 The decentralized and open nature of these repositories is one of their greatest strengths,
 as anyone can freely publish a package; 
 however, this openness also constitutes a significant attack surface~\cite{ohm2020backstabbersknifecollectionreview}.
 An attacker who manages to inject malicious code into a legitimate package update can compromise, 
 in a single operation, all the projects that transitively depend on it.
-This class of attack on the \ac{SSC} is called a \ac{SSCA} and has become 
+This category of threat to the \ac{SSC} is know as a \ac{SSCA}, and has become 
 increasingly prevalent in recent years~\cite{ohm2020backstabbersknifecollectionreview}.
-Notably, over 245,000 malicious packages were discovered in 2023 alone, 
-a figure that doubles the total of all those found in the previous four years combined~\cite{10.1145/3691620.3695492}.
+Notably, over 245,000 malicious packages were discovered in the \ac{NPM} and \ac{PyPI} ecosystems in 2023 alone,
+a figure that doubles the total of all those found in the previous four years combined~\cite{10.1145/3691620.3695492}. 
+This trend is not merely statistical, as the attacks analyzed in \cref{ch:AnalysisRecentAttacks} illustrate that 
+a single compromised release of a widely-used package can affect millions of end users within hours.
+Attackers typically employ techniques such as \emph{Account Compromise}, 
+\emph{Typosquatting} and other methods detailed in \cref{subsec:AttackVectors}, to trick developers into integrating harmful code.
 
 \subsection{Attack Vectors}
 \label{subsec:AttackVectors}
@@ -41,13 +46,12 @@ a figure that doubles the total of all those found in the previous four years co
 In this subsection, we describe the main vectors identified in the literature~\cite{duan2020measuringsupplychainattacks},
 which primarily target upstream stakeholders, such as \acp{PM}, the developers responsible for publishing and managing a given package,
 and \acp{RM}, the registry administrators.
-By compromising these pivotal figures, attackers can amplify their impact and
-effectively propagate threats to downstream stakeholders, including developers and end users.
+Compromising either one gives an attacker a privileged position to push malicious code to all downstream users.
 
 The most common vector is \emph{Account Compromise} (also known as \emph{Account Hijacking}), 
 which consists of gaining unauthorized access to the registry account of a \ac{PM}.
 Once the attacker controls the account, they can publish new versions of any package
-managed by that \ac{PM}, embedding malicious code that will be distributed
+managed by that maintainer, embedding malicious code that will be distributed
 to all downstream users the next time they run an update or a fresh installation.
 This vector is particularly insidious because the malicious version reaches users
 through the same trusted channel they normally rely on.
@@ -55,9 +59,9 @@ through the same trusted channel they normally rely on.
 A similarly prevalent attack vector is \emph{Typosquatting}, in which an attacker registers a package 
 whose name closely resembles that of a popular, legitimate one, differing by only one or two characters, 
 in the hope that developers will accidentally install it instead of the intended target.
-A variant of this technique, known as \emph{Package Masking}, consists of 
-registering a package with an identical name to a popular one from another registry,
-relying on the developer's assumption of cross-ecosystem availability when in fact the package is not present in the target one.
+A variant of this technique, known as \emph{Package Masking}, involves 
+registering a module with a name identical to a popular one from another registry,
+relying on the developer assumption of cross-ecosystem availability when in fact the component is not present in the target platform.
 
 Another vector is \emph{Direct Publication}, in which an attacker simply publishes a new 
 malicious package without relying on typos or account hijacking. 
@@ -65,17 +69,17 @@ This can serve purposes such as bot tracking or malware hosting,
 and is made possible by the openness of these registries, where anyone can freely publish without prior review.
 
 \emph{Ownership Transfer} exploits the open-source practice of transferring package ownership to new \acp{PM}. 
-Abandoned packages can be reclaimed by new parties, 
+Abandoned projects can be reclaimed by new parties, 
 or legitimate owners can be persuaded through social engineering into handing over control,
-after which the new owner can publish malicious versions.
+after which the new owner can publish compromised versions.
 
 \emph{Malicious Contributor} and \emph{Disgruntled Insider} represent vectors that originate from within the package development process itself.
 In the first case, a seemingly legitimate contributor submits a pull request that introduces vulnerable or malicious code
 without the knowledge of the \acp{PM}. 
-In the second, an authorized \ac{PM} deliberately sabotages the package they are responsible for.
+In the second, an authorized maintainer deliberately sabotages the project they are responsible for.
 
 Finally, \emph{Registry Exploitation} refers to directly exploiting a vulnerability 
-in the registry platform itself (e.g., through a Remote Code Execution flaw), 
+in the platform itself (e.g., through a Remote Code Execution flaw), 
 allowing attackers to modify or replace packages directly.
 Unlike the other vectors, this attack does not rely on compromising any individual stakeholder, 
 but rather targets the central infrastructure shared by the entire ecosystem.
@@ -84,7 +88,7 @@ It is, however, considerably harder to execute and comparatively rare in practic
 \subsection{Victims and Impact}
 \label{subsec:VictimsAndImpact}
 
-The consequences of \acp{SSCA} extend to multiple parties within the ecosystem, each facing distinct risks and threats.
+Not all parties in the ecosystem are equally exposed to \acp{SSCA}.
 In this subsection, we examine the two main victim categories identified in the literature~\cite{duan2020measuringsupplychainattacks} 
 and discuss the potential impact on each.
 
@@ -97,77 +101,105 @@ In the most severe cases, a single compromised package with a large number of we
 can expose hundreds of millions of users to risk within hours of the malicious version being published,
 as illustrated concretely by the attacks analyzed in \cref{ch:AnalysisRecentAttacks}.
 
-\subsection{Obfuscation Techniques}
-\label{subsec:ObfuscationTechniques}
+\subsection{Code Obfuscation}
+\label{subsec:CodeObfuscation}
 
-To evade detection by both automated tools and human reviewers, attackers rely on code obfuscation techniques that disguise 
-the true nature of malicious code.
+Since packages are often distributed as source code or build artifacts,
+as described in detail in \cref{sec:tarballContent},
+a \ac{PM} has full control over the content of a tarball before publication.
+This flexibility, while legitimate when used to protect intellectual property,
+also enables malicious actors to inject harmful code and conceal its behavior from automated scanners and human reviewers.
+The practice of deliberately transforming code to make it harder to understand while preserving
+its functional behavior is known as \emph{code obfuscation}.
+Although obfuscation techniques can theoretically be applied to any programming language, 
+this work focuses specifically on JavaScript because the \ac{NPM} ecosystem is fundamentally built around JavaScript and Node.js, 
+making \texttt{.js} files the most abused and critical attack surface within the \ac{SSC}.
+Among the various obfuscation techniques documented in the literature and
+observed in real-world attacks~\cite{ohm2020backstabbersknifecollectionreview, 9505063},
+the \ac{NPM} ecosystem is particularly affected by the following.
 
-The most widespread technique in the \ac{NPM} ecosystem consists of encoding identifiers
-such as variable and function names using hexadecimal notation,
-replacing meaningful names with opaque tokens like \texttt{\_0x26499F}~\cite{ohm2020backstabbersknifecollectionreview}.
-In JavaScript, hexadecimal numeric literals must begin with a leading zero followed by the letter \texttt{x}
-(\texttt{0x} or \texttt{0X})~\cite{hexadecimalsyntax}.
-Since JavaScript identifiers cannot start with a digit,
-an underscore prefix is commonly prepended by obfuscation tools when a hexadecimal token is used as a variable or function name,
-a convention observed, for instance, in the attacks analyzed in \cref{sec:attackB} and \cref{sec:attackD}.
-Conversely, when hexadecimal values represent numeric constants,
-no underscore is needed, and they appear for example as \texttt{0x1c8}.
-The result is source code that is syntactically valid but semantically opaque, making manual inspection difficult.
-This technique is simple, requires no external dependencies, and is highly effective
-at hiding the true behavior of the malicious code from static analysis.
+The most widespread technique consists of encoding identifiers such as variable and function names using hexadecimal notation, 
+replacing meaningful names with opaque tokens~\cite{ohm2020backstabbersknifecollectionreview}. 
+For example, a variable name may appear as \texttt{\_0x26499F}, %In JavaScript, hexadecimal numeric literals must begin with a leading zero followed by the letter \texttt{x} (\texttt{0x} or \texttt{0X})~\cite{hexadecimalsyntax}.
+where the underscore prefix is prepended because JavaScript identifiers cannot start with a digit, 
+while numeric constants appear directly as \texttt{0x1c8}~\cite{hexadecimalsyntax}.
+This convention is observed in the attacks analyzed in \cref{sec:attackB,sec:attackD}.
+The result is source code that is syntactically valid but semantically opaque, 
+making manual inspection very difficult and effectively hiding malicious behavior from static analysis.
+
+Other common techniques include \emph{string sampling}~\cite{ohm2020backstabbersknifecollectionreview},
+in which seemingly random strings are reconstructed dynamically to hide sensitive data (e.g., URLs, API keys);
+\emph{dynamic code generation}~\cite{9505063}, 
+which leverages the dynamic nature of JavaScript to execute code generated at runtime (e.g., with  \texttt{eval()});
+and \emph{dead-code injection}~\cite{9505063}, 
+which floods source files with irrelevant instructions to increase noise and hinder manual review.
 
 \section{NPM Ecosystem}
 \label{sec:NPMEcosystem}
 
-The \ac{NPM} registry is the de facto standard platform for distributing JavaScript and Node.js packages, 
-hosting over two million of them~\cite{9505063}, 
-and understanding its architecture, mechanisms, and security properties is essential for analyzing how attacks propagate through the ecosystem.
-This section draws from the official \ac{NPM} documentation~\cite{npmdocs2026npmdocumentation}.
+The \ac{NPM} registry is the de facto standard platform for distributing JavaScript and Node.js software, 
+hosting over two million entries~\cite{9505063}, 
+and understanding its architecture and security properties is essential for analyzing how attacks propagate through the ecosystem.
+This section draws from the official documentation~\cite{npmdocs2026npmdocumentation},
+while \cref{fig:NPMWorkflow} provides a high-level overview of the workflow involved in publishing and consuming artifacts.
 
-The public \ac{NPM} registry is a database where developers can share and download packages, 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{NPMWorkflow.pdf}
+    \caption{High-level Overview of the NPM Distribution Workflow.}
+    \label{fig:NPMWorkflow}
+\end{figure}
+
+The public registry is a database where developers can share and download packages, 
 i.e., self-contained folders of files that can be incorporated into other projects. 
 To resolve a package by name and version, \ac{NPM} communicates with the registry endpoint 
 (configured by default at \href{https://registry.npmjs.org}{https://registry.npmjs.org}), 
-from which any available version can be retrieved.
+from which any available release can be retrieved.
+When publishing, the maintainer uploads a \emph{tarball}: a gzipped archive
+representing the code at a specific version and constituting the actual artifact distributed to users.
+Once published, it becomes available for download and installation by other developers,
+who integrate it into their projects to be used by end users and further downstream stakeholders, 
+as previously described in \cref{sec:SSCAndSSCA} and illustrated in \cref{fig:NPMWorkflow}.
 
-When publishing a package, the maintainer uploads it as a \emph{tarball}, a gzipped archive
-that represents the package at a specific version and constitutes the artifact actually distributed to users.
-The package can also be referenced via a Git URL pointing to a repository,
-but it is important to note that the content of the tarball may differ from the
-content of the repository, even if both nominally represent the same version.
+Although a package may reference a Git URL pointing to a source repository, 
+a connection represented by the dashed arrow in \cref{fig:NPMWorkflow}, 
+two critical aspects must be considered.
+First, the content of the tarball may differ from that of the repository, even if both nominally represent the same version.
 This discrepancy occurs because maintainers can selectively include files in the tarball through two mechanisms:
 the optional \texttt{files} field in \texttt{package.json} explicitly lists which files to include,
 and the \texttt{.npmignore} file (analogous to \texttt{.gitignore}) specifies which files to exclude.
-As a consequence, to ensure fair and consistent analysis across packages,
-it is necessary to analyze the same type of artifact rather than mixing tarballs with repository contents.
-
-A crucial security property of the \ac{NPM} registry is that once a package is published
-under a given name and version, that combination can never be reused,
-even if the release is subsequently removed with the \texttt{npm unpublish} command.
-This means that a malicious release, once published, cannot be overwritten by the legitimate maintainer.
-The typical response is to unpublish it and release a new, corrected one,
-often with the same content as the last legitimate version that preceded the attack;
-alternatively, developers can downgrade to that same prior release.
-
-An equally important security gap, highlighted by~\textcite{duan2020measuringsupplychainattacks}, 
+As a consequence, to ensure a consistent analysis across packages,
+it is necessary to examine the same type of artifact rather than mixing tarballs with repository contents.
+Second, a crucial security gap~\cite{duan2020measuringsupplychainattacks} 
 is that providing a link to a public source repository is optional in \texttt{package.json}.
-When no such link is present, there is no source of truth against which the tarball file's contents can be verified. 
+When no such link is present, there is no source of truth against which the tarball contents can be verified. 
 Even when a link is provided, the registry performs no such verification, 
 meaning that an attacker can inject malicious code into the tarball at publication time without modifying the corresponding repository.
+
+An equally important property of the \ac{NPM} registry is that once a package is published
+under a given name and version, that combination can never be reused,
+even if the release is subsequently removed with the \texttt{npm unpublish} command.
+This means that a malicious update, once published, cannot be overwritten by the legitimate maintainer.
+The typical response is to unpublish it and issue a new, corrected one,
+often with the same content as the last legitimate version that preceded the attack;
+alternatively, developers can downgrade to that same prior stable release.
 
 \section{Tarball Content}
 \label{sec:tarballContent}
 
 While a \ac{NPM} tarball can theoretically contain any type of file, 
-in practice, most of them follow a consistent structure.
+in practice, most of them follow a consistent structure, as illustrated in \cref{fig:tarballStructure}.
 Understanding the typical contents of a tarball is essential to identifying potential injection points for malicious code.
 This section describes the main file categories typically found in \ac{NPM} packages~\cite{pinckney2023largescaleanalysissemantic}.
 
-\subsection{Configuration Files and Metadata}
-\label{subsec:configurationFilesAndMetadata}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{tarballStructure.pdf}
+    \caption{Example of a Typical NPM Tarball Directory Structure.}
+    \label{fig:tarballStructure}
+\end{figure}
 
-Required for publication to the \ac{NPM} registry, every valid package must include a \texttt{package.json} file
+Required for publication to the \ac{NPM} registry, every valid package must include a \texttt{package\allowbreak .json} file
 that describes its contents and properties.
 Its \texttt{name} and \texttt{version} fields are mandatory and together form a unique identifier.
 Other common optional fields include a description, the license, a link to the source
@@ -176,24 +208,18 @@ As noted in \cref{sec:NPMEcosystem}, since no repository link is required,
 the registry does not verify the correspondence between the tarball and its declared source code, 
 creating a significant security gap.
 
-\subsection{Documentation and General Information}
-\label{subsec:documentationAndGeneralInformation}
-
 Most packages include documentation files such as \texttt{README.md},
 \texttt{CHANGELOG.md}, and a \texttt{LICENSE} text file specifying copyright terms.
 These files carry no executable logic and are included purely for informational purposes,
-providing human-readable descriptions of the package's functionality, usage instructions,
+providing human-readable descriptions of the package functionality, usage instructions,
 and licensing conditions.
-
-\subsection{Code Files and Build Artifacts}
-\label{subsec:codeFilesAndBuildArtifacts}
 
 The core of a package consists of JavaScript and TypeScript files defining its functional logic.
 In addition, tarballs can include \emph{build artifacts}, that is, files that are
 automatically generated by build tools rather than written directly by developers~\cite{9240695}.
 Through processes such as minification and bundling, these tools produce optimized versions
 of the original source code that are smaller and faster to load.
-A common example is Source Map files (identifiable by the \texttt{.map} extension),
+A common example is source map files (identifiable by the \texttt{.map} extension),
 which map the minified output back to the original source to facilitate debugging~\cite{sourceMap}.
 Build processes also ensure compatibility, as the resulting code can run across 
 different environments and runtimes without the end user needing to worry about the original syntax.

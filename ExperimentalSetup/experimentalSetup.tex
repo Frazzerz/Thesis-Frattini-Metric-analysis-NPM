@@ -1,110 +1,261 @@
 \chapter{Experimental Setup}
 \label{ch:ExperimentalSetup}
 
-This chapter describes the datasets used for the analyses conducted in \cref{ch:metricsAnalysis}
-and the software tools developed to create these datasets.
+This chapter describes the datasets used for the analyses conducted in \cref{ch:metricsAnalysis} and the software tools developed to create them.
+\Cref{sec:datasets} introduces the two datasets, the Goodware and the Malware, 
+explaining why they were structured this way, 
+how the entries were selected, and what their main statistical properties are.
+\Cref{sec:SoftwareTools} details the two software tools developed:
+the primary analysis tool that downloads tarballs and computes metrics on them,
+and the custom script to automatically retrieve malicious versions.
 
 \section{Datasets}
 \label{sec:datasets}
 
-To carry out the analyses conducted in \cref{ch:metricsAnalysis}, we created two datasets:
-one Goodware (\cref{sec:goodwareDataset}) and one Malware (\cref{sec:malwareDataset}).
+To carry out the analyses in \cref{ch:metricsAnalysis}, two datasets are required:
+one to establish a baseline of normal package behavior, 
+and one to evaluate whether malicious releases are detectable against that baseline.
+Accordingly, we constructed a Goodware (\cref{subsec:goodwareDataset}) and a Malware dataset (\cref{subsec:malwareDataset}).
+Both datasets consist of the same set of metrics computed from \ac{NPM} tarballs,
+using the tool described in \cref{subsec:ToolForAnalyzingPkgs}.
+Concretely, for each package across its 20 releases, these datasets store:
+the set of distinct file types detected, 
+the total uncompressed size in bytes, 
+and, in plain-text files, the length of the longest line, 
+and the count of unique hexadecimal values and Ethereum addresses.
+While the metrics themselves are analyzed in \cref{ch:metricsAnalysis},
+this section focuses on the composition and construction of both collections.
 
-These two datasets are a collection of metrics from a set of \ac{NPM} packages.
+Each dataset is organized as a collection of CSV files, one per metric.
+Each is named after the metric it represents, followed by a suffix indicating the dataset: 
+\texttt{\_GD} for the Goodware and \texttt{\_MD} for the Malware (e.g., \texttt{package\_size\_GD.csv}, \texttt{package\_size\_MD.csv}).
+As illustrated in the excerpts provided in \cref{tab:csv-Goodware,tab:csv-Malware},
+the first column provides the entry name,
+followed by 20 columns, labelled -19 to 0, hold the metric value for the corresponding release.
+For the \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses} metrics,
+an additional filtered variant of the Goodware CSV is also provided,
+containing only the entries that have at least one non-zero value in at least one release 
+(e.g., \texttt{unique\_hexadecimal\_values\_GD\_GreaterThan0.csv}).
+This filtered file is used in \cref{ch:metricsAnalysis} to focus the analysis on modules that are actually informative for those metrics.
+The CSV format was chosen for three main reasons: 
+it is human-readable without specialized tools, 
+it integrates naturally with data analysis libraries such as \texttt{pandas}~\cite{pandas} and \texttt{matplotlib}~\cite{matplotlib},
+and it enables independent reuse of the datasets without requiring any specific tooling.
+Both datasets are publicly available on
+GitHub\footnote{\url{https://github.com/Frazzerz/Datasets-NPM-Analysis}}.
 
-The metrics considered, discussed in the relevant section in \cref{ch:metricsAnalysis}, are identical for both datasets.
-To compute this metric from the \ac{NPM} packages, we developed a software tool described in \cref{sec:ToolForAnalyzingNpmPackages}.
+A key design decision common to both datasets is the fixed window of exactly 20 releases per entry.
+This constraint ensures comparability across packages and between datasets,
+and reflects the deliberate methodological choice of tracking the evolution of each 
+across consecutive releases rather than analyzing a single snapshot in isolation.
+The threshold of 20 was chosen to balance two competing requirements:
+it is large enough to capture a meaningful historical trend,
+while remaining small enough to retain a large fraction of the ecosystem;
+a higher threshold would have excluded significantly more packages from the Goodware dataset.
+This longitudinal perspective is essential to the detection approach,
+because malicious updates stand out as sudden deviations from an otherwise predictable evolutionary pattern, 
+a signal that would be invisible in a single-snapshot analysis.
+However, this represents a trade-off and a limitation, as for long-lived projects with many releases, 
+examining the 20 most recent versions may capture a partial view of their history, 
+omitting behavioral patterns present in the early stages of development.
 
-Instead, the set of \ac{NPM} packages and their collection are different for the two datasets.
-However, both datasets always have 20 versions for each package. 
-This was done to study their behavior and evolution across versions.
+\subsection{Goodware Dataset}
+\label{subsec:goodwareDataset}
 
-Consequently, these datasets consist of a collection of CSV files, one for each metric, 
-containing the values of that specific metric for every version of every package included in the dataset.
-We used the tool described in \cref{sec:ToolForAnalyzingNpmPackages} to generate both 
-datasets, available on GitHub\footnote{\url{https://github.com/Frazzerz/Datasets-NPM-Analysis}}.
+The purpose of the Goodware dataset is to establish a \emph{baseline}, 
+the typical behavior of each metric under normal, benign development conditions.
+This baseline is used in \cref{ch:metricsAnalysis} to identify packages exhibiting outlier values
+and to evaluate whether the compromised releases in the Malware dataset are detectable.
 
-The two datasets are comparable to each other 
-as they are homogeneous, since both have packages with the same number of versions (20).
+To build a large and representative baseline, 
+the dataset is composed of modules ranked among the 1,000 most popular in the \ac{NPM} registry by number of stars, 
+according to a publicly available popularity ranking~\cite{tristan2026listtop10000}.
+This criterion was chosen because such packages are the most realistic and impactful targets of \acp{SSCA}.
+Of the 1,000 candidates, 371 have fewer than 20 releases available in the registry and were therefore excluded, 
+as the analysis requires exactly that number per entry.
+The dataset includes the remaining 629 packages, 
+using the 20 most recent versions parsable via node-semver~\cite{semver} (ensuring chronological order).
+Within the CSV file, entries are sorted by descending order of popularity,
+so that the most downloaded modules appear first.
+The developed tool (\cref{subsec:ToolForAnalyzingPkgs}) downloads the corresponding tarballs automatically,
+taking as input a JSON file containing the 1,000 names 
+extracted from the same ranking~\cite{tristan2026listtop10000}.
 
-\subsection{Goodware dataset}
-\label{sec:goodwareDataset}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Excerpt of \texttt{package\_size\_GD.csv} (values in bytes).}
+\label{tab:csv-Goodware}
+\begin{tabularx}{\textwidth}{@{} l r r r r r r r r r @{}}
+\toprule
+\textbf{Package} & \textbf{$-19$} & \textbf{$-18$} & \textbf{$-17$} & \textbf{$-16$} & \textbf{$\ldots$}  & \textbf{$-3$} & \textbf{$-2$} & \textbf{$-1$} & \textbf{$0$} \\
+\midrule
+\texttt{chalk}     & 26,924  & 31,421  & 31,889  & 32,729 & \ldots & 44,242 & 44,295  & 44,342  & 44,342  \\
+\texttt{commander} & 162,734 & 163,823 & 168,750 & 169,596 & \ldots & 200,514 & 208,171 & 208,150 & 208,153 \\
+\texttt{debug}     & 79,494  & 79,525  & 79,525  & 53,255 & \ldots & 42,060 & 42,798  & 42,793  & 42,793  \\
+\texttt{tslib}     & 32,856  & 34,201  & 34,220  & 35,212 & \ldots & 84,876 & 86,155  & 89,090  & 90,359  \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
+\Cref{tab:csv-Goodware} shows an excerpt of \texttt{package\_size\_GD.csv}, illustrating two typical evolutionary patterns.
+\texttt{commander} and \texttt{tslib} show a gradual size increase across versions,
+reflecting the natural accumulation of functionality over time;
+by contrast, \texttt{debug} decreases significantly from the middle of its history
+due to a major restructuring that made it considerably lighter.
+These variations are expected and follow predictable, documented trajectories, 
+a property that makes them distinguishable from the abrupt spikes introduced by compromised releases, as shown in \cref{tab:csv-Malware}.
+It is also worth noting that for \texttt{chalk} and \texttt{debug}, the value at version 0 is identical with version -1,
+and this reflects the standard maintainer response of unpublishing the malicious version and immediately republishing the last clean one, 
+as described in \cref{sec:NPMEcosystem}.
 
-This dataset is composed of packages ranked among the 1,000 most popular 
-in the \ac{NPM} registry, in terms of number of stars~\cite{tristan2026listtop10000npmpackages}.
+\begin{table}[ht]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Summary Statistics of the Goodware Dataset.}
+\label{tab:goodware-stats}
+\begin{tabularx}{\textwidth}{@{} l r r l X @{}}
+\toprule
+\textbf{Metric} & \textbf{Median} & \textbf{Max} & \textbf{Packages > 0} & \textbf{Notable examples} \\
+\midrule
+\emph{File Types} & 5 & 27 & 629 (100\%) & \texttt{json}~(100\%), \texttt{js}~($\sim$97.6\%) and \texttt{ts}~($\sim$71\%) \\ \addlinespace
+\emph{Package Size} & $\sim$84 KB & $\sim$211 MB & 629 (100\%) & \texttt{next}~($\sim$140MB) and \texttt{aws-sdk}~($\sim$98MB) \\ \addlinespace
+\emph{Longest Line Length} & $\sim$460 & 4,041,545 & 629 (100\%) & \texttt{next} and \texttt{@angular} (maps) \\ \addlinespace
+\emph{Unique Hexadecimal Values} & 0 & 2,208 & 109 (17.3\%) & \texttt{crypto-js}: 1,588, \texttt{chardet}: 972, \texttt{aws-sdk}: 600 \\ \addlinespace
+\emph{Unique Ethereum Addresses} & 0 & 1 & 2 (0.3\%) & \texttt{brace-expansion} and \texttt{dotenv-expand} (\texttt{tea.yaml}) \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-Out of these 1,000 packages, 371 have less than 20 versions 
-available in the \ac{NPM} registry and were therefore excluded.
+The 629 packages in the dataset span a wide range of sizes and complexities,
+reflecting the diversity of real-world \ac{NPM} ecosystems.
+\Cref{tab:goodware-stats} summarizes the key statistical properties of the Goodware dataset for each of the five metrics analyzed in \cref{ch:metricsAnalysis}.
+For each metric, the table reports the median and maximum values, 
+the number of packages that have at least one non-zero value across their versions (Packages~>~0), and representative notable examples.
 
-The dataset includes the 
-remaining 629 packages, with their 20 most recent available versions parsable via node-semver~\cite{semver}.
+For \emph{File Types}, the median and maximum refer to the number of unique file types found per release.
+The maximum of 27 is attributable to \texttt{moment-timezone} (in version 0.5.36),
+which erroneously included an unrelated temporary folder, subsequently removed in the following version, as discussed in \cref{sec:analysisFileTypes}.
+In the Notable examples column, the three most common extensions are reported,
+together with the percentage of packages that contain at least one file of that type.
 
-To automatically obtain these versions of these packages, we used the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}),
-specifying the first 1,000 packages names from list of \textcite{tristan2026listtop10000npmpackages} in a JSON file as input.
+For \emph{Package Size}, the median grows progressively over time, 
+from approximately 71~KB in older releases to 84~KB in the most recent ones.
+The maximum of 211~MB corresponds again to \texttt{moment-timezone}, 
+for the same reason described above and also detailed in \cref{sec:analysisPackageSize}.
+Other packages with notably large sizes include \texttt{next} and \texttt{aws-sdk},
+which are consistently among the largest across all their versions.
 
-\subsection{Malware dataset}
-\label{sec:malwareDataset}
+The high variability in \emph{Longest Line Length} is attributable to the presence of build artifacts in some tarballs.
+The maximum of 4,041,545 characters belongs to \texttt{next},
+for this reason, similarly to those under the \texttt{@angular} scope, as detailed in \cref{sec:analysisLLL}.
 
+For \emph{Unique Hexadecimal Values}, 109 out of 629 packages (17.3\%) have at least one hexadecimal value in any version; 
+the remaining 520 have none.
+Among those with non-zero values, the ones with the highest counts are typically encryption-related,
+such as \texttt{crypto-js} and \texttt{node-forge}, or contain generated JavaScript files, such as \texttt{aws-sdk}.
+The maximum of 2,208 belongs to \texttt{polished}, 
+which temporarily included an erroneous \texttt{.yarn} cache directory with a generated file, as detailed in \cref{sec:analysisHex}.
 
-This dataset is composed of 20 \ac{NPM} packages
-compromised by one of the four \ac{SSCA} analyzed in 
-\cref{ch:AnalysisRecentAttacks}.
+For \emph{Unique Ethereum Addresses}, only two packages (\texttt{brace-expansion} and \texttt{dotenv-expand})
+contain a single address each, across their versions.
+In both cases, the address originates from a \texttt{tea.yaml} protocol registration file unrelated to the core functionality of either module, 
+as discussed in \cref{sec:analysisEthAdd}.
 
-Each of these packages has 20 versions: one malicious and 19 legitimate.
+The main limitation of this dataset is that it represents only popular packages; 
+less prominent ones may exhibit different statistical properties, and the baselines derived here should be interpreted accordingly.
 
-To obtain the malicious versions of these packages, we used the developed script 
-explained in \cref{sec:DownloadMaliciousTarballs}.
+\subsection{Malware Dataset}
+\label{subsec:malwareDataset}
 
-The list below reports the compromised packages in the Malware dataset for each attack,
-including the specific malicious version number.
+The Malware dataset contains packages compromised by one of the four \acp{SSCA} analyzed in \cref{ch:AnalysisRecentAttacks},
+and is used in \cref{ch:metricsAnalysis} to evaluate whether the metrics are sensitive enough to detect the anomalous malicious releases.
+The dataset includes twenty entries, each analyzed across exactly 20 releases: nineteen legitimate and one compromised.
+Within the CSV files, packages are ordered chronologically by attack: the three from Attack~A appear first,
+followed by the nine from Attack~B, the four from Attack~C, and the four from Attack~D.
+The nineteen legitimate versions were downloaded automatically by the tool described in \cref{subsec:ToolForAnalyzingPkgs},
+while the malicious tarballs were retrieved separately using the custom script presented in \cref{subsec:DownloadMaliciousTarballs}.
+
+The twenty packages were selected based on two criteria.
+The first was the availability of at least nineteen legitimate prior versions in the registry,
+as required by the longitudinal analysis design.
+The second was a sufficiently high weekly download count to reflect realistic, high-impact attack scenarios.
+Entries that did not satisfy the first criterion were therefore excluded;
+specifically, two from Attack~A and nine from Attack~B lacked enough prior versions.
+For Attacks~C and~D, which affected a very large number of packages (187 and 1,055, respectively),
+including all compromised ones would not add analytical value and would make the dataset difficult to manage;
+therefore, only a representative subset was included, 
+selecting those with at least 1,000 weekly downloads.
+It is worth noting that all nine packages included from Attack~B are among the 1,000 most popular in the registry, 
+while none of those from the remaining attacks fall into that category.
+
+The full list of entries included in the Malware dataset, 
+together with the specific compromised release number for each, is reported below.
+
 \begin{itemize}
-    \item For the attack A (\cref{sec:attackA}) there are 3 packages:
+    \item Attack~A (\cref{sec:attackA}):
     \begin{itemize}
-        \item \texttt{eslint-config-prettier}, version 10.1.7
-        \item \texttt{eslint-plugin-prettier}, version 4.2.3
-        \item \texttt{synckit}, version 0.11.9
+        \item \texttt{eslint-config-prettier}, v.10.1.7
+        \item \texttt{eslint-plugin-prettier}, v.4.2.3
+        \item \texttt{synckit}, v.0.11.9
     \end{itemize}
-    \item For the attack B (\cref{sec:attackB}) there are 9 packages:
+    \item Attack~B (\cref{sec:attackB}):
     \begin{itemize}
-        \item \texttt{ansi-regex}, version 6.2.1
-        \item \texttt{ansi-styles}, version 6.2.2
-        \item \texttt{chalk}, version 5.6.1
-        \item \texttt{color-convert}, version 3.1.1
-        \item \texttt{color-string}, version 2.1.1
-        \item \texttt{debug}, version 4.4.2
-        \item \texttt{supports-color}, version 10.2.1
-        \item \texttt{strip-ansi}, version 7.1.1
-        \item \texttt{wrap-ansi}, version 9.0.1
+        \item \texttt{ansi-regex}, v.6.2.1
+        \item \texttt{ansi-styles}, v.6.2.2
+        \item \texttt{chalk}, v.5.6.1
+        \item \texttt{color-convert}, v.3.1.1
+        \item \texttt{color-string}, v.2.1.1
+        \item \texttt{debug}, v.4.4.2
+        \item \texttt{supports-color}, v.10.2.1
+        \item \texttt{strip-ansi}, v.7.1.1
+        \item \texttt{wrap-ansi}, v.9.0.1
     \end{itemize}
-    \item For the attack C (\cref{sec:attackC}) there are 4 packages:
+    \item Attack~C (\cref{sec:attackC}):
         \begin{itemize}
-            \item \texttt{@ctrl/deluge}, version 7.2.1
-            \item \texttt{@ctrl/shared-torrent}, version 6.3.2
-            \item \texttt{@ctrl/tinycolor}, version 4.1.2
-            \item \texttt{ember-browser-services}, version 5.0.3
+            \item \texttt{@ctrl/deluge}, v.7.2.1
+            \item \texttt{@ctrl/shared-torrent}, v.6.3.2
+            \item \texttt{@ctrl/tinycolor}, v.4.1.2
+            \item \texttt{ember-browser-services}, v.5.0.3
         \end{itemize}
-    \item For the attack D (\cref{sec:attackD}) there are 4 packages:
+    \item Attack~D (\cref{sec:attackD}):
         \begin{itemize}
-            \item \texttt{@asyncapi/avro-schema-parser}, version 3.0.26
-            \item \texttt{@asyncapi/bundler}, version 0.6.6
-            \item \texttt{@asyncapi/cli}, version 4.1.3
-            \item \texttt{posthog-node}, version 5.11.3
+            \item \texttt{@asyncapi/avro-schema-parser}, v.3.0.26
+            \item \texttt{@asyncapi/bundler}, v.0.6.6
+            \item \texttt{@asyncapi/cli}, v.4.1.3
+            \item \texttt{posthog-node}, v.5.11.3
         \end{itemize}
 \end{itemize}
 
-Attacks C and D involved a large number of compromised packages, respectively 187 and 1,055.
-For this reason, it was decided to include in the dataset a limited number of 
-the most relevant packages for both attacks,
-specifically those with a high number of weekly downloads (at least over 1,000).
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Excerpt of \texttt{package\_size\_MD.csv} (values in bytes).
+The malicious version of each package is highlighted in bold.}
+\label{tab:csv-Malware}
+\begin{tabularx}{\textwidth}{@{} l r r r r r r r @{}}
+\toprule
+\textbf{Package} & \textbf{$-19$} & \textbf{$-18$} & \textbf{$-17$} & \textbf{\ldots} & \textbf{$-2$} & \textbf{$-1$} & \textbf{$0$} \\
+\midrule
+\texttt{eslint-config-prettier} & 18,332 & 19,729 & 19,819 & \ldots & 59,021 & \textbf{1,356,692} & 59,021 \\
+\texttt{chalk}                  & 31,421 & 31,889 & 32,729 & \ldots & 44,342 & \textbf{121,131}   & 44,342 \\
+\texttt{@ctrl/tinycolor}        & 238,949 & 288,469 & 241,608 & \ldots & 244,065 & \textbf{3,978,776} & 244,090 \\
+\texttt{@asyncapi/bundler}      & 56,101  & 56,128  & 56,473  & \ldots & 64,914  & 64,883 & \textbf{10,227,467} \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-The Malware dataset only includes packages with at least 19 legitimate versions available in the \ac{NPM} registry.
+\Cref{tab:csv-Malware} presents an excerpt of \texttt{package\_size\_MD.csv} with one entry per attack, 
+illustrating how the malicious version appears in the Malware dataset.
+As observed in \cref{tab:csv-Malware}, for the \emph{Package Size} metric, 
+the compromised release in all \acp{SSCA} introduces a sharp, 
+isolated spike surrounded by otherwise predictable evolutionary patterns in the legitimate values.
+For \texttt{eslint-config-prettier} and \texttt{chalk}, the value at version 0 returns to the pre-attack level 
+because the maintainer republished the last clean release, as discussed in \cref{subsec:goodwareDataset}.
+Instead, for \texttt{@asyncapi/bundler}, the spike falls at version 0, 
+because the \ac{PM} chose to downgrade to the prior update rather than republishing it as a new one, as described in \cref{sec:NPMEcosystem}.
 
-However in these attacks, there are compromised packages that have fewer than 19 versions. 
-In such case, they were ignored and not included in the dataset (nor are they present in the list above).
-Specifically, two packages were excluded from attack A and nine from attack B.
-
-For the purpose of this dataset and its analysis conducted in \cref{ch:metricsAnalysis},
-it is not necessary that its packages are among the 1,000 most popular in the \ac{NPM} registry.
-Anyway in the list, all nine packages from attack B are among the 1,000 most popular,
-while for the other attacks, none of the compromised packages fall into that category.
+The main limitation of this dataset is that it covers a narrow selection of attack campaigns;
+packages compromised by different \acp{SSCA} may exhibit structural properties not captured by this sample,
+and the results should be interpreted accordingly.

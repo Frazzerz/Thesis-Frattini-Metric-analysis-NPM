@@ -1,128 +1,163 @@
 \section{Software Tools}
-\label{ch:SoftwareTools}
+\label{sec:SoftwareTools}
 
-In this section, we describe the tool and script developed, along with the approaches used,
-to create the two datasets described in \cref{sec:datasets}.
+This section describes the tool and script developed to create the two datasets presented in \cref{sec:datasets}.
+\Cref{subsec:ToolForAnalyzingPkgs} presents the primary analysis tool \texttt{NPM Packages Analyzer},
+while \cref{subsec:DownloadMaliciousTarballs} details the custom script to automatically retrieve malicious versions from mirror registries.
 
-\subsection{Tool for Analyzing NPM Packages}
-\label{sec:ToolForAnalyzingNpmPackages}
+\subsection{NPM Packages Analyzer}
+\label{subsec:ToolForAnalyzingPkgs}
 
-The \texttt{Npm-packages-analyzer} tool computes
-the metrics of \cref{ch:metricsAnalysis} from a set of \ac{NPM} package versions.
-
-Using this tool, it is possible to construct 
-the Goodware dataset (\cref{sec:goodwareDataset}) and the Malware dataset (\cref{sec:malwareDataset}).
-
+The developed tool computes the metrics analyzed in \cref{ch:metricsAnalysis} from a set of \ac{NPM} package releases.
+It enables the construction of both the Goodware (\cref{subsec:goodwareDataset}) and the Malware dataset (\cref{subsec:malwareDataset}).
 Implemented in Python, it is available on GitHub\footnote{\url{https://github.com/Frazzerz/Npm-packages-analyzer}},
-and can be invoked from the command line in the following way:
-
+and can be invoked from the command line as follows:
 \begin{verbatim}
 python3 main.py --json <input_file>.json [--workers N] [--local]
 \end{verbatim}
 
-The tool requires as input a JSON file containing a list of \ac{NPM} packages names you want to analyze.
+The required input is a JSON file containing the list of \ac{NPM} package names to analyze. 
+The optional \texttt{-{}-local} flag allows local tarballs,
+such as the malicious releases in the Malware dataset, 
+to be included alongside those downloaded from the registry.
+The optional \texttt{-{}-workers} flag controls the number of parallel processes used for per-file metric computation. 
+Packages and their versions are processed sequentially (from oldest to most recent), 
+while the analysis of individual files within each version is parallelized using multiprocessing. 
+The tool workflow is organized into four phases, described below.
 
-Optionally, the \texttt{-{}-local} flag allows local tarballs of \ac{NPM} package versions to be include in the analysis.
+\subsubsection{Phase 1: Version Retrieval}
+\label{subsubsec:ToolForAnalyzingPkgsPhase1}
 
-The tool processes one package and one version at a time, from the oldest version to the most recent one.
-Instead, the analysis and computation of metrics for individual files within in a version are performed in parallel, using multiprocessing.
-The \texttt{-{}-workers} flag allows for specifying the number of processes to be used.
+The \texttt{NPMClient} component queries the official \ac{NPM} registry to retrieve the module metadata and the list of all available releases. 
+From this list, only versions parsable by node-semver~\cite{semver} are kept, 
+so that they can be sorted chronologically. 
+For the Goodware dataset (\cref{subsec:goodwareDataset}), the 20 most recent valid versions are selected and their tarballs downloaded. 
+For the Malware dataset (\cref{subsec:malwareDataset}), only the nineteen most recent legitimate versions are fetched; 
+the twentieth slot is reserved for the malicious tarball, 
+which is retrieved separately via the custom script described in \cref{subsec:DownloadMaliciousTarballs} and included through the \texttt{-{}-local} flag.
 
-The tool's workflow can be divided into four phases:
-\begin{enumerate}
-    \item \textbf{Version Retrieval:}
+\subsubsection{Phase 2: Metrics Computation}
+\label{subsubsec:ToolForAnalyzingPkgsPhase2}
 
-First, the NPMClient component retrieves the package metadata and the list of available versions
-by querying the official \ac{NPM} registry.
+For each version, the tool first extracts the tarball and computes the metrics on the individual files it contains. 
 
-From this list, only versions parsable via node-semver~\cite{semver} are kept, 
-to make them chronologically sortable.
+The \emph{File Types} metric (\cref{sec:analysisFileTypes}) is computed by running \texttt{Magika}~\cite{magika}, 
+a deep-learning-based content-type detection library developed by Google. 
+Each file in the tarball is processed, and the resulting labels is recorded.
+Notably, \texttt{Magika} labels Windows \ac{PE} executables (including \ac{DLL} files) as \texttt{pebin}.
+The \emph{Package Size} metric (\cref{sec:analysisPackageSize}) is computed as the uncompressed size in bytes of each individual file.
 
-The tool selects the 20 most recent valid versions from the list and downloads 
-the related tarballs for the Goodware dataset (\cref{sec:goodwareDataset}).
+Metrics based on the textual content of files, namely \emph{Longest Line Length} (\cref{sec:analysisLLL}), 
+\emph{Unique Hexadecimal values} (\cref{sec:analysisHex}), 
+and \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}),
+are computed only on plain-text files, such as JavaScript and TypeScript sources, 
+and are therefore skipped for binary files such as zip, png or \ac{DLL}.
+To determine the type of each file and thereby distinguish plain-text from binary content, 
+the tool uses \texttt{Magika} to classify each file and checks the detected label against a predefined whitelist of plain-text types.
+Additionally, for these metrics, 
+comments are stripped from JavaScript and TypeScript files before metric computation, 
+using a parser from the tree-sitter library~\cite{treesitter}, so that comment content does not affect the results.
+To compute \emph{Longest Line Length}, the tool splits the file content at newline characters and records the length of the longest line.
 
-Instead, the tool selects and downloads the 19 most recent valid tarballs versions
-for the Malware dataset (\cref{sec:malwareDataset}).
-In this case, the twentieth version is the tarball related to the malicious version,
-retrieved with the developed script (\cref{sec:DownloadMaliciousTarballs}) 
-and included using the \texttt{-{}-local} flag.
+The \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses} metrics are computed via regular expressions (regex).
+These patterns are precompiled with \texttt{re.compile} from the Python \texttt{re} library~\cite{re}, 
+which parses each pattern once and reuses the resulting object across all files, reducing overhead.
+The precompilation step also allows flags to be specified at compile time; 
+for example, \texttt{re.IGNORECASE} is used to match both \texttt{0x} and \texttt{0X} prefixes in the hexadecimal pattern, 
+making the search case-insensitive.
+To find all matches within a file contents, the tool uses the \texttt{finditer} method on the compiled pattern,
+which returns an iterator over all matches and is more memory-efficient than collecting all results at once.
+The pattern used for \emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}) is:
+\begin{verbatim}
+_?0x[0-9a-fA-F]+
+\end{verbatim}
+The optional leading underscore (specified with \texttt{\_?}) captures the naming convention used by obfuscation
+tools when a hexadecimal token serves as a variable or function name (e.g., \texttt{\_0x6fd57a}), 
+followed by the mandatory \texttt{0x} prefix with one or more hexadecimal characters (digits 0 to 9 and letters a to f, both lowercase and uppercase).
+This flexible pattern allows matching values even when they appear inside function calls or other code structures, 
+where strict boundaries, like the pattern below, would miss them.
+For \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}), the pattern is instead:
+\begin{verbatim}
+(?<![\w\-/_])0x[a-fA-F0-9]{40}(?![\w\-/_])
+\end{verbatim}
+A valid Ethereum address consists of the prefix \texttt{0x} followed by exactly 40 hexadecimal characters~\cite{ethereum}.
+The lookbehind (\texttt{(?<![{\textbackslash}w{\textbackslash}-/\_])}) 
+and lookahead (\texttt{(?![{\textbackslash}w{\textbackslash}-/\_])})
+prevent matching strings embedded in URLs, file paths, or longer hexadecimal sequences, 
+which standard word boundaries like \texttt{{\textbackslash}b} would not correctly handle the typical path separators, such as slashes and hyphens.
 
-    \item \textbf{Metrics Computation:}
+Once per-file metrics are available, they are aggregated to produce a single version-level summary. 
+For \emph{File Types}, the per-file labels are collected into a deduplicated set of unique types. 
+For \emph{Package Size}, the per-file sizes are summed. 
+For \emph{Longest Line Length}, the maximum across all plain-text files is taken. 
+For \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses}, the per-file match lists are merged and deduplicated.
 
-In this phase, the tool first computes the metrics on the individual files extracted from the package version's tarball.
+\subsubsection{Phase 3: Results Saving}
+\label{subsubsec:ToolForAnalyzingPkgsPhase3}
 
-The computation of each metric is different, and each one is described in 
-depth in its own section in \cref{ch:metricsAnalysis}.
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Excerpt of \texttt{file\_metrics.csv} for \texttt{chalk} package.}
+\label{tab:file-metrics-excerpt}
+\begin{tabularx}{\textwidth}{@{} l r r r r r r r @{}}
+\toprule
+\textbf{Version} & \textbf{File Path} & \textbf{\shortstack{File \\ Type}} & \textbf{\shortstack{Size \\ Bytes}} & \textbf{\shortstack{Longest \\ Line}} & \textbf{\shortstack{Hex \\ Count}} & \textbf{\shortstack{Hex \\ Patterns}} & \textbf{\ldots} \\
+\midrule
+2.4.2 & \texttt{package.json} & json & 1,195 & 74 & 0 & [] & \ldots \\
+2.4.2 & \texttt{index.js} & javascript & 6,439 & 120 & 0 & [] & \ldots \\
+2.4.2 & \texttt{types/index.d.ts} & typescript & 2,353 & 65 & 0 & [] & \ldots \\
+2.4.2 & \texttt{templates.js} & javascript & 3,133 & 158 & 0 & [] & \ldots \\
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
+3.0.0-beta.1 & \texttt{package.json} & json & 1,003 & 53 & 0 & [] & \ldots \\
+3.0.0-beta.1 & \texttt{source/index.js} & javascript & 5,863 & 135 & 0 & [] & \ldots \\
+3.0.0-beta.1 & \texttt{source/templates.js} & javascript & 3,361 & 179 & 0 & [] & \ldots \\
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
+5.6.2 & \texttt{package.json} & json & 1,640 & 59 & 0 & [] & \ldots \\
+5.6.2 & \texttt{source/index.js} & javascript & 5,902 & 140 & 0 & [] & \ldots \\
+5.6.2 & \texttt{source/\ldots/index.js} & javascript & 5,256 & 109 & 1 & [``0xFF''] & \ldots \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-Metrics based on the textual content of the files
-(Longest Line Length (\cref{sec:analysisLLL}), Unique Hexadecimal values (\cref{sec:analysisHex}) 
-and Unique Ethereum Addresses (\cref{sec:analysisEthAdd}))
-are computed only on plain text files, such as JavaScript and TypeScript files, 
-ignoring binary files such as zip, png or \ac{DLL}.
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{Excerpt of \texttt{aggregate\_metrics\_by\_single\_version.csv} for \texttt{chalk} package.}
+\label{tab:aggregate-metrics-excerpt}
+\begin{tabular}{@{} l r r r r r r r r @{}}
+\toprule
+\textbf{Version} & \textbf{\shortstack{List Total \\ Types}} & \textbf{\shortstack{Total \\ Types}} & \textbf{\shortstack{T. Size \\ Bytes}} & \textbf{\shortstack{Longest \\ Line}} & \textbf{\shortstack{T. \\ Hex}} & \textbf{\shortstack{Hex \\ Patterns}} & \textbf{\shortstack{T. Eth. \\ Add.}} & \textbf{\shortstack{Eth. Add. \\ Patterns}} \\
+\midrule
+2.4.2        & [``json'', \ldots] & 5 & 26,924 & 158 & 0 & [] & 0 & [] \\
+3.0.0-beta.1 & [``json'', \ldots] & 5 & 31,421 & 179 & 0 & [] & 0 & [] \\
+\ldots       & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
+5.6.2        & [``json'', \ldots] & 5 & 44,342 & 140 & 1 & [``0xFF''] & 0 & [] \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-To identify plain text files (and compute these metrics on it), 
-the tool first determines the type of the file using \texttt{Magika}, 
-a deep learning-based content-type detection tool developed by Google~\cite{magika}.
-Then, the tool checks whether the detected file type is on a predefined whitelist.
-If not, the tool simply does not compute these metrics on that file.
+For each package, results are saved incrementally to two CSV files as each version is processed, 
+so that partial outputs are preserved in the event of an interruption or error.
+\texttt{file\_metrics.csv} records one row per file across all analyzed releases, 
+with columns for each per-file metric, as illustrated in \cref{tab:file-metrics-excerpt};
+while \texttt{aggregate\_metrics\_by\_single\_ \allowbreak version.csv} records one row per release, 
+with columns for the corresponding version-level aggregated values, as shown in \cref{tab:aggregate-metrics-excerpt}.
+Furthermore, a \texttt{log.txt} file is also saved, updated incrementally, mirroring the terminal output.
+It reports general information such as the total number of packages and worker count, 
+and for each entry it logs the number of versions found, 
+the download status of each tarball, the per-release analysis progress, and the total analysis time.
 
-Furthermore, for these metrics, the tool removes comments 
-from JavaScript and TypeScript files using a parser from the tree-sitter library~\cite{treesitter}.
+\subsubsection{Phase 4: Dataset Generation}
+\label{subsubsec:ToolForAnalyzingPkgsPhase4}
+Once all packages have been analyzed, the dataset files are produced by running:
 
-For the metrics Unique Hexadecimal values (\cref{sec:analysisHex}) and the Unique Ethereum Addresses (\cref{sec:analysisEthAdd})
-are computed by the tool using regular expressions (regex).
-
-These regex patterns are precompiled using the \texttt{re.compile} function from the Python \texttt{re} library~\cite{re}.
-Pre-compilation improves performance by parsing the pattern once and reusing the resulting object,
-eliminating overhead across multiple files.
-Furthermore, this approach allows to specified flags, such as re.IGNORECASE to make regex case-insensitive,
-for instance to match both \texttt{0x} and \texttt{0X} in Unique Hexadecimal values metric.
-
-To find all matches of a pattern within a file's content, 
-the tool uses the \texttt{finditer} method on the compiled pattern,
-which returns an iterator over all matches, and is more memory efficient than collecting all results at once.
-
-Subsequently, these metrics computed on individual files are aggregated to form metrics at the package version level.
-For example, to compute the package size metric (\cref{sec:analysisPackageSize}),
-the tool sums the sizes of all files contained in the tarball.
-
-Aggregation strategies vary based on the type of metric. 
-For instance, counts and weights are summed, 
-the maximum value among the longest lines of the files is taken,
-and strings are collected into lists.
-
-    \item \textbf{Results Saving:}
-
-For each package, the results are saved incrementally in two CSV files.
-\begin{itemize}
-    \item \texttt{file\_metrics.csv} contains one row for every file of each package version. 
-    The columns represent the metrics computed on single file.
-    \item \texttt{aggregate\_metrics\_by\_single\_version.csv} contains one row for every package version, 
-    and the columns represent the metrics computed at the package version level.
-\end{itemize}
-
-The tool saves the results incrementally at the completion of each version's analysis,
-ensuring that partial results are preserved even in the event of an error.
-
-In addition to the CSV files, 
-the tool produces a \texttt{log.txt} log file, which is also updated incrementally
-and serves as a copy of the terminal output.
-
-Inside the \texttt{log.txt} file, there is general information such as the number of packages to analyze and the number of workers that will be used.
-Furthermore, for each package, the file also reports: the number of versions found in the registry,
-the status of the tarball downloads, the progress of the analysis of the selected versions
-and the total time for the analysis of the entire package.
-
-    \item \textbf{Dataset Generation:}
-
-Once the analysis is complete, the datasets explained in \cref{sec:datasets} can be created
-by executing the following command: 
 \begin{verbatim}
 python3 dataset.py 
 \end{verbatim}
 
-The tool processes the \texttt{aggregate\_metrics\_by\_single\_version.csv} files from all analyzed packages
-and generates a separate CSV file for each metric.
-Each resulting file contains the specific metric values for every version of every analyzed package included in the analysis.
-
-\end{enumerate}
+This script reads the \texttt{aggregate\_metrics\_by\_single\_version.csv} file from every analyzed package 
+and generates a separate CSV file per metric, where each row corresponds to an entry and each column to one of its analyzed versions,
+as illustrated in \cref{tab:csv-Goodware,tab:csv-Malware}.
+Each resulting file contains the metric values for every version of every analyzed package, 
+collectively forming the datasets described in \cref{sec:datasets}.

@@ -1,75 +1,87 @@
 \section{Wrap up Analysis Metrics}
 \label{sec:wrapUpAnalysisMetrics}
 
-In this section we summarize the results of the analysis conducted on the five metrics
-of \cref{ch:metricsAnalysis}, evaluating their overall effectiveness in detecting the four attacks considered.
+This section synthesizes the results of the analysis conducted on the five metrics defined in this section,
+evaluates their overall effectiveness in detecting the four attacks considered in this study,
+and discusses the proposed approach.
 
-% \fullcirc[2ex] per pallino più grande
-% C'è anche mezzo cerchio arancione \halfcirc
 \begin{table}[htbp]
   \centering
-  \caption{Summary of Metrics Analysis.}
-  \begin{tabular}{lcccccc}
+  \caption{Summary of Metric Effectiveness across the Four Attacks.
+  %\fullcirc~= Metric is Effective (Malicious Version is an Outlier);
+  %\emptycirc~= Metric is Not Indicative (Malicious Version is within the Confidence Interval).
+  }
+  \label{tab:summaryTableMetricsAnalysis}
+  \begin{tabular}{lccccc}
     \toprule
-     & Metric 1 & Metric 2 & Metric 3 & Metric 4 & Metric 5\\
+     & Metric 1 & Metric 2 & Metric 3 & Metric 4 & Metric 5 \\
+     & File Types & Pkg Size & Line Len. & Hex Val. & Eth Addr. \\
     \midrule
-    Attack A & \fullcirc & \emptycirc & \emptycirc & \emptycirc & \emptycirc \\
-    Attack B & \emptycirc & \emptycirc & \emptycirc & \fullcirc & \fullcirc \\
-    Attack C & \emptycirc & \fullcirc & \fullcirc & \emptycirc & \emptycirc  \\
-    Attack D & \emptycirc & \fullcirc & \fullcirc & \fullcirc & \emptycirc \\
+    Attack A - Malicious DLL   & \fullcirc  & \emptycirc & \emptycirc & \emptycirc & \emptycirc \\
+    Attack B - Crypto Attack   & \emptycirc & \emptycirc & \emptycirc & \fullcirc  & \fullcirc  \\
+    Attack C - Shai-Hulud 1.0  & \emptycirc & \fullcirc  & \fullcirc  & \emptycirc & \emptycirc \\
+    Attack D - Shai-Hulud 2.0  & \emptycirc & \fullcirc  & \fullcirc  & \fullcirc  & \emptycirc \\
     \bottomrule
   \end{tabular}
-  \label{tab:summaryTableMetricsAnalysis}
 \end{table}
 
-\cref{tab:summaryTableMetricsAnalysis} visually summarizes the detection capability
-of each metric for every attack.
-A filled green circle (\fullcirc) indicates that the metric proved effective in detecting
-the attack, while an empty red circle (\emptycirc) indicates that the metric was not
-indicative for that attack.
+\cref{tab:summaryTableMetricsAnalysis} visually summarizes the detection capability of each metric for every \ac{SSCA}.
+A filled green circle (\fullcirc) indicates that the metric proved effective in detecting the attack, 
+while an empty red circle (\emptycirc) indicates that was not indicative.
 
-From the analysis it can be observed that every attack is detectable by at least one
-of the defined metrics, but no single metric is capable of detecting all four attacks simultaneously.
-This follows from the fact that each metric focuses on specific characteristics that are
-not necessarily shared across all the malicious versions analyzed.
+From the analysis it can be observed that while every attack is detectable by at least one metric,
+none is capable of detecting all four \acp{SSCA} simultaneously.
+This reflects the diversity of the attacks, each with specific characteristics and 
+leaving different traces, not necessarily shared.
 
-We report below the effectiveness of each metric.
-\begin{itemize}
-    \item \textbf{Metric 1 - File Types} (\cref{sec:analysisFileTypes}):
-    This metric proves effective in detecting attacks where the attacker introduces or modify file types 
-    rarely found in \ac{NPM} packages, such as \ac{PE} files, as in the case of Attack A (\cref{sec:attackA}).
+The detection logic for each metric can be summarized as follows.
 
-    It is instead not indicative for attacks that introduce or modify file types 
-    commonly found in \ac{NPM} packages, such as JavaScript files, as in the case of Attacks B (\cref{sec:attackB}), 
-    C (\cref{sec:attackC}), and D (\cref{sec:attackD}).
+As argued in \cref{sec:analysisFileTypes},
+\textbf{Metric 1 - File Types} is effective when the attacker introduces a file type rarely found in \ac{NPM} packages,
+such as the the \ac{PE} file in Attack~A.
+Instead, it is not indicative for \acp{SSCA} that introduce or modify common file types in the ecosystem, 
+such as JavaScript files in the case of Attacks~B, C~and D.
 
-    \item \textbf{Metric 2 - Package Size} (\cref{sec:analysisPackageSize}):
-    This metric proves effective for attacks that introduce malicious files of considerable
-    size, as in the case of Attacks C (\cref{sec:attackC}) and D (\cref{sec:attackD}).
+As discussed in \cref{sec:analysisPackageSize},
+\textbf{Metric 2 - Package Size} is effective when the malicious files are large enough
+to push the total tarball size amoung the outlier of the Goodware distribution.
+It succeeds for Attacks~C (3.7~MB injection) and~D (10~MB injection),
+but fails for Attacks~A (1.2~MB injection, absorbed by the confidence interval)
+and~B (a few kilobytes added to an existing file).
 
-    It is instead not indicative for attacks that introduce smaller files or that make modifications 
-    which do not significantly increase the package size, as in the case of Attacks A (\cref{sec:attackA}) and B (\cref{sec:attackB}).
+As seen in \cref{sec:analysisLLL},
+\textbf{Metric 3 - Longest Line Length} is effective when the malicious code is written as a single extremely long line.
+It succeeds for Attacks~C (3.7 million characters) and~D (10 million characters),
+but not for Attack~B (76,438 characters), 
+whose line length falls below the outlier threshold established also by the presence of build artifacts in legitimate packages;
+and Attack~A because its main malicious file is a binary and excluded from computation.
 
-    \item \textbf{Metric 3 - Longest Line Length} (\cref{sec:analysisLLL}):
-    This metric proves effective for attacks that introduce extremely long lines of code, 
-    as in the case of Attacks C (\cref{sec:attackC}) and D (\cref{sec:attackD}).
+As detailed in \cref{sec:analysisHex},
+\textbf{Metric 4 - Unique Hexadecimal Values} is effective for attacks that introduce obfuscated code making extensive use of 
+hexadecimal values to encode variable and function names, such as in the case of Attacks~B (455 unique values) and~D (122,535 values).
+Instead, it is not indicative for attacks that do not rely on this obfuscated technique, such as Attacks~A and C.
 
-    It is instead not indicative for attacks that introduce shorter lines of code or 
-    that do not modify any plain text file, 
-    as in the case of Attacks A (\cref{sec:attackA}) and B (\cref{sec:attackB}).
+As described in \cref{sec:analysisEthAdd},
+\textbf{Metric 5 --- Unique Ethereum Addresses} is highly specific to attacks that embed cryptocurrency wallet addresses for transaction hijacking.
+It effectively detects Attack~B, which embeds seven known smart contract addresses, 
+and provides no signal for the other three attacks, which have different goals and do not include any Ethereum address in their malicious versions.
 
-    \item \textbf{Metric 4 - Unique Hexadecimal Values} (\cref{sec:analysisHex}):
-    This metric proves effective for attacks that introduce obfuscated code making extensive use of 
-    hexadecimal values to encode variable and function names, such as in the case of Attacks B (\cref{sec:attackB}) and D (\cref{sec:attackD}).
+Some limitations of the proposed approach should be noted.
 
-    It is instead not indicative for attacks that do not introduce obfuscated code, 
-    as in the case of Attacks A (\cref{sec:attackA}) and C (\cref{sec:attackC}).
+First, the metrics were defined based on the specific characteristics of the four \acp{SSCA} analyzed. 
+Diverse attacks with different properties not covered by this study may not be detectable through these metrics.
+Or even an attacker aware of these metrics could craft a malicious payload specifically designed to evade all five, 
+by injecting a small syntactically plausible file that avoids unusual extensions, long lines, hexadecimal identifiers, and Ethereum addresses.
+Therefore, it is necessary to extend this set of metrics to include additional, uncovered attack patterns.
 
-    \item \textbf{Metric 5 - Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}):
-    This metric proves effective for attacks whose goal falls within the domain of 
-    cryptojacking and wallet theft, as in the case of Attack B (\cref{sec:attackB}).
-    
-    It is instead not indicative for attacks that have different purposes, 
-    as in the case of Attacks A (\cref{sec:attackA}), C (\cref{sec:attackC}), and D (\cref{sec:attackD}).
+Second, the Goodware dataset covers 629 of the 1,000 most popular packages.
+Less popular ones may have different structural properties, 
+and the confidence intervals derived from this dataset may not generalize perfectly the entire \ac{NPM} ecosystem.
+Moreover, the Goodware dataset is inherently heterogeneous, comprising packages that vary widely in size, purpose, and content.
+As a result, some legitimate packages show anomalous values across the considered metrics
+and must be analyzed individually and manually to understand their nature.
 
-\end{itemize}
+Finally, a monitoring system based on these metrics must maintain a history of 20 recent versions per package.
+For a registry the size of \ac{NPM} (over two million packages), this implies storing and updating a substantial amount of per-release data.
+However, the per-version computation is entirely local to the tarball and requires no external services or container environments,
+making the operational cost substantially lower than dynamic analysis or \ac{LLM}-based approaches.

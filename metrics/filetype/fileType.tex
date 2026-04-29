@@ -1,52 +1,139 @@
 \section{Analysis Metric 1: File Types}
 \label{sec:analysisFileTypes}
 
-\subsection{Metric Definition}
-\label{sec:metricFileTypesDefinition}
+The first metric we examined relates to the set of file types in an \ac{NPM} package version.
+It is driven by the characteristics of Attack~A (\cref{sec:attackA}), 
+in which an adversary inserts a harmful binary Windows executable into the tarball.
+The intuition is that \ac{DLL} files are essentially never present in legitimate \ac{NPM} packages;
+thus, their appearance in a new version constitutes a clear anomalous signal.
+More generally, the presence of any extension that is rare within the Goodware dataset warrants further investigation.
+To verify this, we first identified which categories are typical or rare in the Goodware dataset,
+and then checked whether the malicious versions deviate from that baseline distribution.
+As demonstrated in this section, the analysis confirmed that binary Windows executables are virtually absent from benign entries, 
+making their detection a strong anomalous signal.
 
-The first metric we analyzed concerns the file types of \ac{NPM} packages.
+\subsection{Analysis of the Goodware Dataset}
+\label{subsec:analysisFileTypesGoodware}
 
-To compute this metric, the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}) uses 
-\texttt{Magika}, a deep learning-based content-type detection tool developed by Google~\cite{magika}.
+The Goodware dataset provides, for each of the 629 packages,
+the set of file types found across their 20 analyzed versions, as detailed in \cref{subsec:goodwareDataset}.
+In total, 71 distinct extensions were identified throughout the dataset.
 
-The developed tool first determines the type of each file present in the package version 
-and then constructs a list of all unique file types found.
-
-This metric was taken into consideration 
-because the attack A described in \cref{sec:attackA} introduces a malicious Windows \ac{DLL} 
-into the compromised package versions.
-
-
-\subsection{Goodware Dataset Analysis}
-\label{sec:analysisFileTypesGoodware}
-
-For this metric, the Goodware dataset (explained in \cref{sec:goodwareDataset}) contains 
-20 lists of file types, one for each version of every package.
-
-We used heatmaps, \cref{fig:fig1ComFileTypes} and \cref{fig:fig1RareFileTypes},
-to visualize the distribution and evolutionary patterns 
-of the file types of the packages in the Goodware dataset across versions.
-
-In the heatmaps, the x-axis shows the package versions, from the least recent (-19) to the latest available (0),
-while the y-axis represents the file extensions.
-
-The numbers inside the cells are the relative frequency
-of the extensions respect to the total number of packages in the dataset.
-
-A value like 1.000 indicates that all packages in the dataset (100\%) have at least one file of that type in that version.
-Conversely, a value such as 0.010 indicates that only 1\% of the packages have that extension among their files.
-
-Therefore, this number also indicates how common it is to find a given extension in the packages.
-
-The heatmaps use dark color shades for high values and light shades for low values.
-
-The \cref{fig:fig1ComFileTypes} and \cref{fig:fig1RareFileTypes} show all seventy-one file types found 
-in the dataset, ordered from the most common to the rarest.
-
-We used two heatmaps to better visualize the analysis:
+To visualize the distribution and evolutionary patterns of these file types across releases,
+we use two heatmaps, presented in \cref{fig:fig1ComFileTypes,fig:fig1RareFileTypes}.
+In both, the x-axis shows the 20 versions, from the least recent (-19) to the latest available (0), 
+while the y-axis lists the file extensions.
+Each cell contains the \emph{relative frequency} of that extension,
+defined as the fraction of packages in the dataset containing at least one file of that type in a given version.
+For instance, a value of 1.000 indicates that every project contains that file type,
+whereas 0.010 indicates that only 1\% do.
+Dark shading corresponds to high frequency, while light tones indicate lower occurrence.
+The 71 identified types are split between the two heatmaps as follows:
 \begin{enumerate}
-    \item \textbf{Common File Types:} \cref{fig:fig1ComFileTypes} is the heatmap showing file types 
-    that have a relative frequency higher than 1\% in at least one version.
-    \item \textbf{Rare File Types:} \cref{fig:fig1RareFileTypes} is the heatmap showing all remaining types, 
-    which have a relative frequency that does not exceed 1\% across the versions.
+    \item \textbf{Common File Types} (\cref{fig:fig1ComFileTypes}): represent the most common categories, 
+    with a relative frequency exceeding 1\% in at least one version. 
+    \item \textbf{Rare File Types} (\cref{fig:fig1RareFileTypes}): representing rarer ones, 
+    include all remaining extensions whose frequency never surpasses the 1\% threshold.
 \end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/filetype/heatmap_common.pdf}
+    \caption{Heatmap for Common File Types.}
+    \label{fig:fig1ComFileTypes}
+\end{figure}
+
+\cref{fig:fig1ComFileTypes} reveals several notable patterns in the evolution of common file types.
+
+JSON files are present in all packages across all versions, as expected, 
+because every valid \ac{NPM} package must include a \texttt{package.json} file as a condition of publication~\cite{npmdocs2026npmdocumentation}.
+However, JavaScript files are not always included, and this can occur for several reasons:
+\begin{enumerate}
+    \item \textbf{Maintainer Oversight}: packages such as \texttt{@opentelemetry/api} (version 1.0.0-rc.2),
+\texttt{cross-fetch} (3.2.0-alpha.0), and \texttt{cheerio} (1.0.0-rc.7), among others,
+were published without JavaScript files by mistake, and the versions were subsequently deprecated.
+This explains the slight dips in JavaScript frequency visible in some version columns.
+    \item  \textbf{Project Abandonment}: some packages are no longer maintained,
+and their latest versions contain no code, as with \texttt{@types/uuid}.
+    \item  \textbf{Package Purpose}: some packages provide data rather than executable logic, 
+and developers use them as dependencies to retrieve current data without manual hard-coding.
+For example, some packages contain only TypeScript code, such as those under 
+the \texttt{@types} scope (e.g., \texttt{@types/node}, \texttt{@types/react}), which provide static type definitions~\cite{typesnode}.
+Similarly, \texttt{node-releases}, which catalogues a list of Node.js release versions~\cite{node-releases},
+and \texttt{spdx-license-ids}, which provides the official Software Package Data Exchange (SPDX) license list~\cite{spdx-license-ids};
+distribute information solely as JSON files without any JavaScript code.
+\end{enumerate}
+
+The relative frequency of TypeScript files consistently increased across versions, 
+rising approximately 50\% in the earliest releases to about 70\% in the most recent. 
+This reflects the broader ecosystem-wide shift toward native TypeScript support, 
+driven by the benefits of static type checking for code quality and maintainability.
+This behavior is also visible in the size analysis of the \texttt{figlet} package (\cref{subsec:goodwarePackageSize}).
+
+Markdown and text files, typically \texttt{README.md}, \texttt{CHANGELOG.md}, and \texttt{LICENSE}, 
+are present in the majority of packages, with small variations attributable to occasional maintainer omissions.
+The remaining eleven file types in \cref{fig:fig1ComFileTypes} show declining relative frequency over time, 
+never exceeding 8\% in the latest versions, consistent with the practice of excluding non-essential files from tarballs to keep the package lightweight.
+
+Shell files are present in a small and decreasing number of packages.
+In the most recent releases, three packages still include shell files:
+\texttt{pino}, which uses a script to update version numbers across its metadata files;
+and \texttt{husky} and \texttt{jake}, which use shell scripts to trigger automated checks at Git commit time~\cite{husky, jake}.
+These uses are legitimate and harmless.
+
+\begin{figure}[htbp]%[H]
+    \centering
+    \includegraphics[width=\textwidth]{metrics/filetype/heatmap_rare.pdf}
+    \caption{Heatmap for Rare File Types (Outliers).}
+    \label{fig:fig1RareFileTypes}
+\end{figure}
+
+\cref{fig:fig1RareFileTypes} displays the 55 file types whose frequency remains below 1\% in any version.
+Four cases among these outlier occurrences deserve detailed attention.
+
+\textbf{C and C++ files} are found in three packages: \texttt{sharp}, \texttt{node-addon-api}, and \texttt{nan}. 
+The \texttt{sharp} module performs high-performance image processing using the C library \texttt{libvips}~\cite{sharp}.
+Since Node.js cannot execute C code natively,
+\texttt{sharp} depends on \texttt{node-addon-\allowbreak api} and \texttt{nan}~\cite{node-addon-api, nan},
+which function as wrappers that bridge the JavaScript runtime and the compiled C code.
+The presence of C files in these packages is therefore an inherent requirement of their functionality.
+
+\textbf{gzip files} appear in two packages as the result of accidental inclusions.
+The \texttt{polished} module mistakenly included a \texttt{.yarn} cache directory, 
+containing \texttt{install-state.gz} among other files, in four consecutive versions (4.0.0-beta.2 to 4.0.3).
+This was corrected in release 4.0.4, as documented on GitHub~\cite{polished_release_notes}.
+Similarly, \texttt{moment-timezone} (0.5.36) accidentally included a temporary folder containing gzip, 
+\ac{PE}, mp3, and psd files (none related to its functionality), before removing it in the following version.
+
+\textbf{Dockerfile files} appear in \texttt{recast} for three consecutive versions (0.21.3 to 0.21.5),
+due to the accidental inclusion of a \texttt{.devcontainer} folder intended for maintainer use only,
+which contains a dockerfile that configures a container with Node.js and Typescript.
+This folder was removed in subsequent releases.
+
+\textbf{PE files (Windows executables)} are present in two packages, marked as \texttt{pebin} in \cref{fig:fig1RareFileTypes}.
+\texttt{nodemon} is a development tool that monitors file changes and automatically restarts the process~\cite{nodemon},
+and includes \texttt{windows-kill.exe} in all 20 versions to handle signal events (such as CTRL+C) 
+correctly on Windows (e.g., to allow clean process shutdown).
+Instead, \texttt{moment-timezone} includes a \ac{PE} file by mistake in one version,
+as part of the temporary folder discussed above.
+The distinction between these two cases is important:
+the \texttt{nodemon} \ac{PE} file is stable, present in all releases, and has a documented purpose;
+while for the second package, an unexpected \ac{PE} appears for the first time in a new update, 
+without a documented justification. 
+This second case should be treated as a red flag,
+and follows a similar pattern behavior to Attack~A.
+
+\subsection{Comparison with the Malware Dataset}
+\label{subsec:analysisFileTypesComparisonMalware}
+
+In attack~A (\cref{sec:attackA}), the adversary introduced a malicious Windows \ac{DLL} into the tarball, 
+and as shown in \cref{fig:fig1RareFileTypes}, \ac{PE} files are a rare extension in the Goodware dataset, 
+as only two packages contain them: \texttt{nodemon}, which presence is documented and stable, 
+and \texttt{moment-timezone}, where it was an accidental inclusion subsequently corrected.
+Therefore, the appearance of a \ac{PE} file in a new version of a package that previously contained none, is an outlier signal, 
+making this metric effective for detecting Attack~A.
+
+For the remaining three attacks, the malicious payload either modifies an existing JavaScript file (Attack~B) or introduces new ones (Attacks~C and~D);
+an extension present in nearly all packages in the Goodware dataset.
+The metric is therefore not indicative of these \acp{SSCA},
+since the compromised versions are indistinguishable from legitimate ones.

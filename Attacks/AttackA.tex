@@ -1,30 +1,15 @@
 \section{Attack A: Malicious Windows DLL}
 \label{sec:attackA}
 
-The first attack, which occurred on July 18, 2025,
-infected five \ac{NPM} packages, one of which, \texttt{eslint-config-prettier}, is widely used
-with over thirty million weekly downloads~\cite{endorlabs2025eslint}.
+The first attack occurred on July 18, 2025, and compromised five \ac{NPM} packages.
+Among these, \texttt{eslint-config-prettier} is the most widely used,
+with over thirty million weekly downloads~\cite{endorlabs2025eslint};
+the remaining infected packages were \texttt{eslint-plugin-prettier}, \texttt{synckit}, 
+\texttt{@pkgr/core}, and \texttt{napi-postinstall}.
 
-A maintainer of this package fell victim 
-to a phishing email, and the attacker, 
-once the account was compromised, published malicious versions of the following packages:
-\begin{itemize}
-    \item \texttt{eslint-config-prettier}
-    \item \texttt{eslint-plugin-prettier}
-    \item \texttt{synckit}
-    \item \texttt{@pkgr/core}
-    \item \texttt{napi-postinstall}
-\end{itemize}
-
-The tarball of these malicious versions contains a new file called \texttt{install.js}
-and a \ac{DLL} called \texttt{node-gyp.dll}, weighing 1.2 MB.
-
-During the installation or update of one
-of these compromised packages,
-the \texttt{install.js} script is executed.
-This script checks the victim's operating system and, if it detects a Windows environment,
-it invokes \texttt{rundll32.exe}.
-The latter loads the \texttt{node-gyp.dll} into memory,
-allowing the attacker to perform remote code execution,
-enabling for example the installation of 
-additional malware.
+The tarball of each malicious version contains two new files, 
+namely a script called \texttt{install.js} and a \ac{DLL} called \texttt{node-gyp.dll}, weighing 1.2~MB.
+During the installation or update of one of these compromised packages, the \texttt{install.js} script is automatically executed;
+it checks the operating system of the victim and, upon detecting a Windows environment, 
+invokes \texttt{rundll32.exe} to load \texttt{node-gyp.dll} into memory, 
+thereby enabling remote code execution and the subsequent installation of additional malware.

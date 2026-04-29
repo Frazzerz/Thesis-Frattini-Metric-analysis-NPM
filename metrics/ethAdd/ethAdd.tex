@@ -1,93 +1,61 @@
 \section{Analysis Metric 5: Unique Ethereum Addresses}
 \label{sec:analysisEthAdd}
 
-\subsection{Metric Definition}
-\label{sec:metricEthAddDefinition}
+The fifth and final metric is the count of unique Ethereum addresses found across all
+plain-text files of an \ac{NPM} package version.
+It was motivated by Attack~B (\cref{sec:attackB}),
+in which the malicious code embeds seven known smart contract Ethereum addresses to perform cryptocurrency transaction hijacking.
+The intuition is that Ethereum addresses are essentially absent from general purpose \ac{NPM} packages, 
+so even a small count would constitute an anomalous signal.
 
-The last metric we analyzed is the number of unique Ethereum addresses
-found in the plain text files of the \ac{NPM} packages.
+\subsection{Analysis of the Goodware Dataset}
+\label{subsec:goodwareEthAdd}
 
-To compute this metric and identify strings that represent Ethereum addresses, 
-the developed tool (\cref{sec:ToolForAnalyzingNpmPackages}) uses the following precompiled regular expression:
-\begin{verbatim}
-(?<![\w\-/_])0x[a-fA-F0-9]{40}(?![\w\-/_])
-\end{verbatim}
+For this metric, the Goodware dataset provides the count of unique Ethereum addresses
+found in each of the 20 analyzed versions of every package,
+as described in \cref{subsec:goodwareDataset}.
+The distribution is so sparse that a trend figure is uninformative,  
+and, across all 629 packages, only two contain at least one Ethereum address in a given version, 
+namely \texttt{brace-expansion} and \texttt{dotenv-expand}, as also summarized in \cref{tab:goodware-stats}.
+Both cases are analyzed below to understand the reason for this presence.
 
-The regex uses a lookbehind \texttt{(?<![{\textbackslash}w{\textbackslash}-/\_])}
-and a lookahead \texttt{(?![{\textbackslash}w{\textbackslash}-/\_])}
-to ensure that the address is neither preceded nor followed by words,
-hyphens, underscores or slashes.
-This avoids, for example, capturing a string that is part of a URL or a file path,
-reducing false positives.
-Unlike word boundaries \texttt{{\textbackslash}b},
-this solution also correctly handles the typical path separators, like slashes and hyphens.
+\textbf{brace-expansion} provides shell-like brace expansion for JavaScript~\cite{brace-expansion}.
+Starting from version 4.0.0 (the second-to-last available release),
+the tarball includes a file named \texttt{tea.yaml},
+a configuration file required to register a project on the Tea protocol.
+The Tea protocol is an incentivization system for open-source projects that allows
+registered packages to earn TEA tokens proportional to their popularity and usage~\cite{teaProtocol}.
+The \texttt{tea.yaml} file must include one or more Ethereum addresses
+to receive tokens and to define the identities of the project owners.
+This file is also present in the latest available version (4.0.1).
 
-A valid Ethereum address consists of exactly 40 hexadecimal characters
-(i.e., digits 0 to 9 and letters a to f, both lowercase and uppercase) 
-preceded by the prefix \texttt{0x}~\cite{ethereum}.
+\textbf{dotenv-expand} extends the functionality of \texttt{dotenv} 
+by allowing variable expansion in \texttt{.env} files~\cite{dotenv-expand}.
+Similarly to \texttt{brace-expansion},
+starting from version 11.0.7 the tarball includes a \texttt{tea.yaml} file containing one Ethereum address.
+This file remained present for four consecutive releases,
+until version 12.0.3 (the most recent available), in which it was removed.
 
-The tool identifies all occurrences of this pattern in each plain text file of a package version,
-ignores duplicates within that version to ensure the values are unique, and then 
-sums the counts to obtain the total number of unique Ethereum addresses for the entire package version.
+These two cases establish that the presence of even a single Ethereum address
+in an \ac{NPM} tarball is rare in the Goodware dataset,
+and limited to a specific optional configuration file related to a third-party incentivization protocol, 
+with no connection to the core functionality of the packages.
 
-This metric was taken into consideration because attacks B (\cref{sec:attackB}) 
-introduce seven smart contract Ethereum addresses.
+\subsection{Comparison with the Malware Dataset}
+\label{subsec:analysisEthAddComparisonMalware}
 
+Given that only two packages in the Goodware dataset contain one Ethereum address,
+the appearance of seven of them in the compromised versions of Attack~B constitutes an important outlier.
+Because this constitute a value with no precedent in the Goodware baseline, makes the metric effective for detecting this specific attack.
 
-\subsection{Goodware Dataset Scenario}
-\label{sec:goodwareEthAdd}
+Otherwise, the metric is not indicative for the remaining three attacks.
+For Attack~A (\cref{sec:attackA}), the malicious \ac{DLL} is a binary file and is excluded from the computation, 
+leaving the address count unchanged.
+For Attacks~C and~D (\cref{sec:attackC,sec:attackD}),
+the malicious goal is credential and token exfiltration, not cryptocurrency theft;
+neither \texttt{bundle.js} nor \texttt{bun\_environment.js} contains any Ethereum addresses,
+so the count remains at zero as in the legitimate versions.
 
-For this metric, the Goodware dataset (\cref{sec:goodwareDataset}) contains the 
-total count of unique Ethereum addresses for each of the 20 versions of every package.
-
-For this metric we do not present any figure because in the Goodware dataset only
-two packages have exactly one Ethereum address in at least one version, namely
-\texttt{brace-expansion} and \texttt{dotenv-expand}.
-We analyze both packages to understand the reason for this presence.
-
-\begin{itemize}
-    \item \textbf{brace-expansion:} This package provides brace expansion for JavaScript,
-    allowing the use of shell-like syntax to generate sets of strings from a pattern~\cite{brace-expansion}.
-    
-    Starting from version 4.0.0 (the second-to-last available version), the tarball includes
-    the file \texttt{tea.yaml}, a configuration file required to register an
-    open-source project on the Tea protocol.
-    The Tea protocol is an incentivization protocol for open-source projects,
-    which allows registered projects to earn TEA tokens based on their popularity and
-    usage~\cite{teaProtocol}.
-    The \texttt{tea.yaml} file must contain one or a list of Ethereum addresses
-    to receive TEA tokens and to define who controls the project.
-    The file is also present in the latest version 4.0.1.
-
-    \item \textbf{dotenv-expand:} This package extends the functionality of dotenv by 
-    allowing variable expansion in dotenv files~\cite{dotenv-expand}.
-
-    Similarly to \texttt{brace-expansion}, 
-    starting from version 11.0.7 the tarball includes the file \texttt{tea.yaml}
-    containing an Ethereum address.
-    This file remained present for four consecutive versions, until 
-    version 12.0.3, the most recent available, in which it was removed.
-
-\end{itemize}
-
-\subsection{Comparison with Malware Dataset}
-\label{sec:analysisEthAddComparisonMalware}
-
-Although the Goodware dataset (\cref{sec:goodwareDataset}) contains very few packages with Ethereum addresses,
-as discussed in \cref{sec:goodwareEthAdd}, 
-the metric nonetheless proves effective in detecting attack B (\cref{sec:attackB}).
-The compromised versions of this attack introduce seven known smart contract Ethereum addresses into the packages, 
-which the tool (\cref{sec:ToolForAnalyzingNpmPackages}) correctly identifies.
-Given that only two packages in the Goodware dataset contain even a single Ethereum address, 
-a count of seven qualifies the malicious versions as outliers.
-
-However, the metric is not indicative for the remaining three attacks.
-For attack A (\cref{sec:attackA}), the malicious \ac{DLL} is a binary file 
-and is therefore excluded from this computation of the metric, 
-leaving the Ethereum addresses count unchanged with respect to the legitimate versions.
-For attacks C (\cref{sec:attackC}) and D (\cref{sec:attackD}),
-the malicious code targets the theft of credentials and cloud services access keys, 
-rather than manipulating cryptocurrency transactions.
-As a result, neither \texttt{bundle.js} nor \texttt{bun\_environment.js} 
-contains any Ethereum addresses, and the count remains unchanged compared to the legitimate versions.
-In all three cases, the compromised versions are therefore indistinguishable from the legitimate ones under this metric.
+This metric is therefore highly specific, 
+as it detects the class of \ac{SSCA} that target cryptocurrency wallets
+and provides no signal for other attack categories, making it a limited but reliable metric.
