@@ -26,7 +26,7 @@ Each metric is discussed in a dedicated section, presenting the motivation behin
 The first analysis characterizes the distribution and evolutionary patterns of the metric within the Goodware dataset (\cref{subsec:goodwareDataset}),
 with the goal of establishing a baseline for normal development conditions.
 Understanding how a package evolves across versions is fundamental to evaluating potential attacks,
-and tracking a metric across consecutive releases allows identifying anomalies that would be invisible in a single-snapshot analysis. 
+and tracking a metric across consecutive releases allows us to identify anomalies that would be invisible in a single-snapshot analysis. 
 A sudden deviation from an otherwise stable trend is precisely the signature left by the \acp{SSCA} analyzed in \cref{ch:AnalysisRecentAttacks}.
 Moreover, this longitudinal perspective helps distinguish malicious injections from legitimate development events, 
 such as a new feature introduction or a major refactoring, 
@@ -40,11 +40,11 @@ The x-axis represents the versions from the least recent (-19) to the latest ava
 and the y-axis reports the measured value on a logarithmic scale.
 The vertical black bars mark the 95th-percentile confidence intervals, computed following an established statistical approach~\cite{article2}:
 entries within the interval exhibit values consistent with normal behavior, 
-while the gray dots above the bar represent the outlier of the remaining 5\% of the population.
+while the gray dots above the bar represent the outliers of the remaining 5\% of the population.
 The red dashed line is the median, calculated for each release and used instead of the mean to avoid distortion from extreme values.
 Packages of particular interest are highlighted with colored lines, as illustrated in \cref{fig:fig1PackageSizeIncreasing,fig:fig1PackageSizeStable}. 
 For instance, \cref{fig:fig1PackageSizeIncreasing} (discussed in \cref{sec:analysisPackageSize}) 
-shows the \texttt{moment-timezone} module (solid green) exhibiting a sudden jump at point~2, caused by the accidental inclusion of a temporary folder.
+shows \texttt{moment-timezone} (solid green) exhibiting a sudden jump at point~2, caused by the accidental inclusion of a temporary folder.
 Instead, in \cref{fig:fig1PackageSizeStable} \texttt{next} (solid orange) remains a stable outlier across all releases
 due to the large build artifacts it bundles by design.
 Comparing these two cases already illustrates the core challenge of this analysis, 
@@ -54,7 +54,7 @@ distinguishing a legitimate anomaly from a malicious injection requires examinin
 The second analysis evaluates the effectiveness of each metric by comparing the values of the
 compromised releases in the Malware dataset (\cref{subsec:malwareDataset}) against the Goodware baseline.
 A metric is considered \emph{effective} for a given attack if the compromised release produces
-a value that falls among the outlier of the Goodware distribution,
+a value that falls among the outliers of the Goodware distribution,
 making it distinguishable from the majority of the population.
 Conversely, a metric is considered \emph{not indicative} if the malicious release falls within the confidence interval,
 meaning it is indistinguishable from the majority of legitimate releases.
@@ -66,4 +66,4 @@ providing the context needed to appreciate how sudden the anomaly introduced by 
 fall among the outlier dots of the Goodware distribution, confirming that the metric successfully detects this attack.
 Instead, \cref{fig:fig2PackageSizeAttackB} shows a not indicative case, where the red crosses remain within the confidence intervals,
 meaning that the affected releases of Attack~B are indistinguishable from legitimate ones under this measure.
-When entries from the same attack overlap visually, separate figures are provided per package for clarity, as shown in \cref{fig:fig2HexAttackA}.
+When packages from the same attack overlap visually, separate figures are provided per entry for clarity, as shown in \cref{fig:fig2HexAttackA}.

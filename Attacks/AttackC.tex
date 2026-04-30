@@ -2,7 +2,7 @@
 \label{sec:attackC}
 
 On September 15, 2025, 187 \ac{NPM} packages,
-including \texttt{@ctrl/ \allowbreak tinycolor} with over two million weekly downloads,
+including \texttt{@ctrl/tinycolor} with over two million weekly downloads,
 were compromised by the \ac{SSCA} known as \texttt{Shai-Hulud}~1.0~\cite{oxsecurity2025npm20hack}.
 The initial infection vector and the identity of patient zero remain unknown;
 phishing is considered the most likely hypothesis~\cite{kaspersky2025tinycolorshaikuludsupplychainattack}.
@@ -13,7 +13,7 @@ The operation of the malware can be divided into two phases:
 \begin{enumerate}
     \item \textbf{Secret Scanning:} 
     When the victim finishes installing or updating a compromised package,
-    a malicious script is executed that downloads, installs and runs a platform-appropriate version of \texttt{TruffleHog}~\cite{trufflehog}.
+    a malicious script is executed that downloads, installs, and runs a platform-appropriate version of \texttt{TruffleHog}~\cite{trufflehog}.
     \texttt{TruffleHog} is a legitimate tool normally used to prevent accidental leakage of secrets in source code repositories;
     in this context, however, it is used to maliciously search for secrets in the local file system of the victim.
 

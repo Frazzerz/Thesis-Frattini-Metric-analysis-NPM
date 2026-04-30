@@ -3,11 +3,11 @@
 
 The second metric is the uncompressed size of an \ac{NPM} package version, expressed in bytes.
 It is relevant because all four \acp{SSCA} introduce or modify files that increase the package size.
-Attack~A (\cref{sec:attackA}) adds a \ac{DLL} of 1.2~MB,
-Attack~B (\cref{sec:attackB}) increases an existing JavaScript file by adding a malicious line of 76,438 characters,
-Attack~C (\cref{sec:attackC}) adds a malicious file weighing approximately 3.7~MB,
-and Attack~D (\cref{sec:attackD}) introduces a malicious file weighing over 10~MB.
-The question is whether these size increases are large enough to be distinguishable from size changes that occur naturally during benign development.
+Attack~A (\cref{sec:attackA}) incorporates a \ac{DLL} of 1.2~MB,
+Attack~B (\cref{sec:attackB}) expands an existing JavaScript source code by adding a harmful string of 76,438 characters,
+Attack~C (\cref{sec:attackC}) bundles a file of approximately 3.7~MB,
+and Attack~D (\cref{sec:attackD}) injects a payload exceeding 10~MB.
+The question is whether these increments are significant enough to be distinguishable from the fluctuations that occur naturally during benign development.
 
 \subsection{Analysis of the Goodware Dataset}
 \label{subsec:goodwarePackageSize}
@@ -25,7 +25,7 @@ To visualize the distribution and evolutionary patterns of this metric across re
 we used \cref{fig:fig1PackageSize,fig:fig1PackageSizeIncreasing,fig:fig1PackageSizeDecreasing,fig:fig1PackageSizeStable}.
 Among the packages in the Goodware dataset, several exhibit outlier values for one or more versions. 
 Nine packages were selected for individual analysis as representative cases, chosen to cover the range of observed trends
-and the most common causes of legitimate outlier values, 
+and the most common causes of legitimate outliers, 
 such as accidental inclusions, major refactorings, and inherent package characteristics. 
 Understanding these patterns is essential to distinguish legitimate anomalies from malicious injections when evaluating the Malware dataset in \cref{subsec:analysisPackageSizeComparisonMalware}.
 The following figures highlight these nine packages with solid colored lines, categorizing them according to their observed trends:
@@ -51,7 +51,7 @@ starting from version 4.0.0-beta.2 for four consecutive releases.
 In these versions, the developers erroneously included a \texttt{.yarn} cache directory in the final tarball distributed to the public, 
 which contained numerous files, as also discussed in \cref{subsec:analysisFileTypesGoodware}.
 The package returned to its previous size in version 4.0.4 once the folder was removed, 
-as reported in the release notes on GitHub~\cite{polished_release_notes}.
+as documented on GitHub~\cite{polished_release_notes}.
 
 As seen at point~2 in \cref{fig:fig1PackageSizeIncreasing},
 \textbf{moment-timezone} (solid green line) jumped from about 1.6~MB to 211~MB in version 0.5.36
@@ -72,7 +72,7 @@ As seen at point~4 in \cref{fig:fig1PackageSizeIncreasing},
 it grew from about 5~MB to 22~MB in release 3.6.0, when the developers added 400 new files for compatibility with older browsers~\cite{date-fns_release_notes}.
 Again, this is a documented and legitimate change.
 
-These examples illustrate as large size increases can occur in benign packages for a variety of reasons, 
+These examples illustrate how large size increases can occur in benign packages for a variety of reasons, 
 such as accidental inclusions, refactoring, or intentional feature additions.
 
 \begin{figure}[htbp]
@@ -82,13 +82,11 @@ such as accidental inclusions, refactoring, or intentional feature additions.
     \label{fig:fig1PackageSizeDecreasing}
 \end{figure}
 
-Only the \texttt{punycode} package (solid green line in \cref{fig:fig1PackageSizeDecreasing}) 
-experienced a decrease enough to move from an outlier to within the confidence interval between consecutive releases.
-In the first three versions, it started with a size of 15.5~MB,
-and from point~1 in \cref{fig:fig1PackageSizeDecreasing}, 
-it was progressively optimized to include only the essential files,
-shrinking to approximately 33~KB in its most recent releases.
-This represents a deliberate and documented cleanup of the distribuited tarball.
+Only the \textbf{punycode} package (solid green line in \cref{fig:fig1PackageSizeDecreasing}) 
+experienced a decrease large enough to move from an outlier to within the confidence interval between consecutive releases.
+In its first three versions, the size was 15.5~MB, and from point~1 in \cref{fig:fig1PackageSizeDecreasing}, 
+it was progressively optimized to include only the essential files, shrinking to approximately 33~KB in its most recent releases.
+This represents a deliberate and documented cleanup of the distributed tarball.
 
 \begin{figure}[htbp]
     \centering
@@ -99,9 +97,9 @@ This represents a deliberate and documented cleanup of the distribuited tarball.
 
 As shown in \cref{fig:fig1PackageSizeStable},
 three packages are consistently the largest in the dataset across all 20 versions:
-\texttt{next}~\cite{next} (solid orange, 140~MB, a React full-stack framework),
-\texttt{aws-sdk}~\cite{aws-sdk} (solid purple, 98~MB, the official \ac{AWS} client),
-and \texttt{typescript}~\cite{typescript} (solid green, 23.7~MB, the TypeScript compiler).
+\textbf{next}~\cite{next} (solid orange, 140~MB, a React full-stack framework),
+\textbf{aws-sdk}~\cite{aws-sdk} (solid purple, 98~MB, the official \ac{AWS} client),
+and \textbf{typescript}~\cite{typescript} (solid green, 23.7~MB, the TypeScript compiler).
 
 \subsection{Comparison with the Malware Dataset}
 \label{subsec:analysisPackageSizeComparisonMalware}
@@ -134,12 +132,12 @@ and \texttt{typescript}~\cite{typescript} (solid green, 23.7~MB, the TypeScript 
     \label{fig:fig2PackageSizeAttackD}
 \end{figure}
 
-\textbf{Attack~A} (\cref{sec:attackA}) adds a malicious \ac{DLL} of 1.2~MB to each compromised package,
+\textbf{Attack~A} (\cref{sec:attackA}) bundles a malicious \ac{DLL} of 1.2~MB to each compromised package,
 and as shown in \cref{fig:fig2PackageSizeAttackA}, 
 this increase is insufficient to place the compromised versions among the outlier values of the Goodware dataset.
-The reason is that these affected tarball are small enough to remain within the confidence intervals, 
-failing to surpass the upper bound (2.7-2.9$\sim$~MB) required for outlier classification.
-The metric is therefore not able to detect this specific attacks and results as not indicative.
+The reason is that these affected tarballs are small enough to remain within the confidence intervals, 
+failing to surpass the upper bound (approximately 2.7-2.9~MB) required for outlier classification.
+The metric is therefore not able to detect this specific attack and not indicative.
 
 \textbf{Attack~B} (Crypto attack, \cref{sec:attackB}) adds a single obfuscated line to an existing \texttt{index.js} file.
 This increase is modest relative to the size range of the Goodware dataset, 

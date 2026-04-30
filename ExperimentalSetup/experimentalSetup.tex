@@ -6,7 +6,7 @@ This chapter describes the datasets used for the analyses conducted in \cref{ch:
 explaining why they were structured this way, 
 how the entries were selected, and what their main statistical properties are.
 \Cref{sec:SoftwareTools} details the two software tools developed:
-the primary analysis tool that downloads tarballs and computes metrics on them,
+the primary analysis application that downloads tarballs and computes metrics on them,
 and the custom script to automatically retrieve malicious versions.
 
 \section{Datasets}
@@ -14,9 +14,9 @@ and the custom script to automatically retrieve malicious versions.
 
 To carry out the analyses in \cref{ch:metricsAnalysis}, two datasets are required:
 one to establish a baseline of normal package behavior, 
-and one to evaluate whether malicious releases are detectable against that baseline.
+and one to evaluate whether malicious releases are detectable against it.
 Accordingly, we constructed a Goodware (\cref{subsec:goodwareDataset}) and a Malware dataset (\cref{subsec:malwareDataset}).
-Both datasets consist of the same set of metrics computed from \ac{NPM} tarballs,
+Both consist of the same set of metrics computed from \ac{NPM} tarballs,
 using the tool described in \cref{subsec:ToolForAnalyzingPkgs}.
 Concretely, for each package across its 20 releases, these datasets store:
 the set of distinct file types detected, 
@@ -31,27 +31,27 @@ Each is named after the metric it represents, followed by a suffix indicating th
 \texttt{\_GD} for the Goodware and \texttt{\_MD} for the Malware (e.g., \texttt{package\_size\_GD.csv}, \texttt{package\_size\_MD.csv}).
 As illustrated in the excerpts provided in \cref{tab:csv-Goodware,tab:csv-Malware},
 the first column provides the entry name,
-followed by 20 columns, labelled -19 to 0, hold the metric value for the corresponding release.
+followed by 20 columns, labelled -19 to 0, that hold the metric value for the corresponding release.
 For the \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses} metrics,
 an additional filtered variant of the Goodware CSV is also provided,
-containing only the entries that have at least one non-zero value in at least one release 
+containing only the entries that have at least one non-zero value in any release 
 (e.g., \texttt{unique\_hexadecimal\_values\_GD\_GreaterThan0.csv}).
 This filtered file is used in \cref{ch:metricsAnalysis} to focus the analysis on modules that are actually informative for those metrics.
 The CSV format was chosen for three main reasons: 
-it is human-readable without specialized tools, 
+it is human-readable without specialized software, 
 it integrates naturally with data analysis libraries such as \texttt{pandas}~\cite{pandas} and \texttt{matplotlib}~\cite{matplotlib},
-and it enables independent reuse of the datasets without requiring any specific tooling.
+and it enables independent reuse of the datasets without requiring any specific environment.
 Both datasets are publicly available on
 GitHub\footnote{\url{https://github.com/Frazzerz/Datasets-NPM-Analysis}}.
 
-A key design decision common to both datasets is the fixed window of exactly 20 releases per entry.
+A key design decision shared by both is the fixed window of exactly 20 releases per entry.
 This constraint ensures comparability across packages and between datasets,
 and reflects the deliberate methodological choice of tracking the evolution of each 
 across consecutive releases rather than analyzing a single snapshot in isolation.
-The threshold of 20 was chosen to balance two competing requirements:
-it is large enough to capture a meaningful historical trend,
-while remaining small enough to retain a large fraction of the ecosystem;
-a higher threshold would have excluded significantly more packages from the Goodware dataset.
+The threshold of 20 was chosen to balance two competing requirements,
+as it is sufficiently large to capture a meaningful historical trend
+while remaining small enough to retain a large fraction of the ecosystem.
+A higher threshold would have excluded significantly more packages from the Goodware dataset.
 This longitudinal perspective is essential to the detection approach,
 because malicious updates stand out as sudden deviations from an otherwise predictable evolutionary pattern, 
 a signal that would be invisible in a single-snapshot analysis.
@@ -105,7 +105,7 @@ by contrast, \texttt{debug} decreases significantly from the middle of its histo
 due to a major restructuring that made it considerably lighter.
 These variations are expected and follow predictable, documented trajectories, 
 a property that makes them distinguishable from the abrupt spikes introduced by compromised releases, as shown in \cref{tab:csv-Malware}.
-It is also worth noting that for \texttt{chalk} and \texttt{debug}, the value at version 0 is identical with version -1,
+It is also worth noting that for \texttt{chalk} and \texttt{debug}, the value at version 0 is identical to version -1,
 and this reflects the standard maintainer response of unpublishing the malicious version and immediately republishing the last clean one, 
 as described in \cref{sec:NPMEcosystem}.
 
@@ -129,9 +129,9 @@ as described in \cref{sec:NPMEcosystem}.
 \end{table}
 
 The 629 packages in the dataset span a wide range of sizes and complexities,
-reflecting the diversity of real-world \ac{NPM} ecosystems.
+reflecting the diversity of real-world \ac{NPM} ecosystem.
 \Cref{tab:goodware-stats} summarizes the key statistical properties of the Goodware dataset for each of the five metrics analyzed in \cref{ch:metricsAnalysis}.
-For each metric, the table reports the median and maximum values, 
+For each, the table reports the median and maximum values, 
 the number of packages that have at least one non-zero value across their versions (Packages~>~0), and representative notable examples.
 
 For \emph{File Types}, the median and maximum refer to the number of unique file types found per release.
@@ -254,7 +254,7 @@ isolated spike surrounded by otherwise predictable evolutionary patterns in the 
 For \texttt{eslint-config-prettier} and \texttt{chalk}, the value at version 0 returns to the pre-attack level 
 because the maintainer republished the last clean release, as discussed in \cref{subsec:goodwareDataset}.
 Instead, for \texttt{@asyncapi/bundler}, the spike falls at version 0, 
-because the \ac{PM} chose to downgrade to the prior update rather than republishing it as a new one, as described in \cref{sec:NPMEcosystem}.
+because the \ac{PM} chose to downgrade to the prior version rather than republishing it as a new one, as described in \cref{sec:NPMEcosystem}.
 
 The main limitation of this dataset is that it covers a narrow selection of attack campaigns;
 packages compromised by different \acp{SSCA} may exhibit structural properties not captured by this sample,

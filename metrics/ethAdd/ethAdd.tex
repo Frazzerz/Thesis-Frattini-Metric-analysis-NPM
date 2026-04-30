@@ -5,7 +5,7 @@ The fifth and final metric is the count of unique Ethereum addresses found acros
 plain-text files of an \ac{NPM} package version.
 It was motivated by Attack~B (\cref{sec:attackB}),
 in which the malicious code embeds seven known smart contract Ethereum addresses to perform cryptocurrency transaction hijacking.
-The intuition is that Ethereum addresses are essentially absent from general purpose \ac{NPM} packages, 
+The intuition is that Ethereum addresses are essentially absent from general-purpose \ac{NPM} packages, 
 so even a small count would constitute an anomalous signal.
 
 \subsection{Analysis of the Goodware Dataset}
@@ -45,8 +45,8 @@ with no connection to the core functionality of the packages.
 \label{subsec:analysisEthAddComparisonMalware}
 
 Given that only two packages in the Goodware dataset contain one Ethereum address,
-the appearance of seven of them in the compromised versions of Attack~B constitutes an important outlier.
-Because this constitute a value with no precedent in the Goodware baseline, makes the metric effective for detecting this specific attack.
+the appearance of seven of them in the compromised versions of Attack~B represents an important outlier.
+Because this is a value with no precedent in the Goodware baseline, the metric is effective for detecting this specific attack.
 
 Otherwise, the metric is not indicative for the remaining three attacks.
 For Attack~A (\cref{sec:attackA}), the malicious \ac{DLL} is a binary file and is excluded from the computation, 

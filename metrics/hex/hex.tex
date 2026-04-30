@@ -52,8 +52,8 @@ These ten packages are highlighted in the following figures with solid colored l
 \cref{fig:fig1HexIncreasing} shows three packages that experienced a significant increase in this metric at a specific release: 
 \texttt{crypto-js}, \texttt{polished}, and \texttt{xml2js}.
 
-\textbf{crypto-js} (solid green line) is a package related to cryptography, 
-and implements cryptographic primitives, such as encryption algorithms and digital signatures~\cite{crypto-js}.
+\textbf{crypto-js} (solid green line) is a cryptographic package that implements standard primitives, 
+such as encryption algorithms and digital signatures~\cite{crypto-js}.
 In its first three versions from thirteen years ago (3.1.2 to 3.1.2-2),
 cryptographic constants were stored in decimal format, yielding a metric value of~0.
 As shown at point~1 in \cref{fig:fig1HexIncreasing},
@@ -66,7 +66,7 @@ which added new hexadecimal constants and raised the count to 1,588, making it t
 \textbf{polished} (solid pink line) is a styling package for JavaScript~\cite{polished}.
 As seen at point~3 in \cref{fig:fig1HexIncreasing}, 
 it jumped from 0 to 2,208 in version 4.0.0-beta.2, the most extreme outlier for four consecutive releases.
-This happened because the developers accidentally included a \texttt{.yarn} cache directory contained numerous files, including a build-tool-generated JavaScript file,
+This happened because the developers accidentally included a \texttt{.yarn} cache directory containing numerous files, including a build-tool-generated JavaScript file,
 as also discussed in \Cref{subsec:goodwarePackageSize,subsec:analysisFileTypesGoodware}.
 When the folder was removed in version 4.0.4~\cite{polished_release_notes}, the count returned to~0.
 This is an example of an accidental anomaly traceable to a documented release note, 
@@ -88,9 +88,9 @@ The generated file remained in the package for the subsequent version 0.6.2.
 Two packages experienced a notable decrease: \texttt{buffer-crc32} and \texttt{object-hash}, as shown in \cref{fig:fig1HexDecreasing}.
 
 \textbf{buffer-crc32} (solid green line) implements the Cyclic Redundancy Check (CRC32) algorithm for data integrity checking~\cite{buffer-crc32}.
-For efficient reasons, the algorithm uses a CRC table, 
+For efficiency reasons, the algorithm uses a CRC table, 
 a matrix of 256 precalculated values that prevents the processor from performing complex mathematical calculations on every single byte.
-Until version 0.2.13, the CRC table value was stored as hexadecimal constants.
+Until version 0.2.13, the CRC table values were stored as hexadecimal constants.
 As shown at point~1 in \cref{fig:fig1HexDecreasing}, 
 from version 1.0.0-RC1 onward the developers switched to a build-tool-generated version of the table 
 in which the values were converted to decimal for compactness.
@@ -102,7 +102,7 @@ it represented the upper limit of the confidence intervals, having 78 unique hex
 all located in the test file \texttt{object\_hash\_test.js}.
 At point~2 in \cref{fig:fig1HexDecreasing}, 
 starting from version 1.1.7, the test file was excluded from the published tarball for space optimization, 
-and as it is not essential for its functionality and not needed by end users.
+as it is not essential for its functionality and not needed by end users.
 The count therefore dropped to~0.
 
 \begin{figure}[htbp]
@@ -116,12 +116,12 @@ Five packages maintain stable outlier or near-outlier values across all releases
 
 \textbf{node-forge} and \textbf{tweetnacl} are both cryptographic packages that use hexadecimal constants as part
 of their primitive implementations~\cite{node-forge, tweetnacl}, analogously to \texttt{crypto-js}.
-In \cref{fig:fig1HexStable}, \texttt{node-forge} (solid green line) has 406 unique hexadecimal values 
-across all releases, always representing an outlier;
-while \texttt{tweetnacl} (solid blue line) has 177, representing an outlier in the most.
+In \cref{fig:fig1HexStable}, \texttt{node-forge} (solid green line) and \texttt{tweetnacl} (solid blue line) 
+exhibit 406 and 177 unique hexadecimal values, respectively, 
+qualifying as outliers in either all or the vast majority of releases.
 
 \textbf{chardet} (solid pink line) detects character encoding using byte maps stored as 
-hexadecimal constants in \texttt{/lib/encoding/sbcs.js}~\cite{chardet}, resulting 972 values.
+hexadecimal constants in \texttt{/lib/encoding/sbcs.js}~\cite{chardet}, resulting in 972 values.
 As shown in \cref{fig:fig1HexStable},
 this makes \texttt{chardet} the extreme outlier for most releases, 
 surpassed only by \texttt{polished} during its four anomalous versions and by \texttt{crypto-js} in its most recent ones.
@@ -166,22 +166,22 @@ has 600 across all releases and is an outlier in every version.
     \label{fig:fig2HexAttackD}
 \end{figure}
 
-\textbf{Attack~A} (Malicious Windows DLL, \cref{sec:attackA}) do not introduce any new hexadecimal values,
+\textbf{Attack~A} (Malicious Windows DLL, \cref{sec:attackA}) does not introduce any new hexadecimal values,
 as the malicious \ac{DLL} is binary and excluded from computation, and the \texttt{install.js} script contains no hexadecimal tokens.
 As shown in \cref{fig:fig2HexAttackA}, the metric value is unchanged relative to the preceding legitimate versions, 
 and the metric is not indicative for this attack.
 
 \textbf{Attack~B} (Crypto attack, \cref{sec:attackB}) injects an obfuscated line of code into an existing \texttt{index.js} file.
 The resulting count of unique hexadecimal values reaches 455.
-As shown in \cref{fig:fig2HexAttackB}, this positions the malicious versions among the outlier of the Goodware distribution, 
+As shown in \cref{fig:fig2HexAttackB}, this positions the malicious versions among the outliers of the Goodware distribution, 
 making the metric effective for detecting Attack~B.
 
 \textbf{Attack~C} (\texttt{Shai-Hulud}~1.0, \cref{sec:attackC}) introduces a malicious file containing only one unique hexadecimal value.
 As shown in \cref{fig:fig2HexAttackC}, this marginal increase leaves the compromised
 releases within the confidence intervals of the Goodware dataset, 
 making the metric not indicative for this attack.
-This outcome is consistent with the nature of the \ac{SSCA} as does not rely on any obfuscation technique, 
-but rather on the presence of a clear-text malicious code.
+This outcome is consistent with the nature of the \ac{SSCA} as it does not rely on any obfuscation technique, 
+but rather on the presence of clear-text malicious code.
 
 \textbf{Attack~D} (\texttt{Shai-Hulud}~2.0, \cref{sec:attackD}) introduces an obfuscated file
 using the same hexadecimal encoding technique as Attack~B.

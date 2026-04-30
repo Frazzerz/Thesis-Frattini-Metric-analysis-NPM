@@ -21,7 +21,7 @@ The core idea behind most static analyzers is \emph{source-to-sink data-flow ana
 the tool identifies \emph{sources}, points in the code where external or sensitive data enters the program,
 and \emph{sinks}, points where that data could be used in a dangerous way, 
 such as being sent over the network, written to disk, or passed to an execution primitive.
-A package is flagged as suspicious when data flows between sources and sinks without proper sanitization in between.
+A package is flagged as suspicious when data flows between sources and sinks without proper sanitization.
 This abstraction is powerful because the analyzer reasons over a static representation of possible execution paths, 
 typically relying on a predefined set of sensitive \acp{API} or an abstract syntax tree, to determine whether dangerous flows can occur.
 
@@ -48,7 +48,7 @@ These trade-offs motivate hybrid approaches described in the following sections.
 \section{Dynamic Analysis}
 \label{sec:dynamicAnalysis}
 
-Dynamic analysis overcomes the obfuscation limitation by executing the package in a controlled environment and observing its runtime behaviour. 
+Dynamic analysis overcomes the obfuscation limitation by executing the package in a controlled environment and observing its runtime behavior. 
 The primary cost is the significant overhead of setting up and tearing down sandbox environments for every candidate package, 
 as well as the risk that some malicious payloads may not be triggered during the bounded execution window.
 
@@ -150,7 +150,7 @@ their metric taxonomy provides a broad reference point for what structural prope
 can simple metrics derived from the whitespace and character distribution of files detect \ac{BST} and \ac{HUT} attacks?
 \ac{BST} attacks hide malicious logic after long sequences of blank characters, exploiting parser behaviors,
 while \ac{HUT} attacks use invisible Unicode control characters, such as right-to-left override markers,
-to make implementation appear different to a human reviewer than what is actually parsed and executed. 
+to make the implementation appear different to a human reviewer than what is actually parsed and executed. 
 \textcite{zoratti2025valutazione} proposed the ratio of whitespace to printable 
 characters as a key metric to detect such anomalies in GitHub repositories.
 A significant aspect of his methodology is that the analysis is performed across multiple consecutive versions of a project,

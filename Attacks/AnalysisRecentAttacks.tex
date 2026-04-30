@@ -24,7 +24,7 @@ and the key differences between the compromised versions and their benign counte
 
 All four attacks studied in this work follow the same high-level model, illustrated in \cref{fig:attackModel}.
 The threat actor is an external attacker who targets the \ac{NPM} ecosystem by exploiting the \emph{Account Compromise}:
-first, the attacker obtains the credentials of a legitimate \ac{PM} typically through a phishing campaign (Step~1 in \cref{fig:attackModel}),
+first, the attacker obtains the credentials of a legitimate \ac{PM}, typically through a phishing campaign (Step~1 in \cref{fig:attackModel}),
 and then uses the compromised account to publish a new malicious update of the packages managed by that maintainer (Step~2 in \cref{fig:attackModel}), 
 which is automatically distributed to all downstream victims upon the next \texttt{npm install} or \texttt{npm update}.
 These include developers who directly depend on the package, those whose projects transitively rely on it,

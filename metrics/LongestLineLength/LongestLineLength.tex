@@ -6,7 +6,7 @@ expressed in number of characters.
 It was motivated by the observation that Attacks~B (\cref{sec:attackB}),
 C (\cref{sec:attackC}), and D (\cref{sec:attackD}) all inject malicious code formatted as a single, extremely long line.
 Specifically, Attack~B adds 76,438 characters to an existing \texttt{index.js},
-while Attack~C and D introduce files containing lines of 3,734,355 and 10,157,373 characters, respectively.
+while Attacks~C and D introduce files containing lines of 3,734,355 and 10,157,373 characters, respectively.
 The intuition is that legitimate packages rarely contain code with lines of such extreme length, making this an anomalous signal.
 To verify this, we first characterized the distribution of this metric in the Goodware dataset,
 paying particular attention to the role of build artifacts, 
@@ -28,7 +28,7 @@ the longest line length observed across all plain-text files in their 20 analyze
 as described in \cref{subsec:goodwareDataset}.
 To visualize the distribution and evolutionary patterns of this metric across releases,
 we used \cref{fig:fig1LLL,fig:fig1LLLTrend}; 
-where here we can observe that the median remains stable at approximately 460 characters, 
+where we can observe that the median remains stable at approximately 460 characters, 
 indicating that the length of the longest line does not change significantly in the typical package.
 This stability is a useful property for anomaly detection, 
 as a sudden large increase is precisely the signature left by the \acp{SSCA} considered.
@@ -37,7 +37,7 @@ An important caveat is that build artifacts,
 such as source map files (\texttt{.map}) and compiler-generated JavaScript, 
 can legitimately contain very long lines, and are therefore a potential source of false positives for this metric.
 In this analysis, we chose to include the entire tarball contents without excluding any file type or directory a priori,
-because an advertiser could inject a malicious code anywhere within the tarball.
+because an attacker could inject malicious code anywhere within the tarball.
 
 \begin{figure}[htbp]
     \centering
@@ -73,16 +73,16 @@ This variability shows that even stable outlier values from build artifacts are 
 such as \texttt{compiler.mjs}, a generated JavaScript file containing approximately 30,000 lines with the longest reaching 14,825 characters.
 
 \textbf{date-fns} (solid blue line) shows that build artifacts can be introduced in a new release without having been present in previous ones.
-Before version 3.6.0, this package is within the confidence intervals, 
+Before version 3.6.0, this package was within the confidence intervals, 
 but at point~2 in \cref{fig:fig1LLLTrend} the metric jumped to 2,188,784 characters, making it an outlier for all subsequent releases.
 This sudden increase was caused by the addition of \texttt{cdn.js.map} in the \texttt{locale} directory, 
-consists of 10 lines with the longest being 2,188,784 characters, making it the longest line found across all plain-text files in the package.
+consisting of 10 lines with the longest being 2,188,784 characters, making it the longest line found across all plain-text files in the package.
 It was introduced in version 3.6.0 together with approximately 400 new files for compatibility with older browsers,
 as already discussed in \cref{subsec:goodwarePackageSize}.
 The sudden change in this metric is superficially similar to what a malicious injection would produce, 
 with the difference that this one is documented~\cite{date-fns_release_notes}.
 In this version, \texttt{date-fns} also includes other build artifacts, 
-such as the file \texttt{cdn.js} containing 10 lines with the longest line being 777,296 characters.
+such as the file \texttt{cdn.js} containing 10 lines with the longest being 777,296 characters.
 
 \subsection{Comparison with the Malware Dataset}
 \label{subsec:analysisLLLComparisonMalware}
@@ -117,7 +117,7 @@ such as the file \texttt{cdn.js} containing 10 lines with the longest line being
 
 
 \textbf{Attack~A} (Malicious Windows DLL, \cref{sec:attackA}) includes a plain-text script \texttt{install.js}, 
-which however does not contain the longest line in the compromised versions; 
+which, however, does not contain the longest line in the compromised versions; 
 and the malicious \ac{DLL} was correctly excluded from the computation, as it is not a plain-text file.
 Consequently, the longest line length of the compromised releases remained unchanged compared 
 to the preceding legitimate versions, as shown in \cref{fig:fig2LLLAttackA},
@@ -136,7 +136,7 @@ As shown in \cref{fig:fig2LLLAttackC}, this places the compromised versions amon
 The metric is therefore effective for detecting Attack~C.
 
 \textbf{Attack~D} (\texttt{Shai-Hulud}~2.0, \cref{sec:attackD}) introduces a malicious file 
-\texttt{setup\_bun.js} containing a single line of 10,157,373 characters.
+\texttt{bun\_environment.js} containing a single line of 10,157,373 characters.
 As shown in \cref{fig:fig2LLLAttackD}, the compromised releases not only enter
 the outlier range but far exceed the maximum outlier values in the Goodware dataset.
 The metric is clearly effective for detecting Attack~D.
@@ -146,4 +146,4 @@ it effectively detects Attacks~C and~D, whose injected files contain a line long
 Instead, it is not indicative for Attacks~A and~B, since 
 the first scenario involves a binary file that is excluded from computation,
 while the malicious line of 76,438 characters introduced by Attack~B 
-remains within the high confidence interval bound established in the Goodware dataset.
+remains within the upper confidence interval bound established in the Goodware dataset.

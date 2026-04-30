@@ -27,7 +27,7 @@ The script is invoked from the command line as follows:
 python3 downloadpkgnpm.py <input_file>.json
 \end{verbatim}
 The input is a JSON file specifying the list of mirrors to query and the list of package-version pairs to download. 
-For each requested release, the script queries the mirrors sequentially until the requested tarball is found and downloaded; 
+For each requested release, the script queries the mirrors sequentially until the tarball is found and downloaded; 
 if all mirrors fail, the failure is reported and the script moves on to the next entry. 
 Once retrieved, the tarballs can be passed to the \texttt{NPM Packages Analyzer} tool (\cref{subsec:ToolForAnalyzingPkgs}) 
 via the \texttt{-{}-local} flag to construct the Malware dataset (\cref{subsec:malwareDataset}).

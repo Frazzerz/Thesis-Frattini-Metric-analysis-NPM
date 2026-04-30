@@ -2,7 +2,7 @@
 \label{sec:SoftwareTools}
 
 This section describes the tool and script developed to create the two datasets presented in \cref{sec:datasets}.
-\Cref{subsec:ToolForAnalyzingPkgs} presents the primary analysis tool \texttt{NPM Packages Analyzer},
+\Cref{subsec:ToolForAnalyzingPkgs} presents the primary analysis application, namely \texttt{NPM Packages Analyzer},
 while \cref{subsec:DownloadMaliciousTarballs} details the custom script to automatically retrieve malicious versions from mirror registries.
 
 \subsection{NPM Packages Analyzer}
@@ -43,39 +43,39 @@ For each version, the tool first extracts the tarball and computes the metrics o
 
 The \emph{File Types} metric (\cref{sec:analysisFileTypes}) is computed by running \texttt{Magika}~\cite{magika}, 
 a deep-learning-based content-type detection library developed by Google. 
-Each file in the tarball is processed, and the resulting labels is recorded.
+Each file in the tarball is processed, and the resulting label is recorded.
 Notably, \texttt{Magika} labels Windows \ac{PE} executables (including \ac{DLL} files) as \texttt{pebin}.
 The \emph{Package Size} metric (\cref{sec:analysisPackageSize}) is computed as the uncompressed size in bytes of each individual file.
 
 Metrics based on the textual content of files, namely \emph{Longest Line Length} (\cref{sec:analysisLLL}), 
-\emph{Unique Hexadecimal values} (\cref{sec:analysisHex}), 
+\emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}), 
 and \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}),
-are computed only on plain-text files, such as JavaScript and TypeScript sources, 
-and are therefore skipped for binary files such as zip, png or \ac{DLL}.
-To determine the type of each file and thereby distinguish plain-text from binary content, 
-the tool uses \texttt{Magika} to classify each file and checks the detected label against a predefined whitelist of plain-text types.
+are computed only on plain-text sources, such as JavaScript and TypeScript, 
+and are therefore skipped for binary formats such as zip, png or \ac{DLL}.
+To determine the nature of each item and thereby distinguish plain-text from binary content, 
+the tool uses \texttt{Magika} to classify each entry and checks the detected label against a predefined whitelist of allowed types.
 Additionally, for these metrics, 
-comments are stripped from JavaScript and TypeScript files before metric computation, 
+comments are stripped from JavaScript and TypeScript code before computation, 
 using a parser from the tree-sitter library~\cite{treesitter}, so that comment content does not affect the results.
-To compute \emph{Longest Line Length}, the tool splits the file content at newline characters and records the length of the longest line.
+To compute \emph{Longest Line Length}, the tool splits the buffer at newline characters and records the length of the longest line.
 
 The \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses} metrics are computed via regular expressions (regex).
-These patterns are precompiled with \texttt{re.compile} from the Python \texttt{re} library~\cite{re}, 
+These are precompiled with \texttt{re.compile} from the Python \texttt{re} library~\cite{re}, 
 which parses each pattern once and reuses the resulting object across all files, reducing overhead.
 The precompilation step also allows flags to be specified at compile time; 
-for example, \texttt{re.IGNORECASE} is used to match both \texttt{0x} and \texttt{0X} prefixes in the hexadecimal pattern, 
+for example, \texttt{re.IGNORECASE} is used to match both \texttt{0x} and \texttt{0X} prefixes in the hexadecimal logic, 
 making the search case-insensitive.
-To find all matches within a file contents, the tool uses the \texttt{finditer} method on the compiled pattern,
+To find all matches within a file contents, the tool uses the \texttt{finditer} method on the compiled object,
 which returns an iterator over all matches and is more memory-efficient than collecting all results at once.
-The pattern used for \emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}) is:
+The regex used for \emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}) is:
 \begin{verbatim}
 _?0x[0-9a-fA-F]+
 \end{verbatim}
 The optional leading underscore (specified with \texttt{\_?}) captures the naming convention used by obfuscation
 tools when a hexadecimal token serves as a variable or function name (e.g., \texttt{\_0x6fd57a}), 
 followed by the mandatory \texttt{0x} prefix with one or more hexadecimal characters (digits 0 to 9 and letters a to f, both lowercase and uppercase).
-This flexible pattern allows matching values even when they appear inside function calls or other code structures, 
-where strict boundaries, like the pattern below, would miss them.
+This flexible matching rule allows capturing values even when they appear inside function calls or other code structures, 
+where strict boundaries, such as the one shown below, would miss them.
 For \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}), the pattern is instead:
 \begin{verbatim}
 (?<![\w\-/_])0x[a-fA-F0-9]{40}(?![\w\-/_])
@@ -84,7 +84,8 @@ A valid Ethereum address consists of the prefix \texttt{0x} followed by exactly 
 The lookbehind (\texttt{(?<![{\textbackslash}w{\textbackslash}-/\_])}) 
 and lookahead (\texttt{(?![{\textbackslash}w{\textbackslash}-/\_])})
 prevent matching strings embedded in URLs, file paths, or longer hexadecimal sequences, 
-which standard word boundaries like \texttt{{\textbackslash}b} would not correctly handle the typical path separators, such as slashes and hyphens.
+which standard word boundaries like \texttt{{\textbackslash}b} would not correctly handle, 
+given the presence of typical path separators such as slashes and hyphens.
 
 Once per-file metrics are available, they are aggregated to produce a single version-level summary. 
 For \emph{File Types}, the per-file labels are collected into a deduplicated set of unique types. 
@@ -140,10 +141,10 @@ For \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses}, the p
 For each package, results are saved incrementally to two CSV files as each version is processed, 
 so that partial outputs are preserved in the event of an interruption or error.
 \texttt{file\_metrics.csv} records one row per file across all analyzed releases, 
-with columns for each per-file metric, as illustrated in \cref{tab:file-metrics-excerpt};
+with columns for each per-file metric, as illustrated in \cref{tab:file-metrics-excerpt},
 while \texttt{aggregate\_metrics\_by\_single\_ \allowbreak version.csv} records one row per release, 
 with columns for the corresponding version-level aggregated values, as shown in \cref{tab:aggregate-metrics-excerpt}.
-Furthermore, a \texttt{log.txt} file is also saved, updated incrementally, mirroring the terminal output.
+Furthermore, a \texttt{log.txt} file is saved, updated incrementally, mirroring the terminal output.
 It reports general information such as the total number of packages and worker count, 
 and for each entry it logs the number of versions found, 
 the download status of each tarball, the per-release analysis progress, and the total analysis time.
