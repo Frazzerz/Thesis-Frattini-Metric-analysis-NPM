@@ -9,7 +9,7 @@ while \cref{subsec:DownloadMaliciousTarballs} details the custom script to autom
 \label{subsec:ToolForAnalyzingPkgs}
 
 The developed tool computes the metrics analyzed in \cref{ch:metricsAnalysis} from a set of \ac{NPM} package releases.
-It enables the construction of both the Goodware (\cref{subsec:goodwareDataset}) and the Malware dataset (\cref{subsec:malwareDataset}).
+It enables the construction of both the \emph{Goodware} (\cref{subsec:goodwareDataset}) and the \emph{Malware} dataset (\cref{subsec:malwareDataset}).
 Implemented in Python, it is available on GitHub\footnote{\url{https://github.com/Frazzerz/Npm-packages-analyzer}},
 and can be invoked from the command line as follows:
 \begin{verbatim}
@@ -18,7 +18,7 @@ python3 main.py --json <input_file>.json [--workers N] [--local]
 
 The required input is a JSON file containing the list of \ac{NPM} package names to analyze. 
 The optional \texttt{-{}-local} flag allows local tarballs,
-such as the malicious releases in the Malware dataset, 
+such as the malicious releases in the \emph{Malware} dataset, 
 to be included alongside those downloaded from the registry.
 The optional \texttt{-{}-workers} flag controls the number of parallel processes used for per-file metric computation. 
 Packages and their versions are processed sequentially (from oldest to most recent), 
@@ -31,8 +31,8 @@ The tool workflow is organized into four phases, described below.
 The \texttt{NPMClient} component queries the official \ac{NPM} registry to retrieve the module metadata and the list of all available releases. 
 From this list, only versions parsable by node-semver~\cite{semver} are kept, 
 so that they can be sorted chronologically. 
-For the Goodware dataset (\cref{subsec:goodwareDataset}), the 20 most recent valid versions are selected and their tarballs downloaded. 
-For the Malware dataset (\cref{subsec:malwareDataset}), only the nineteen most recent legitimate versions are fetched; 
+For the \emph{Goodware} dataset (\cref{subsec:goodwareDataset}), the 20 most recent valid versions are selected and their tarballs downloaded. 
+For the \emph{Malware} dataset (\cref{subsec:malwareDataset}), only the nineteen most recent legitimate versions are fetched; 
 the twentieth slot is reserved for the malicious tarball, 
 which is retrieved separately via the custom script described in \cref{subsec:DownloadMaliciousTarballs} and included through the \texttt{-{}-local} flag.
 
@@ -51,12 +51,12 @@ Metrics based on the textual content of files, namely \emph{Longest Line Length}
 \emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}), 
 and \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}),
 are computed only on plain-text sources, such as JavaScript and TypeScript, 
-and are therefore skipped for binary formats such as zip, png or \ac{DLL}.
+and are therefore skipped for binary formats such as ZIP, PNG or \ac{DLL}.
 To determine the nature of each item and thereby distinguish plain-text from binary content, 
 the tool uses \texttt{Magika} to classify each entry and checks the detected label against a predefined whitelist of allowed types.
 Additionally, for these metrics, 
 comments are stripped from JavaScript and TypeScript code before computation, 
-using a parser from the tree-sitter library~\cite{treesitter}, so that comment content does not affect the results.
+using a parser from the \emph{tree-sitter} library~\cite{treesitter}, so that comment content does not affect the results.
 To compute \emph{Longest Line Length}, the tool splits the buffer at newline characters and records the length of the longest line.
 
 The \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses} metrics are computed via regular expressions (regex).
@@ -75,7 +75,7 @@ The optional leading underscore (specified with \texttt{\_?}) captures the namin
 tools when a hexadecimal token serves as a variable or function name (e.g., \texttt{\_0x6fd57a}), 
 followed by the mandatory \texttt{0x} prefix with one or more hexadecimal characters (digits 0 to 9 and letters a to f, both lowercase and uppercase).
 This flexible matching rule allows capturing values even when they appear inside function calls or other code structures, 
-where strict boundaries, such as the one shown below, would miss them.
+where strict boundaries, would miss them.
 For \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}), the pattern is instead:
 \begin{verbatim}
 (?<![\w\-/_])0x[a-fA-F0-9]{40}(?![\w\-/_])
@@ -95,6 +95,17 @@ For \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses}, the p
 
 \subsubsection{Phase 3: Results Saving}
 \label{subsubsec:ToolForAnalyzingPkgsPhase3}
+
+For each package, results are saved incrementally to two CSV files as each version is processed, 
+so that partial outputs are preserved in the event of an interruption or error.
+\texttt{file\_metrics.csv} records one row per file across all analyzed releases, 
+with columns for each per-file metric, as illustrated in \cref{tab:file-metrics-excerpt},
+while \texttt{aggregate\_metrics\_by\_single\_ \allowbreak version.csv} records one row per release, 
+with columns for the corresponding version-level aggregated values, as shown in \cref{tab:aggregate-metrics-excerpt}.
+Furthermore, a \texttt{log.txt} file is saved, updated incrementally, mirroring the terminal output.
+It reports general information such as the total number of packages and worker count, 
+and for each entry it logs the number of versions found, 
+the download status of each tarball, the per-release analysis progress, and the total analysis time.
 
 \begin{table}[htbp]
 \centering
@@ -137,17 +148,6 @@ For \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses}, the p
 \bottomrule
 \end{tabular}
 \end{table}
-
-For each package, results are saved incrementally to two CSV files as each version is processed, 
-so that partial outputs are preserved in the event of an interruption or error.
-\texttt{file\_metrics.csv} records one row per file across all analyzed releases, 
-with columns for each per-file metric, as illustrated in \cref{tab:file-metrics-excerpt},
-while \texttt{aggregate\_metrics\_by\_single\_ \allowbreak version.csv} records one row per release, 
-with columns for the corresponding version-level aggregated values, as shown in \cref{tab:aggregate-metrics-excerpt}.
-Furthermore, a \texttt{log.txt} file is saved, updated incrementally, mirroring the terminal output.
-It reports general information such as the total number of packages and worker count, 
-and for each entry it logs the number of versions found, 
-the download status of each tarball, the per-release analysis progress, and the total analysis time.
 
 \subsubsection{Phase 4: Dataset Generation}
 \label{subsubsec:ToolForAnalyzingPkgsPhase4}

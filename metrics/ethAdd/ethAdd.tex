@@ -8,10 +8,25 @@ in which the malicious code embeds seven known smart contract Ethereum addresses
 The intuition is that Ethereum addresses are essentially absent from general-purpose \ac{NPM} packages, 
 so even a small count would constitute an anomalous signal.
 
+Each cryptocurrency defines its own address format, so this metric cannot be generalized across all currencies.
+We initially considered extending the analysis to Bitcoin addresses and their variants,
+generalizing this metric to \emph{Unique Cryptocurrency Addresses}, 
+but doing so produced a non-negligible number of false positives in the \emph{Goodware} dataset,
+as legitimate \ac{NPM} packages may contain strings that match the Bitcoin address format without being actual addresses.
+For instance, repeated digit sequences used as numerical constants or for testing purposes, 
+such as \texttt{11111111112222222222333333333344}, 
+are found in packages like \texttt{aws-sdk} across all their analyzed versions.
+Since Bitcoin addresses are not associated with any of the four \acp{SSCA} analyzed in this research, 
+and no reliable library or regex rule was found capable of disambiguating true addresses from these coincidental matches,
+we chose to restrict the metric to Ethereum only, whose format is unambiguous, as shown in \cref{subsec:goodwareEthAdd}.
+This specificity is both a strength and a limitation, 
+as it provides a reliable signal for attacks targeting Ethereum-based wallets, 
+but offers no coverage for \acp{SSCA} that abuse other cryptocurrency ecosystems.
+
 \subsection{Analysis of the Goodware Dataset}
 \label{subsec:goodwareEthAdd}
 
-For this metric, the Goodware dataset provides the count of unique Ethereum addresses
+For this metric, the \emph{Goodware} dataset provides the count of unique Ethereum addresses
 found in each of the 20 analyzed versions of every package,
 as described in \cref{subsec:goodwareDataset}.
 The distribution is so sparse that a trend figure is uninformative,  
@@ -37,16 +52,16 @@ This file remained present for four consecutive releases,
 until version 12.0.3 (the most recent available), in which it was removed.
 
 These two cases establish that the presence of even a single Ethereum address
-in an \ac{NPM} tarball is rare in the Goodware dataset,
+in an \ac{NPM} tarball is rare in the \emph{Goodware} dataset,
 and limited to a specific optional configuration file related to a third-party incentivization protocol, 
 with no connection to the core functionality of the packages.
 
 \subsection{Comparison with the Malware Dataset}
 \label{subsec:analysisEthAddComparisonMalware}
 
-Given that only two packages in the Goodware dataset contain one Ethereum address,
+Given that only two packages in the \emph{Goodware} dataset contain one Ethereum address,
 the appearance of seven of them in the compromised versions of Attack~B represents an important outlier.
-Because this is a value with no precedent in the Goodware baseline, the metric is effective for detecting this specific attack.
+Because this is a value with no precedent in the \emph{Goodware} baseline, the metric is effective for detecting this specific attack.
 
 Otherwise, the metric is not indicative for the remaining three attacks.
 For Attack~A (\cref{sec:attackA}), the malicious \ac{DLL} is a binary file and is excluded from the computation, 

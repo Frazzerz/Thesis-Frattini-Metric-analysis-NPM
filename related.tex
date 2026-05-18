@@ -9,7 +9,7 @@ while \cref{sec:dynamicAnalysis} covers dynamic analysis approaches.
 \cref{sec:MLAndLLM} describes in detail the two most representative LLM-based tools, \texttt{SpiderScan} and \texttt{SocketAI}, 
 and \cref{sec:metricBasedAnalysis} surveys metric-based methods that rely on measurable structural properties of packages.
 Finally, \cref{sec:positioning} discusses the two main limitations affecting most existing tools which motivate this research, 
-and clarifies how this thesis relates to and differs from existing works, highlighting the contribution it makes to the field.
+and clarifies how this thesis relates to and differs from existing work, highlighting the contribution it makes to the field.
 
 \section{Static Analysis}
 \label{sec:staticAnalysis}
@@ -37,7 +37,7 @@ reducing the number of files that need to be forwarded to the more expensive \ac
 
 A fundamental limitation of purely static approaches is their difficulty with obfuscated code,
 as discussed in \cref{subsec:CodeObfuscation}.
-When dangerous behavior is hidden behind encoding or identifier-renaming techniques,
+When dangerous behavior is hidden behind some forms of encoding,
 it cannot be matched against a fixed set of syntactic rules,
 causing static analyzers to miss the threat entirely.
 A second limitation is that static analysis works on an approximation of the program:
@@ -147,7 +147,7 @@ While their focus is on vulnerability identification rather than \ac{SSCA} detec
 their metric taxonomy provides a broad reference point for what structural properties can be extracted from source code.
 
 \textcite{zoratti2025valutazione} addresses a narrower but directly supply-chain-relevant question: 
-can simple metrics derived from the whitespace and character distribution of files detect \ac{BST} and \ac{HUT} attacks?
+can simple metrics derived from the whitespace and character distribution of files detect \emph{\ac{BST}} and \emph{\ac{HUT}} attacks?
 \ac{BST} attacks hide malicious logic after long sequences of blank characters, exploiting parser behaviors,
 while \ac{HUT} attacks use invisible Unicode control characters, such as right-to-left override markers,
 to make the implementation appear different to a human reviewer than what is actually parsed and executed. 
@@ -158,7 +158,7 @@ studying how the metric evolves over time rather than examining a single snapsho
 This multi-version perspective is shared with the present thesis, 
 which similarly analyzes the evolution of metrics across 20 consecutive package versions to identify anomalous releases.
 
-\section{Positioning of This Work}
+\section{Positioning of This Research}
 \label{sec:positioning}
 
 Despite the breadth of existing approaches, 
@@ -178,7 +178,7 @@ Together, these constraints make continuous, registry-scale monitoring challengi
 
 The present thesis occupies a complementary position in this landscape.
 Rather than conducting semantic analysis of \ac{API} calls or relying on dynamic execution or commercial \ac{LLM} services, 
-it evaluates a set of lightweight, easily computable metrics derived directly from tarball artifacts:
+it evaluates a set of lightweight, easily computable metrics derived directly from tarball artifacts, such as:
 \emph{file types}, \emph{package size}, \emph{longest line length}, \emph{unique hexadecimal values} and \emph{unique Ethereum addresses}.
 Their effectiveness is evaluated against a baseline established from 629 popular goodware packages, 
 and their evolution is tracked across 20 consecutive versions per package.

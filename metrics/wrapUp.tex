@@ -43,7 +43,7 @@ such as JavaScript sources in the case of Attacks~B, C, and D.
 
 As discussed in \cref{sec:analysisPackageSize},
 \textbf{Metric 2 - Package Size} is effective when the malicious files are large enough
-to push the total tarball size among the outliers of the Goodware distribution.
+to push the total tarball size among the outliers of the \emph{Goodware} distribution.
 It succeeds for Attacks~C (3.7~MB injection) and~D (10~MB),
 but fails for Attacks~A (1.2~MB, absorbed by the confidence interval)
 and~B (a few kilobytes added to an existing file).
@@ -73,10 +73,10 @@ Even an attacker aware of these metrics could craft a malicious payload specific
 by injecting a small syntactically plausible file that avoids unusual extensions, long lines, hexadecimal identifiers, and Ethereum addresses.
 Therefore, it is necessary to extend this set of metrics to include additional, uncovered attack patterns.
 
-Second, the Goodware dataset covers 629 of the 1,000 most popular packages.
+Second, the \emph{Goodware} dataset covers 629 of the 1,000 most popular packages.
 Less popular ones may have different structural properties, 
 and the confidence intervals derived from this dataset may not generalize perfectly to the entire \ac{NPM} ecosystem.
-Moreover, the Goodware dataset is inherently heterogeneous, comprising packages that vary widely in size, purpose, and content.
+Moreover, the \emph{Goodware} dataset is inherently heterogeneous, comprising packages that vary widely in size, purpose, and content.
 As a result, some legitimate packages show anomalous values across the considered metrics
 and must be analyzed individually and manually to understand their nature.
 

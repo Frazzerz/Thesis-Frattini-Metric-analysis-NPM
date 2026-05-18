@@ -5,25 +5,25 @@ This chapter provides the foundational concepts needed to understand how the \ac
 \cref{sec:SSCAndSSCA} introduces the notion of \ac{SSC}, 
 describes the principal attack vectors through which \acp{SSCA} are carried out,
 examines the categories of victims typically targeted,
-and discusses source code obfuscation techniques used by both owners to protect intellectual property and attackers to hide malicious code.
+and discusses source code obfuscation techniques used by both owners, to protect intellectual property, and attackers, to hide malicious code.
 \cref{sec:NPMEcosystem} presents the \ac{NPM} ecosystem, 
 the package registry at the center of all attacks considered in this work,  
 and \cref{sec:tarballContent} describes the internal structure of \ac{NPM} tarballs, 
 the artifact distributed to end users and the primary subject of analysis.
 
-\section{Software Supply Chain and Software Supply Chain Attacks}
+\section{Software Supply Chain and Attacks}
 \label{sec:SSCAndSSCA}
 
 Modern software development rarely starts from scratch.
 Developers routinely incorporate ready-made components into their projects
 to handle common functionalities such as date parsing, HTTP request handling, or UI rendering,
-rather than reimplementing them manually.
+rather than reimplementing them.
 These reusable units, commonly called \emph{packages},
 can in turn depend on other components, 
 forming part of a broader ecosystem of software artifacts, tools, processes, 
 and human actors involved in their lifecycle, collectively referred to as the \acf{SSC}~\cite{softwareSupplyChain}.
 
-Such components are distributed through open-source registries such as \ac{NPM}, \ac{PyPI} and RubyGems,
+Such components are distributed through open-source registries, such as \ac{NPM}, \ac{PyPI} and RubyGems,
 which together host millions of software modules used by developers worldwide. 
 The decentralized and open nature of these repositories is one of their greatest strengths,
 as anyone can freely publish a package; 
@@ -34,7 +34,7 @@ This category of threat to the \ac{SSC} is known as a \ac{SSCA}, and has become
 increasingly prevalent in recent years~\cite{ohm2020backstabbersknifecollectionreview}.
 Notably, over 245,000 malicious packages were discovered in the \ac{NPM} and \ac{PyPI} ecosystems in 2023 alone,
 a figure that doubles the total of all those found in the previous four years combined~\cite{10.1145/3691620.3695492}. 
-This trend is not merely statistical, as the attacks analyzed in \cref{ch:AnalysisRecentAttacks} illustrate that 
+This trend is not merely statistical, as the attacks analyzed in \cref{ch:AnalysisRecentAttacks} illustrate,  
 a single compromised release of a widely-used package can affect millions of end users within hours.
 Attackers typically employ techniques such as \emph{Account Compromise}, 
 \emph{Typosquatting} and other methods detailed in \cref{subsec:AttackVectors} to trick developers into integrating harmful code.
@@ -43,16 +43,16 @@ Attackers typically employ techniques such as \emph{Account Compromise},
 \label{subsec:AttackVectors}
 
 \acp{SSCA} can be conducted through different attack vectors, each exploiting distinct vulnerabilities in the ecosystem.
-In this subsection, we describe the main vectors identified in the literature~\cite{duan2020measuringsupplychainattacks},
-which primarily target upstream stakeholders, such as \acp{PM}, the developers responsible for publishing and managing a given package,
-and \acp{RM}, the registry administrators.
+In this section, we describe the main vectors identified in the literature~\cite{duan2020measuringsupplychainattacks},
+which primarily target upstream stakeholders, such as \emph{\acp{PM}}, the developers responsible for publishing and managing a given package,
+and \emph{\acp{RM}}, the registry administrators.
 Compromising either one gives an attacker a privileged position to push malicious code to all downstream users.
 
 The most common vector is \emph{Account Compromise} (also known as \emph{Account Hijacking}), 
 which consists of gaining unauthorized access to the registry account of a \ac{PM}.
 Once the attacker controls the account, they can publish new versions of any package
 managed by that maintainer, embedding malicious code that will be distributed
-to all downstream users the next time they run an update or a fresh installation.
+to all downstream users the next time they run an update or start from a fresh installation.
 This vector is particularly insidious because the malicious version reaches users
 through the same trusted channel they normally rely on.
 
@@ -65,8 +65,11 @@ relying on the developer assumption of cross-ecosystem availability when in fact
 
 Another vector is \emph{Direct Publication}, in which an attacker simply publishes a new 
 malicious package without relying on typos or account hijacking. 
-This can serve purposes such as bot tracking or malware hosting, 
-and is made possible by the openness of these registries, where anyone can freely publish without prior review.
+This can serve purposes such as \emph{bot tracking}, 
+where the package sends data to the attacker's server upon installation to map the number and types of environments where it is installed,
+or \emph{malware hosting}, 
+where the tarball acts as a vehicle for additional malicious payloads that are downloaded and executed on the victim's machine~\cite{baldwin2019package}.
+Both are made possible by the openness of these registries, where anyone can freely publish without prior review.
 
 \emph{Ownership Transfer} exploits the open-source practice of transferring package ownership to new \acp{PM}. 
 Abandoned projects can be reclaimed by new parties, 
@@ -94,10 +97,10 @@ and discuss the potential impact on each.
 
 The first category consists of \emph{developers and maintainers}, who may be targeted directly
 to steal credentials, tokens, or cloud service access keys.
-Additionally, their infrastructure and machines may be damaged as part of the attack.
-The second category consists of \emph{end users} of applications that depend on the compromised packages,
-who may have their sensitive data stolen or their devices damaged.
-In the most severe cases, a single compromised package with a large number of weekly downloads
+Additionally, their infrastructure and machines may be compromised as part of the attack.
+The second category consists of \emph{end users} of applications that depend on malicious packages,
+who may have their sensitive data stolen or their devices compromised.
+In the most severe cases, a single package with a large number of weekly downloads
 can expose hundreds of millions of users to risk within hours of the malicious version being published,
 as illustrated concretely by the attacks analyzed in \cref{ch:AnalysisRecentAttacks}.
 
@@ -106,7 +109,7 @@ as illustrated concretely by the attacks analyzed in \cref{ch:AnalysisRecentAtta
 
 Since packages are often distributed as source code or build artifacts,
 as described in detail in \cref{sec:tarballContent},
-a \ac{PM} has full control over the content of a tarball before publication.
+a \ac{PM} has full control over the content before publication.
 This flexibility, while legitimate when used to protect intellectual property,
 also enables malicious actors to inject harmful code and conceal its behavior from automated scanners and human reviewers.
 The practice of deliberately transforming code to make it harder to understand while preserving
@@ -114,16 +117,15 @@ its functional behavior is known as \emph{code obfuscation}.
 Although obfuscation techniques can theoretically be applied to any programming language, 
 this work focuses specifically on JavaScript because the \ac{NPM} ecosystem is fundamentally built around JavaScript and Node.js, 
 making \texttt{.js} files the most abused and critical attack surface within the \ac{SSC}.
-Among the various obfuscation techniques documented in the literature and
-observed in real-world attacks~\cite{ohm2020backstabbersknifecollectionreview, 9505063},
-the \ac{NPM} ecosystem is particularly affected by the following.
+Various obfuscation techniques have been documented in the literature and
+observed in real-world attacks~\cite{ohm2020backstabbersknifecollectionreview, 9505063}.
 
 The most widespread technique consists of encoding identifiers such as variable and function names using hexadecimal notation, 
 replacing meaningful names with opaque tokens~\cite{ohm2020backstabbersknifecollectionreview}. 
 For example, a variable name may appear as \texttt{\_0x26499F}, 
 where the underscore is prepended because JavaScript identifiers cannot start with a digit, 
 while numeric constants appear directly as \texttt{0x1c8}~\cite{hexadecimalsyntax}.
-This convention is observed in the attacks analyzed in \cref{sec:attackB,sec:attackD}.
+This convention is observed in the \acp{SSCA} analyzed in \cref{sec:attackB,sec:attackD}.
 The result is source code that is syntactically valid but semantically opaque, 
 making manual inspection very difficult and effectively hiding malicious behavior from static analysis.
 
@@ -194,7 +196,7 @@ This section describes the main file categories typically found in \ac{NPM} pack
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{tarballStructure.pdf}
+    \includegraphics[width=0.55\textwidth]{tarballStructure.pdf}
     \caption{Example of a Typical NPM Tarball Directory Structure.}
     \label{fig:tarballStructure}
 \end{figure}
@@ -217,8 +219,10 @@ and licensing conditions.
 The core of a package consists of JavaScript and TypeScript files defining its functional logic.
 In addition, tarballs can include \emph{build artifacts}, that is, files that are
 automatically generated by build tools rather than written directly by developers~\cite{9240695}.
-Through processes such as minification and bundling, these tools produce optimized versions
-of the original source code that are smaller and faster to load.
+Through processes such as \emph{minification}, 
+which strips superfluous elements (such as whitespace, comments, and long variable identifiers) without altering behavior~\cite{minification},
+and \emph{bundling}, which merges multiple files into a single self-contained one, to simplify the distribution~\cite{bundling},
+these tools produce optimized versions of the original source code that are smaller and faster to load.
 A common example is source map files (identifiable by the \texttt{.map} extension),
 which map the minified output back to the original source to facilitate debugging~\cite{sourceMap}.
 Build processes also ensure compatibility, as the resulting code can run across 

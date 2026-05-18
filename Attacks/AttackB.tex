@@ -7,8 +7,8 @@ Collectively, these modules account for over 2.6 billion weekly downloads,
 making this one of the most impactful attacks in the recent history of the \ac{NPM} ecosystem~\cite{matthee2025npmsupplychainattack}.
 Fortunately, the financial impact was limited, 
 as the infected versions remained online for approximately two hours before being detected by developers and removed from the registry.
-The attack was made possible by compromising the account of a package maintainer (\texttt{qix});
-after obtaining the credentials, the attacker published malicious updates of these packages,
+The attack was made possible by compromising the account of a \ac{PM} (\texttt{qix});
+after obtaining their credentials, the attacker published malicious updates of these packages,
 which allowed theft of cryptocurrency by intercepting and manipulating user transactions.
 
 The operation of the malware can be broken into three phases~\cite{henig2025breakdownwidespreadnpmsupplychainattack}:
@@ -39,13 +39,13 @@ The operation of the malware can be broken into three phases~\cite{henig2025brea
 
     To achieve this, the malicious code embeds the Ethereum addresses of seven popular smart contracts:
     \begin{itemize}
-        \item Uniswap V2: \texttt{0x7a250d5630b4cf539739df2c5dacb4c659f2488d}
-        \item Uniswap V3: \texttt{0xe592427a0aece92de3edee1f18e0157c05861564}
-        \item Uniswap V4: \texttt{0x66a9893cC07D91D95644AEDD05D03f95e1dBA8Af}
-        \item PancakeSwap V2: \texttt{0x10ed43c718714eb63d5aa57b78b54704e256024e}
-        \item PancakeSwap V3: \texttt{0x13f4ea83d0bd40e75c8222255bc855a974568dd4}
-        \item 1inch: \texttt{0x1111111254eeb25477b68fb85ed929f73a960582}
-        \item SushiSwap: \texttt{0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f}
+        \item \emph{Uniswap V2}: \texttt{0x7a250d5630b4cf539739df2c5dacb4c659f2488d}
+        \item \emph{Uniswap V3}: \texttt{0xe592427a0aece92de3edee1f18e0157c05861564}
+        \item \emph{Uniswap V4}: \texttt{0x66a9893cC07D91D95644AEDD05D03f95e1dBA8Af}
+        \item \emph{PancakeSwap V2}: \texttt{0x10ed43c718714eb63d5aa57b78b54704e256024e}
+        \item \emph{PancakeSwap V3}: \texttt{0x13f4ea83d0bd40e75c8222255bc855a974568dd4}
+        \item \emph{1inch}: \texttt{0x1111111254eeb25477b68fb85ed929f73a960582}
+        \item \emph{SushiSwap}: \texttt{0xd9e1ce17f2641f24ae83637ab66a2cca9c378b9f}
     \end{itemize}
     
 \end{enumerate}

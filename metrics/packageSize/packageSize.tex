@@ -9,25 +9,32 @@ Attack~C (\cref{sec:attackC}) bundles a file of approximately 3.7~MB,
 and Attack~D (\cref{sec:attackD}) injects a payload exceeding 10~MB.
 The question is whether these increments are significant enough to be distinguishable from the fluctuations that occur naturally during benign development.
 
+Size is measured in absolute terms rather than as a relative change from the previous version.
+This choice is motivated by the heterogeneity of the \ac{NPM} ecosystem, 
+as a small package may exhibit a large percentage increase even in response to a minor legitimate update,
+such as the addition of a single documentation file,
+whereas the same relative change would be negligible for a large package already weighing tens of megabytes.
+Absolute values therefore provide a more stable and comparable basis for establishing a baseline for the entire population.
+
 \subsection{Analysis of the Goodware Dataset}
 \label{subsec:goodwarePackageSize}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{metrics/packageSize/PS_plot1.pdf}
+    \includegraphics[width=0.99\textwidth]{metrics/packageSize/PS_plot1.pdf}
     \caption{Package Size Metric: Package Trend in Goodware Dataset.}
     \label{fig:fig1PackageSize}
 \end{figure}
 
-The Goodware dataset provides, for each of the 629 packages,
+The \emph{Goodware} dataset provides, for each of the 629 packages,
 the total size observed in each of their 20 analyzed versions, as described in \cref{subsec:goodwareDataset}.
 To visualize the distribution and evolutionary patterns of this metric across releases,
 we used \cref{fig:fig1PackageSize,fig:fig1PackageSizeIncreasing,fig:fig1PackageSizeDecreasing,fig:fig1PackageSizeStable}.
-Among the packages in the Goodware dataset, several exhibit outlier values for one or more versions. 
+Among the packages in the \emph{Goodware} dataset, several exhibit outlier values for one or more versions. 
 Nine packages were selected for individual analysis as representative cases, chosen to cover the range of observed trends
 and the most common causes of legitimate outliers, 
 such as accidental inclusions, major refactorings, and inherent package characteristics. 
-Understanding these patterns is essential to distinguish legitimate anomalies from malicious injections when evaluating the Malware dataset in \cref{subsec:analysisPackageSizeComparisonMalware}.
+Understanding these patterns is essential to distinguish legitimate anomalies from malicious injections when evaluating the \emph{Malware} dataset in \cref{subsec:analysisPackageSizeComparisonMalware}.
 The following figures highlight these nine packages with solid colored lines, categorizing them according to their observed trends:
 \begin{itemize}
     \item \textbf{Increasing Trend} (\cref{fig:fig1PackageSizeIncreasing}): illustrates highlighted packages with an increasing trend over time.
@@ -56,7 +63,7 @@ as documented on GitHub~\cite{polished_release_notes}.
 As seen at point~2 in \cref{fig:fig1PackageSizeIncreasing},
 \textbf{moment-timezone} (solid green line) jumped from about 1.6~MB to 211~MB in version 0.5.36
 due to the accidental inclusion of a temporary folder, 
-making this the heaviest tarball in the entire Goodware dataset.
+making this the heaviest tarball in the entire \emph{Goodware} dataset.
 The folder was removed in the following release.
     
 \textbf{figlet} (solid blue line) is used to create ASCII art text from normal strings,
@@ -106,41 +113,39 @@ and \textbf{typescript}~\cite{typescript} (solid green, 23.7~MB, the TypeScript 
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{metrics/packageSize/PS_plot2single_AttackA.pdf}
+    \includegraphics[width=0.90\textwidth]{metrics/packageSize/PS_plot2single_AttackA.pdf}
     \caption{Package Size Metric: Malware Comparison for Attack A.}
     \label{fig:fig2PackageSizeAttackA}
-\end{figure}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{metrics/packageSize/PS_plot2single_AttackB.pdf}
+    \vspace{0.3cm} % Spazio verticale tra i due grafici
+
+    \includegraphics[width=0.90\textwidth]{metrics/packageSize/PS_plot2single_AttackB.pdf}
     \caption{Package Size Metric: Malware Comparison for Attack B.}
     \label{fig:fig2PackageSizeAttackB}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{metrics/packageSize/PS_plot2single_AttackC.pdf}
+    \includegraphics[width=0.90\textwidth]{metrics/packageSize/PS_plot2single_AttackC.pdf}
     \caption{Package Size Metric: Malware Comparison for Attack C.}
     \label{fig:fig2PackageSizeAttackC}
-\end{figure}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{metrics/packageSize/PS_plot2single_AttackD.pdf}
+    \vspace{0.3cm} % Spazio verticale tra i due grafici
+
+    \includegraphics[width=0.90\textwidth]{metrics/packageSize/PS_plot2single_AttackD.pdf}
     \caption{Package Size Metric: Malware Comparison for Attack D.}
     \label{fig:fig2PackageSizeAttackD}
 \end{figure}
 
 \textbf{Attack~A} (\cref{sec:attackA}) bundles a malicious \ac{DLL} of 1.2~MB to each compromised package,
 and as shown in \cref{fig:fig2PackageSizeAttackA}, 
-this increase is insufficient to place the compromised versions among the outlier values of the Goodware dataset.
+this increase is insufficient to place the compromised versions among the outlier values of the \emph{Goodware} dataset.
 The reason is that these affected tarballs are small enough to remain within the confidence intervals, 
 failing to surpass the upper bound (approximately 2.7-2.9~MB) required for outlier classification.
 The metric is therefore not able to detect this specific attack and not indicative.
 
 \textbf{Attack~B} (Crypto attack, \cref{sec:attackB}) adds a single obfuscated line to an existing \texttt{index.js} file.
-This increase is modest relative to the size range of the Goodware dataset, 
+This increase is modest relative to the size range of the \emph{Goodware} dataset, 
 and as shown in \cref{fig:fig2PackageSizeAttackB}, the compromised versions remain within the confidence interval, 
 making the metric not indicative for this attack.
 

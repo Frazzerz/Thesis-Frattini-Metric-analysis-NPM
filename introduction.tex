@@ -34,10 +34,29 @@ The present research adopts a complementary position in this overview,
 evaluating five lightweight, easily computable metrics extracted directly from tarball artifacts.
 By tracking their evolution across 20 consecutive versions, 
 their effectiveness is demonstrated against a baseline of 629 popular goodware samples 
-and a malware dataset of 20 packages compromised by the four \acp{SSCA}.
+and a \emph{Malware} dataset of 20 packages compromised by the four \acp{SSCA}.
 The results indicate that while each individual attack is detectable by at least one metric,
 no single one identifies all four simultaneously.
 This outcome reflects the structural diversity of the malicious payloads,
 which leave distinct traces that no single measurement can fully capture.
 The primary contribution of this work is to demonstrate that a metric-based, 
 multi-version monitoring strategy provides a practical and low-cost addition to existing semantically rich methodologies.
+
+The remainder of this thesis is organized as follows.
+\Cref{ch:background} provides the foundational concepts underlying this work,
+introducing the \ac{SSC} and the main \ac{SSCA} vectors, 
+the architecture of the \ac{NPM} ecosystem, 
+and the structure of tarballs.
+\Cref{ch:related} surveys existing detection approaches,
+spanning static analysis, dynamic analysis, \ac{LLM}-based methods, and metric-based analysis,
+and positions this thesis with respect to their limitations.
+\Cref{ch:AnalysisRecentAttacks} presents and analyzes in depth the four \acp{SSCA} 
+that affected the \ac{NPM} ecosystem in 2025, which serve as case studies throughout the research.
+\Cref{ch:ExperimentalSetup} describes the two datasets constructed for the evaluation,
+the \emph{Goodware} and the \emph{Malware} dataset,
+together with the two software tools developed to build them.
+\Cref{ch:metricsAnalysis} defines the five metrics, 
+analyzes their distribution in the \emph{Goodware} baseline, 
+and evaluates their effectiveness in detecting the compromised releases.
+Finally, \cref{ch:conclusion} summarizes the findings, discusses the limitations of the proposed approach,
+and outlines directions for future work.

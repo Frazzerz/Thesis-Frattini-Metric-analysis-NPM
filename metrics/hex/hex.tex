@@ -18,7 +18,7 @@ so a sudden increase in this count in a new version would constitute an anomalou
     \label{fig:fig1Hex}
 \end{figure}
 
-The Goodware dataset provides, for each of the 629 packages,
+The \emph{Goodware} dataset provides, for each of the 629 packages,
 the count of unique hexadecimal values observed in their 20 analyzed versions,
 as described in \cref{subsec:goodwareDataset}.
 Of these, 520 have zero such values across all versions,
@@ -34,7 +34,7 @@ The three main causes of legitimate high hexadecimal counts are
 cryptographic constants (precomputed lookup tables and algorithm parameters),
 accidental inclusions, 
 and build-tool-generated JavaScript files that use hexadecimal encoding for efficiency. 
-Understanding these cases is essential to distinguish legitimate anomalies from malicious injections when evaluating the Malware dataset.
+Understanding these cases is essential to distinguish legitimate anomalies from malicious injections when evaluating the \emph{Malware} dataset.
 These ten packages are highlighted in the following figures with solid colored lines, categorizing them as follows based on their observed trends:
 \begin{itemize}
     \item \textbf{Increasing Trend} (\cref{fig:fig1HexIncreasing}): illustrates highlighted packages with an increasing trend over time.
@@ -138,6 +138,35 @@ has 600 across all releases and is an outlier in every version.
 \subsection{Comparison with the Malware Dataset}
 \label{subsec:analysisHexComparisonMalware}
 
+\textbf{Attack~A} (Malicious Windows DLL, \cref{sec:attackA}) does not introduce any new hexadecimal values,
+as the malicious \ac{DLL} is binary and excluded from computation, and the \texttt{install.js} script contains no hexadecimal tokens.
+As shown in \cref{fig:fig2HexAttackA}, the metric value is unchanged relative to the preceding legitimate versions, 
+and the metric is not indicative for this attack.
+
+\textbf{Attack~B} (Crypto attack, \cref{sec:attackB}) injects an obfuscated line of code into an existing \texttt{index.js} file.
+The resulting count of unique hexadecimal values reaches 455.
+As shown in \cref{fig:fig2HexAttackB}, this positions the malicious versions among the outliers of the \emph{Goodware} distribution, 
+making the metric effective for detecting Attack~B.
+
+\textbf{Attack~C} (\texttt{Shai-Hulud}~1.0, \cref{sec:attackC}) introduces a malicious file containing only one unique hexadecimal value.
+As shown in \cref{fig:fig2HexAttackC}, this marginal increase leaves the compromised
+releases within the confidence intervals of the \emph{Goodware} dataset, 
+making the metric not indicative for this attack.
+This outcome is consistent with the nature of the \ac{SSCA} as it does not rely on any obfuscation technique, 
+but rather on the presence of clear-text malicious code.
+
+\textbf{Attack~D} (\texttt{Shai-Hulud}~2.0, \cref{sec:attackD}) introduces an obfuscated file
+using the same hexadecimal encoding technique as Attack~B.
+As shown in \cref{fig:fig2HexAttackD}, the count jumps to 122,535, far exceeding the maximum outlier values observed in the \emph{Goodware} dataset.
+The metric is clearly effective for detecting Attack~D.
+
+In summary, the \emph{Unique Hexadecimal Values} metric is effective for attacks that use hexadecimal encoding as an obfuscation strategy (Attacks~B and~D),
+with detection strength scaling with the amount of encoded content, 
+as Attack~B produces 455 values, sufficient to cross the outlier boundary,
+while Attack~D produces 122,535, an extreme anomaly with no parallel in the \emph{Goodware} baseline.
+It is not indicative for Attack~A, whose malicious payload is binary,
+nor for Attack~C, where the injected code is clear-text and does not rely on obfuscation.
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{metrics/hex/hex_plot2singlesingle_AttackA.pdf}
@@ -147,50 +176,20 @@ has 600 across all releases and is an outlier in every version.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{metrics/hex/hex_plot2single_AttackB.pdf}
+    \includegraphics[width=0.90\textwidth]{metrics/hex/hex_plot2single_AttackB.pdf}
     \caption{Unique Hexadecimal Values Metric: Malware Comparison for Attack~B.}
     \label{fig:fig2HexAttackB}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{metrics/hex/hex_plot2single_AttackC.pdf}
+    \includegraphics[width=0.90\textwidth]{metrics/hex/hex_plot2single_AttackC.pdf}
     \caption{Unique Hexadecimal Values Metric: Malware Comparison for Attack~C.}
     \label{fig:fig2HexAttackC}
-\end{figure}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{metrics/hex/hex_plot2single_AttackD.pdf}
+    \vspace{0.3cm} % Spazio verticale tra i due grafici
+
+    \includegraphics[width=0.90\textwidth]{metrics/hex/hex_plot2single_AttackD.pdf}
     \caption{Unique Hexadecimal Values Metric: Malware Comparison for Attack~D.}
     \label{fig:fig2HexAttackD}
 \end{figure}
-
-\textbf{Attack~A} (Malicious Windows DLL, \cref{sec:attackA}) does not introduce any new hexadecimal values,
-as the malicious \ac{DLL} is binary and excluded from computation, and the \texttt{install.js} script contains no hexadecimal tokens.
-As shown in \cref{fig:fig2HexAttackA}, the metric value is unchanged relative to the preceding legitimate versions, 
-and the metric is not indicative for this attack.
-
-\textbf{Attack~B} (Crypto attack, \cref{sec:attackB}) injects an obfuscated line of code into an existing \texttt{index.js} file.
-The resulting count of unique hexadecimal values reaches 455.
-As shown in \cref{fig:fig2HexAttackB}, this positions the malicious versions among the outliers of the Goodware distribution, 
-making the metric effective for detecting Attack~B.
-
-\textbf{Attack~C} (\texttt{Shai-Hulud}~1.0, \cref{sec:attackC}) introduces a malicious file containing only one unique hexadecimal value.
-As shown in \cref{fig:fig2HexAttackC}, this marginal increase leaves the compromised
-releases within the confidence intervals of the Goodware dataset, 
-making the metric not indicative for this attack.
-This outcome is consistent with the nature of the \ac{SSCA} as it does not rely on any obfuscation technique, 
-but rather on the presence of clear-text malicious code.
-
-\textbf{Attack~D} (\texttt{Shai-Hulud}~2.0, \cref{sec:attackD}) introduces an obfuscated file
-using the same hexadecimal encoding technique as Attack~B.
-As shown in \cref{fig:fig2HexAttackD}, the count jumps to 122,535, far exceeding the maximum outlier values observed in the Goodware dataset.
-The metric is clearly effective for detecting Attack~D.
-
-In summary, the \emph{Unique Hexadecimal Values} metric is effective for attacks that use hexadecimal encoding as an obfuscation strategy (Attacks~B and~D),
-with detection strength scaling with the amount of encoded content, 
-as Attack~B produces 455 values, sufficient to cross the outlier boundary,
-while Attack~D produces 122,535, an extreme anomaly with no parallel in the Goodware baseline.
-It is not indicative for Attack~A, whose malicious payload is binary,
-nor for Attack~C, where the injected code is clear-text and does not rely on obfuscation.

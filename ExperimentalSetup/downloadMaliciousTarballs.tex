@@ -12,7 +12,7 @@ in our case, the compromised versions of the packages affected by the four
 An alternative source of removed \ac{NPM} tarballs, which proved effective, is to query mirror registries. 
 A mirror registry is a server that replicates the contents of an official package repository 
 and periodically synchronizes with it~\cite{guo2023empiricalstudymaliciouscode};
-examples of \ac{NPM} mirrors include Huaweicloud, npmmirror, Tencent, and Alibaba.
+examples of \ac{NPM} mirrors include \emph{Huaweicloud}, \emph{npmmirror}, \emph{Tencent}, and \emph{Alibaba}.
 Because synchronization with the official registry is not instantaneous, 
 mirrors often retain copies of releases that have already been unpublished upstream, 
 sometimes for extended periods depending on the mirror synchronization frequency. 
@@ -30,4 +30,4 @@ The input is a JSON file specifying the list of mirrors to query and the list of
 For each requested release, the script queries the mirrors sequentially until the tarball is found and downloaded; 
 if all mirrors fail, the failure is reported and the script moves on to the next entry. 
 Once retrieved, the tarballs can be passed to the \texttt{NPM Packages Analyzer} tool (\cref{subsec:ToolForAnalyzingPkgs}) 
-via the \texttt{-{}-local} flag to construct the Malware dataset (\cref{subsec:malwareDataset}).
+via the \texttt{-{}-local} flag to construct the \emph{Malware} dataset (\cref{subsec:malwareDataset}).

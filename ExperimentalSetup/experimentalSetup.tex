@@ -2,10 +2,10 @@
 \label{ch:ExperimentalSetup}
 
 This chapter describes the datasets used for the analyses conducted in \cref{ch:metricsAnalysis} and the software tools developed to create them.
-\Cref{sec:datasets} introduces the two datasets, the Goodware and the Malware, 
+\Cref{sec:datasets} introduces the two datasets, the \emph{Goodware} dataset and the \emph{Malware} one, 
 explaining why they were structured this way, 
 how the entries were selected, and what their main statistical properties are.
-\Cref{sec:SoftwareTools} details the two software tools developed:
+\Cref{sec:SoftwareTools} details the two developed software tools:
 the primary analysis application that downloads tarballs and computes metrics on them,
 and the custom script to automatically retrieve malicious versions.
 
@@ -15,10 +15,10 @@ and the custom script to automatically retrieve malicious versions.
 To carry out the analyses in \cref{ch:metricsAnalysis}, two datasets are required:
 one to establish a baseline of normal package behavior, 
 and one to evaluate whether malicious releases are detectable against it.
-Accordingly, we constructed a Goodware (\cref{subsec:goodwareDataset}) and a Malware dataset (\cref{subsec:malwareDataset}).
+Accordingly, we constructed a \emph{Goodware} (\cref{subsec:goodwareDataset}) and a \emph{Malware} dataset (\cref{subsec:malwareDataset}).
 Both consist of the same set of metrics computed from \ac{NPM} tarballs,
 using the tool described in \cref{subsec:ToolForAnalyzingPkgs}.
-Concretely, for each package across its 20 releases, these datasets store:
+Concretely, for each package across its 20 latest releases, these datasets store:
 the set of distinct file types detected, 
 the total uncompressed size in bytes, 
 and, in plain-text files, the length of the longest line, 
@@ -28,12 +28,12 @@ this section focuses on the composition and construction of both collections.
 
 Each dataset is organized as a collection of CSV files, one per metric.
 Each is named after the metric it represents, followed by a suffix indicating the dataset: 
-\texttt{\_GD} for the Goodware and \texttt{\_MD} for the Malware (e.g., \texttt{package\_size\_GD.csv}, \texttt{package\_size\_MD.csv}).
+\texttt{\_GD} for the \emph{Goodware} and \texttt{\_MD} for the \emph{Malware} (e.g., \texttt{package\_size\_GD.csv}, \texttt{package\_size\_MD.csv}).
 As illustrated in the excerpts provided in \cref{tab:csv-Goodware,tab:csv-Malware},
 the first column provides the entry name,
 followed by 20 columns, labelled -19 to 0, that hold the metric value for the corresponding release.
 For the \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses} metrics,
-an additional filtered variant of the Goodware CSV is also provided,
+an additional filtered variant of the \emph{Goodware} CSV is also provided,
 containing only the entries that have at least one non-zero value in any release 
 (e.g., \texttt{unique\_hexadecimal\_values\_GD\_GreaterThan0.csv}).
 This filtered file is used in \cref{ch:metricsAnalysis} to focus the analysis on modules that are actually informative for those metrics.
@@ -51,7 +51,7 @@ across consecutive releases rather than analyzing a single snapshot in isolation
 The threshold of 20 was chosen to balance two competing requirements,
 as it is sufficiently large to capture a meaningful historical trend
 while remaining small enough to retain a large fraction of the ecosystem.
-A higher threshold would have excluded significantly more packages from the Goodware dataset.
+A higher threshold would have excluded significantly more packages from the \emph{Goodware} dataset.
 This longitudinal perspective is essential to the detection approach,
 because malicious updates stand out as sudden deviations from an otherwise predictable evolutionary pattern, 
 a signal that would be invisible in a single-snapshot analysis.
@@ -62,10 +62,10 @@ omitting behavioral patterns present in the early stages of development.
 \subsection{Goodware Dataset}
 \label{subsec:goodwareDataset}
 
-The purpose of the Goodware dataset is to establish a \emph{baseline}, 
+The purpose of the \emph{Goodware} dataset is to establish a \emph{baseline}, 
 the typical behavior of each metric under normal, benign development conditions.
 This baseline is used in \cref{ch:metricsAnalysis} to identify packages exhibiting outlier values
-and to evaluate whether the compromised releases in the Malware dataset are detectable.
+and to evaluate whether the compromised releases in the \emph{Malware} dataset are detectable.
 
 To build a large and representative baseline, 
 the dataset is composed of modules ranked among the 1,000 most popular in the \ac{NPM} registry by number of stars, 
@@ -130,7 +130,7 @@ as described in \cref{sec:NPMEcosystem}.
 
 The 629 packages in the dataset span a wide range of sizes and complexities,
 reflecting the diversity of real-world \ac{NPM} ecosystem.
-\Cref{tab:goodware-stats} summarizes the key statistical properties of the Goodware dataset for each of the five metrics analyzed in \cref{ch:metricsAnalysis}.
+\Cref{tab:goodware-stats} summarizes the key statistical properties of the \emph{Goodware} dataset for each of the five metrics analyzed in \cref{ch:metricsAnalysis}.
 For each, the table reports the median and maximum values, 
 the number of packages that have at least one non-zero value across their versions (Packages~>~0), and representative notable examples.
 
@@ -169,7 +169,7 @@ less prominent ones may exhibit different statistical properties, and the baseli
 \subsection{Malware Dataset}
 \label{subsec:malwareDataset}
 
-The Malware dataset contains packages compromised by one of the four \acp{SSCA} analyzed in \cref{ch:AnalysisRecentAttacks},
+The \emph{Malware} dataset contains packages compromised by one of the four \acp{SSCA} analyzed in \cref{ch:AnalysisRecentAttacks},
 and is used in \cref{ch:metricsAnalysis} to evaluate whether the metrics are sensitive enough to detect the anomalous malicious releases.
 The dataset includes twenty entries, each analyzed across exactly 20 releases: nineteen legitimate and one compromised.
 Within the CSV files, packages are ordered chronologically by attack: the three from Attack~A appear first,
@@ -190,7 +190,7 @@ selecting those with at least 1,000 weekly downloads.
 It is worth noting that all nine packages included from Attack~B are among the 1,000 most popular in the registry, 
 while none of those from the remaining attacks fall into that category.
 
-The full list of entries included in the Malware dataset, 
+The full list of entries included in the \emph{Malware} dataset, 
 together with the specific compromised release number for each, is reported below.
 
 \begin{itemize}
@@ -247,7 +247,7 @@ The malicious version of each package is highlighted in bold.}
 \end{table}
 
 \Cref{tab:csv-Malware} presents an excerpt of \texttt{package\_size\_MD.csv} with one entry per attack, 
-illustrating how the malicious version appears in the Malware dataset.
+illustrating how the malicious version appears in the \emph{Malware} dataset.
 As observed in \cref{tab:csv-Malware}, for the \emph{Package Size} metric, 
 the compromised release in all \acp{SSCA} introduces a sharp, 
 isolated spike surrounded by otherwise predictable evolutionary patterns in the legitimate values.

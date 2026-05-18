@@ -8,21 +8,24 @@ and tracking their evolution across 20 consecutive versions.
 To this end, we analyzed in depth four \acp{SSCA} that affected the \ac{NPM} ecosystem in 2025, 
 each sharing the same high-level attack model, namely the compromise of the account of a legitimate maintainer
 followed by the publication of a malicious update, but differing substantially in payload, technique, and goal.
-Attack~A introduced a malicious Windows \ac{DLL} to achieve remote code execution on victim machines, 
-Attack~B embedded obfuscated code in a popular package to hijack cryptocurrency transactions in the browser, 
-and Attacks~C and~D, the two variants of the \texttt{Shai-Hulud} worm, combined credential exfiltration and self-propagation across the registry.
+The Malicious Windows \ac{DLL} attack (Attack~A, \cref{sec:attackA}) 
+introduced a malicious Windows \ac{DLL} to achieve remote code execution on victim machines, 
+the Crypto Attack (Attack~B, \cref{sec:attackB}) 
+embedded obfuscated code in a popular package to hijack cryptocurrency transactions in the browser, 
+and \texttt{Shai-Hulud}~1.0 and~2.0 (Attacks~C and~D, \cref{sec:attackC,sec:attackD}), 
+the two variants of the \texttt{Shai-Hulud} worm, combined credential exfiltration and self-propagation across the registry.
 From the characteristics of these attacks we derived five metrics:
 \emph{File Types}, \emph{Package Size}, \emph{Longest Line Length},
 \emph{Unique Hexadecimal Values}, and \emph{Unique Ethereum Addresses}.
 These were evaluated against two datasets,
-a Goodware dataset of 629 popular samples across their 20 most recent versions each,
+a \emph{Goodware} dataset of 629 popular samples across their 20 most recent versions each,
 used to establish a baseline of normal evolutionary behavior,
-and a Malware dataset of 20 packages compromised by the four \acp{SSCA}.
+and a \emph{Malware} dataset of 20 packages compromised by the four \acp{SSCA}.
 
 The results demonstrate that while each individual attack is detectable by at least one metric,
 no single one identifies all four simultaneously.
 The \emph{File Types} metric proved effective only for Attack~A,
-because the introduction of a Windows \ac{PE} binary is essentially absent from the Goodware baseline.
+because the introduction of a Windows \ac{PE} binary is essentially absent from the \emph{Goodware} baseline.
 The \emph{Package Size} metric successfully detected Attacks~C and~D, both of which injected files of several megabytes,
 but was not sensitive enough for the smaller additions of Attacks~A and~B.
 The \emph{Longest Line Length} metric detected the same two attacks,
@@ -30,7 +33,7 @@ since both \texttt{Shai-Hulud} variants encoded their payloads as a single line 
 it is however inherently noisy due to build artifacts in legitimate packages, which can themselves produce long lines.
 The \emph{Unique Hexadecimal Values} metric proved effective for Attacks~B and~D,
 which both used hexadecimal-based identifier obfuscation to hide malicious logic from static analysis,
-producing counts of 455 and 122,535 unique values respectively, far above the Goodware confidence intervals.
+producing counts of 455 and 122,535 unique values respectively, far above the \emph{Goodware} confidence intervals.
 The \emph{Unique Ethereum Addresses} metric detected Attack~B alone,
 whose goal of cryptocurrency theft required embedding known smart contract addresses in the malicious code in plain text;
 the remaining attacks, targeting credential exfiltration or remote code execution, left this metric unchanged.
@@ -57,5 +60,5 @@ The two datasets and the two developed tools are publicly available to support r
 A natural direction for future work is to expand the metric set to cover attack patterns not represented in this study;
 promising candidates include metadata-derived signals such as changes in the number of \acp{PM}, 
 and releases occurring after unusually long periods of inactivity.
-Expanding the Malware dataset to cover a broader range of \ac{SSCA} families would also strengthen future evaluations
+Expanding the \emph{Malware} dataset to cover a broader range of \ac{SSCA} families would also strengthen future evaluations
 and help assess whether the longitudinal approach generalizes to attack types beyond the four analyzed here.

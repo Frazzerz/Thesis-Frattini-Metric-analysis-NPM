@@ -6,8 +6,8 @@ It is driven by the characteristics of Attack~A (\cref{sec:attackA}),
 in which an adversary inserts a harmful binary Windows executable into the tarball.
 The intuition is that \ac{DLL} files are essentially never present in legitimate \ac{NPM} packages;
 thus, their appearance in a new version constitutes a clear anomalous signal.
-More generally, the presence of any file type that is rare within the Goodware dataset warrants further investigation.
-To verify this, we first identified which categories are typical or rare in the Goodware dataset,
+More generally, the presence of any file type that is rare within the \emph{Goodware} dataset warrants further investigation.
+To verify this, we first identified which categories are typical or rare in the \emph{Goodware} dataset,
 and then checked whether the malicious versions deviate from that baseline distribution.
 As demonstrated in this section, the analysis confirmed that binary Windows executables are virtually absent from benign entries, 
 making their detection a strong anomalous signal.
@@ -15,7 +15,7 @@ making their detection a strong anomalous signal.
 \subsection{Analysis of the Goodware Dataset}
 \label{subsec:analysisFileTypesGoodware}
 
-The Goodware dataset provides, for each of the 629 packages,
+The \emph{Goodware} dataset provides, for each of the 629 packages,
 the set of file types found across their 20 analyzed versions, as detailed in \cref{subsec:goodwareDataset}.
 In total, 71 distinct extensions were identified throughout the dataset.
 
@@ -125,13 +125,13 @@ This second case should be treated as a red flag, and follows a similar behavior
 \label{subsec:analysisFileTypesComparisonMalware}
 
 In Attack~A (\cref{sec:attackA}), the adversary introduced a malicious Windows \ac{DLL} into the tarball, 
-and as shown in \cref{fig:fig1RareFileTypes}, \ac{PE} files are a rare extension in the Goodware dataset, 
+and as shown in \cref{fig:fig1RareFileTypes}, \ac{PE} files are a rare extension in the \emph{Goodware} dataset, 
 as only two packages contain them: \texttt{nodemon}, whose presence is documented and stable, 
 and \texttt{moment-timezone}, where it was an accidental inclusion subsequently corrected.
 Therefore, the appearance of a \ac{PE} file in a new version of a package that previously contained none is an outlier signal, 
 making this metric effective for detecting Attack~A.
 
 For the remaining three attacks, the malicious payload either modifies an existing JavaScript file (Attack~B) or introduces new ones (Attacks~C and~D),
-an extension present in nearly all packages in the Goodware dataset.
+an extension present in nearly all packages in the \emph{Goodware} dataset.
 The metric is therefore not indicative of these \acp{SSCA},
 since the compromised versions are indistinguishable from legitimate ones.

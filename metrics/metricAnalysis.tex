@@ -23,7 +23,7 @@ The five selected metrics are:
 and \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}).
 
 Each metric is discussed in a dedicated section, presenting the motivation behind its choice and the two analyses.
-The first analysis characterizes the distribution and evolutionary patterns of the metric within the Goodware dataset (\cref{subsec:goodwareDataset}),
+The first analysis characterizes the distribution and evolutionary patterns of the metric within the \emph{Goodware} dataset (\cref{subsec:goodwareDataset}),
 with the goal of establishing a baseline for normal development conditions.
 Understanding how a package evolves across versions is fundamental to evaluating potential attacks,
 and tracking a metric across consecutive releases allows us to identify anomalies that would be invisible in a single-snapshot analysis. 
@@ -33,7 +33,7 @@ such as a new feature introduction or a major refactoring,
 that can also produce outlier values but are traceable to documented development decisions.
 
 Except for the \emph{File Types} metric (\cref{sec:analysisFileTypes}), 
-which requires specialized representations, all others share the same figure format for the Goodware dataset analysis.
+which requires specialized representations, all others share the same figure format for the \emph{Goodware} dataset analysis.
 A concrete example is \cref{fig:fig1PackageSize},
 which shows the evolution of the \emph{Package Size} metric across 20 releases.
 The x-axis represents the versions from the least recent (-19) to the latest available (0), 
@@ -52,9 +52,9 @@ as both produce outlier values, but for entirely different reasons;
 distinguishing a legitimate anomaly from a malicious injection requires examining the nature and history of the change.
 
 The second analysis evaluates the effectiveness of each metric by comparing the values of the
-compromised releases in the Malware dataset (\cref{subsec:malwareDataset}) against the Goodware baseline.
+compromised releases in the \emph{Malware} dataset (\cref{subsec:malwareDataset}) against the \emph{Goodware} baseline.
 A metric is considered \emph{effective} for a given attack if the compromised release produces
-a value that falls among the outliers of the Goodware distribution,
+a value that falls among the outliers of the \emph{Goodware} distribution,
 making it distinguishable from the majority of the population.
 Conversely, a metric is considered \emph{not indicative} if the malicious release falls within the confidence interval,
 meaning it is indistinguishable from the majority of legitimate releases.
@@ -63,7 +63,7 @@ Two concrete examples are \cref{fig:fig2PackageSizeAttackD,fig:fig2PackageSizeAt
 In both figures, the colored lines show the longitudinal evolution of the affected entries, 
 providing the context needed to appreciate how sudden the anomaly introduced by the malicious release actually is.
 \cref{fig:fig2PackageSizeAttackD} shows an effective case, where the red crosses marking the compromised releases of Attack~D 
-fall among the outlier dots of the Goodware distribution, confirming that the metric successfully detects this attack.
+fall among the outlier dots of the \emph{Goodware} distribution, confirming that the metric successfully detects this attack.
 Instead, \cref{fig:fig2PackageSizeAttackB} shows a not indicative case, where the red crosses remain within the confidence intervals,
 meaning that the affected releases of Attack~B are indistinguishable from legitimate ones under this measure.
 When packages from the same attack overlap visually, separate figures are provided per entry for clarity, as shown in \cref{fig:fig2HexAttackA}.
