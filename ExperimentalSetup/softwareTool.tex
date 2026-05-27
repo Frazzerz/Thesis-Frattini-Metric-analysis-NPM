@@ -2,23 +2,23 @@
 \label{sec:SoftwareTools}
 
 This section describes the tool and script developed to create the two datasets presented in \cref{sec:datasets}.
-\Cref{subsec:ToolForAnalyzingPkgs} presents the primary analysis application, namely \texttt{NPM Packages Analyzer},
+\Cref{subsec:ToolForAnalyzingPkgs} presents the primary analysis application, namely \texttt{npm Packages Analyzer},
 while \cref{subsec:DownloadMaliciousTarballs} details the custom script to automatically retrieve malicious versions from mirror registries.
 
-\subsection{NPM Packages Analyzer}
+\subsection{The npm Packages Analyzer}
 \label{subsec:ToolForAnalyzingPkgs}
 
-The developed tool computes the metrics analyzed in \cref{ch:metricsAnalysis} from a set of \ac{NPM} package releases.
-It enables the construction of both the \emph{Goodware} (\cref{subsec:goodwareDataset}) and the \emph{Malware} dataset (\cref{subsec:malwareDataset}).
-Implemented in Python, it is available on GitHub\footnote{\url{https://github.com/Frazzerz/Npm-packages-analyzer}},
+The developed tool computes the metrics analyzed in \cref{ch:metricsAnalysis} from a set of \ac{npm} package releases.
+It enables the construction of both the goodware (\cref{subsec:goodwareDataset}) and the malware dataset (\cref{subsec:malwareDataset}).
+Implemented in Python, it is available on GitHub\footnote{\url{https://github.com/Frazzerz/npm-packages-analyzer}},
 and can be invoked from the command line as follows:
 \begin{verbatim}
 python3 main.py --json <input_file>.json [--workers N] [--local]
 \end{verbatim}
 
-The required input is a JSON file containing the list of \ac{NPM} package names to analyze. 
+The required input is a json file containing the list of \ac{npm} package names to analyze. 
 The optional \texttt{-{}-local} flag allows local tarballs,
-such as the malicious releases in the \emph{Malware} dataset, 
+such as the malicious releases in the malware dataset, 
 to be included alongside those downloaded from the registry.
 The optional \texttt{-{}-workers} flag controls the number of parallel processes used for per-file metric computation. 
 Packages and their versions are processed sequentially (from oldest to most recent), 
@@ -28,13 +28,13 @@ The tool workflow is organized into four phases, described below.
 \subsubsection{Phase 1: Version Retrieval}
 \label{subsubsec:ToolForAnalyzingPkgsPhase1}
 
-The \texttt{NPMClient} component queries the official \ac{NPM} registry to retrieve the module metadata and the list of all available releases. 
+The \texttt{npmClient} component queries the official \ac{npm} registry to retrieve the module metadata and the list of all available releases. 
 From this list, only versions parsable by node-semver~\cite{semver} are kept, 
 so that they can be sorted chronologically. 
-For the \emph{Goodware} dataset (\cref{subsec:goodwareDataset}), the 20 most recent valid versions are selected and their tarballs downloaded. 
-For the \emph{Malware} dataset (\cref{subsec:malwareDataset}), only the nineteen most recent legitimate versions are fetched; 
+For the goodware dataset (\cref{subsec:goodwareDataset}), the 20 most recent valid versions are selected and their tarballs downloaded. 
+For the malware dataset (\cref{subsec:malwareDataset}), only the nineteen most recent legitimate versions are fetched; 
 the twentieth slot is reserved for the malicious tarball, 
-which is retrieved separately via the custom script described in \cref{subsec:DownloadMaliciousTarballs} and included through the \texttt{-{}-local} flag.
+which is retrieved separately via the custom script (\cref{subsec:DownloadMaliciousTarballs}) and included through the \texttt{-{}-local} flag.
 
 \subsubsection{Phase 2: Metrics Computation}
 \label{subsubsec:ToolForAnalyzingPkgsPhase2}
@@ -51,7 +51,7 @@ Metrics based on the textual content of files, namely \emph{Longest Line Length}
 \emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}), 
 and \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}),
 are computed only on plain-text sources, such as JavaScript and TypeScript, 
-and are therefore skipped for binary formats such as ZIP, PNG or \ac{DLL}.
+and are therefore skipped for binary formats such as zip, png or \ac{DLL}.
 To determine the nature of each item and thereby distinguish plain-text from binary content, 
 the tool uses \texttt{Magika} to classify each entry and checks the detected label against a predefined whitelist of allowed types.
 Additionally, for these metrics, 
@@ -67,19 +67,18 @@ for example, \texttt{re.IGNORECASE} is used to match both \texttt{0x} and \textt
 making the search case-insensitive.
 To find all matches within a file contents, the tool uses the \texttt{finditer} method on the compiled object,
 which returns an iterator over all matches and is more memory-efficient than collecting all results at once.
-The regex used for \emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}) is:
-\begin{verbatim}
-_?0x[0-9a-fA-F]+
-\end{verbatim}
+
+The regex used for \emph{Unique Hexadecimal Values} (\cref{sec:analysisHex}) is: \verb|_?0x[0-9a-fA-F]+|
+
 The optional leading underscore (specified with \texttt{\_?}) captures the naming convention used by obfuscation
 tools when a hexadecimal token serves as a variable or function name (e.g., \texttt{\_0x6fd57a}), 
 followed by the mandatory \texttt{0x} prefix with one or more hexadecimal characters (digits 0 to 9 and letters a to f, both lowercase and uppercase).
 This flexible matching rule allows capturing values even when they appear inside function calls or other code structures, 
 where strict boundaries, would miss them.
-For \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}), the pattern is instead:
-\begin{verbatim}
-(?<![\w\-/_])0x[a-fA-F0-9]{40}(?![\w\-/_])
-\end{verbatim}
+
+For \emph{Unique Ethereum Addresses} (\cref{sec:analysisEthAdd}), the pattern is instead: \\
+\verb|(?<![\w\-/_])0x[a-fA-F0-9]{40}(?![\w\-/_])|
+
 A valid Ethereum address consists of the prefix \texttt{0x} followed by exactly 40 hexadecimal characters~\cite{ethereum}.
 The lookbehind (\texttt{(?<![{\textbackslash}w{\textbackslash}-/\_])}) 
 and lookahead (\texttt{(?![{\textbackslash}w{\textbackslash}-/\_])})
@@ -107,7 +106,7 @@ It reports general information such as the total number of packages and worker c
 and for each entry it logs the number of versions found, 
 the download status of each tarball, the per-release analysis progress, and the total analysis time.
 
-\begin{table}[htbp]
+\begin{table}[htb]
 \centering
 \footnotesize
 \caption{Excerpt of \texttt{file\_metrics.csv} for \texttt{chalk} package.}
@@ -132,7 +131,7 @@ the download status of each tarball, the per-release analysis progress, and the 
 \end{tabularx}
 \end{table}
 
-\begin{table}[htbp]
+\begin{table}[htb]
 \centering
 \footnotesize
 \caption{Excerpt of \texttt{aggregate\_metrics\_by\_single\_version.csv} for \texttt{chalk} package.}
@@ -159,6 +158,6 @@ python3 dataset.py
 
 This script reads the \texttt{aggregate\_metrics\_by\_single\_version.csv} file from every analyzed package 
 and generates a separate CSV file per metric, where each row corresponds to an entry and each column to one of its analyzed versions,
-as illustrated in \cref{tab:csv-Goodware,tab:csv-Malware}.
+as illustrated in \cref{tab:csv-goodware,tab:csv-malware}.
 Each resulting file contains the metric values for every version of every analyzed package, 
 collectively forming the datasets described in \cref{sec:datasets}.

@@ -18,6 +18,20 @@ doi = {10.48550/arXiv.2305.14157}
       url={https://arxiv.org/abs/2005.09535}, 
 }
 
+@misc{esempioTyposquatting,
+      title={Typosquatting Attack}, 
+      author={Snyk},
+      year={2021},
+      url={https://snyk.io/blog/typosquatting-attacks/}, 
+}
+
+@misc{checkmarx2025colorama,
+  author       = {Darren Meyer},
+  title        = {{PyPI} Supply Chain Attack Uncovered: {Colorama} and {Colorizr} Name Confusion},
+  year         = {2025},
+  url          = {https://checkmarx.com/zero-post/python-pypi-supply-chain-attack-colorama/}
+}
+
 @misc{duan2020measuringsupplychainattacks,
       title={Towards Measuring Supply Chain Attacks on Package Managers for Interpreted Languages}, 
       author={Ruian Duan and Omar Alrawi and Ranjita Pai Kasturi and Ryan Elder and Brendan Saltaformaggio and Wenke Lee},
@@ -35,6 +49,27 @@ doi = {10.48550/arXiv.2305.14157}
   year = {2019},
   url = {https://www.npmjs.com/advisories/890},
   note = {[Online]}
+}
+
+@misc{techtarget2018eventstream,
+  author       = {TechTarget},
+  title        = {Compromised {NPM} package highlights open source trouble},
+  year         = {2018},
+  url          = {https://www.techtarget.com/searchsecurity/news/252453398/Compromised-NPM-package-highlights-open-source-trouble}
+}
+
+@misc{akamai2024xzutils,
+  author       = {Akamai},
+  title        = {{XZ Utils} Backdoor - Everything You Need to Know, and What You Can Do},
+  year         = {2024},
+  url          = {https://www.akamai.com/blog/security-research/critical-linux-backdoor-xz-utils-discovered-what-to-know}
+}
+
+@misc{bleepingcomputer2022nodeipc,
+  author       = {BleepingComputer},
+  title        = {Big sabotage: Famous npm package deletes files to protest {Ukraine} war},
+  year         = {2022},
+  url          = {https://www.bleepingcomputer.com/news/security/big-sabotage-famous-npm-package-deletes-files-to-protest-ukraine-war/}
 }
 
 @misc{hexadecimalsyntax,
@@ -63,7 +98,7 @@ doi = {10.48550/arXiv.2305.14157}
 }
 
 @misc{pinckney2023largescaleanalysissemantic,
-      title={A Large Scale Analysis of Semantic Versioning in NPM}, 
+      title={A Large Scale Analysis of Semantic Versioning in npm}, 
       author={Donald Pinckney and Federico Cassano and Arjun Guha and Jonathan Bell},
       year={2023},
       eprint={2304.00394},
@@ -75,12 +110,12 @@ doi = {10.48550/arXiv.2305.14157}
 @INPROCEEDINGS{9240695,
   author={Goswami, Pronnoy and Gupta, Saksham and Li, Zhiyuan and Meng, Na and Yao, Daphne},
   booktitle={2020 IEEE International Conference on Software Maintenance and Evolution (ICSME)}, 
-  title={Investigating The Reproducibility of NPM Packages}, 
+  title={Investigating The Reproducibility of npm Packages}, 
   year={2020},
   volume={},
   number={},
   pages={677-681},
-  keywords={Software maintenance;Manuals;Tools;Packaging;Standards;Open source software;Software development management;NPM packages;reproducibility;JavaScript},
+  keywords={Software maintenance;Manuals;Tools;Packaging;Standards;Open source software;Software development management;npm packages;reproducibility;JavaScript},
   doi={10.1109/ICSME46990.2020.00071}
 }
 
@@ -105,7 +140,7 @@ doi = {10.48550/arXiv.2305.14157}
 % Related Work
 
 @misc{huang2024donapimaliciousnpmpackages,
-      title={DONAPI: Malicious NPM Packages Detector using Behavior Sequence Knowledge Mapping}, 
+      title={DONAPI: Malicious npm Packages Detector using Behavior Sequence Knowledge Mapping}, 
       author={Cheng Huang and Nannan Wang and Ziyan Wang and Siqi Sun and Lingzi Li and Junren Chen and Qianchong Zhao and Jiaxuan Han and Zhen Yang and Lei Shi},
       year={2024},
       eprint={2403.08334},
@@ -116,14 +151,14 @@ doi = {10.48550/arXiv.2305.14157}
 
 @inproceedings{10.1145/3691620.3695492,
 author = {Huang, Yiheng and Wang, Ruisi and Zheng, Wen and Zhou, Zhuotong and Wu, Susheng and Ke, Shulin and Chen, Bihuan and Gao, Shan and Peng, Xin},
-title = {SpiderScan: Practical Detection of Malicious NPM Packages Based on Graph-Based Behavior Modeling and Matching},
+title = {SpiderScan: Practical Detection of Malicious npm Packages Based on Graph-Based Behavior Modeling and Matching},
 year = {2024},
 isbn = {9798400712487},
 publisher = {Association for Computing Machinery},
 address = {New York, NY, USA},
 url = {https://doi.org/10.1145/3691620.3695492},
 doi = {10.1145/3691620.3695492},
-abstract = {Open source software (OSS) supply chains have been attractive targets for attacks. One of the significant, popular attacks is realized by malicious packages on package registries. NPM, as the largest package registry, has been recently flooded with malicious packages. In response to this severe security risk, many detection tools have been proposed. However, these tools do not model malicious behavior in a holistic way; only consider a predefined set of sensitive APIs; and require huge manual confirmation effort due to high false positives and binary detection results. Thus, their practical usefulness is hindered.To address these limitations, we propose a practical tool, named SpiderScan, to identify malicious NPM packages based on graph-based behavior modeling and matching. In the offline phase, given a set of malicious packages, SpiderScan models each malicious behavior in a graph that considers control flows and data dependencies across sensitive API calls, while leveraging LLM to recognize sensitive APIs in both built-in modules and third-party dependencies. In the online phase, given a target package, SpiderScan constructs its suspicious behavior graphs and matches them with malicious behavior graphs, and uses dynamic analysis and LLM to confirm the maliciousness only for certain malicious behaviors. Our extensive evaluation has demonstrated the effectiveness of SpiderScan over the state-of-the-art. SpiderScan has detected 249 new malicious packages in NPM, and received 70 thank letters from the official team of NPM.},
+abstract = {Open source software (OSS) supply chains have been attractive targets for attacks. One of the significant, popular attacks is realized by malicious packages on package registries. npm, as the largest package registry, has been recently flooded with malicious packages. In response to this severe security risk, many detection tools have been proposed. However, these tools do not model malicious behavior in a holistic way; only consider a predefined set of sensitive APIs; and require huge manual confirmation effort due to high false positives and binary detection results. Thus, their practical usefulness is hindered.To address these limitations, we propose a practical tool, named SpiderScan, to identify malicious npm packages based on graph-based behavior modeling and matching. In the offline phase, given a set of malicious packages, SpiderScan models each malicious behavior in a graph that considers control flows and data dependencies across sensitive API calls, while leveraging LLM to recognize sensitive APIs in both built-in modules and third-party dependencies. In the online phase, given a target package, SpiderScan constructs its suspicious behavior graphs and matches them with malicious behavior graphs, and uses dynamic analysis and LLM to confirm the maliciousness only for certain malicious behaviors. Our extensive evaluation has demonstrated the effectiveness of SpiderScan over the state-of-the-art. SpiderScan has detected 249 new malicious packages in npm, and received 70 thank letters from the official team of npm.},
 booktitle = {Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering},
 pages = {1146–1158},
 numpages = {13},
@@ -141,15 +176,6 @@ series = {ASE '24}
       archivePrefix={arXiv},
       primaryClass={cs.CR},
       url={https://arxiv.org/abs/2403.12196}, 
-}
-
-@unknown{unknown,
-author = {Froh, Brown, Tom and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and Agarwal, Sandhini and Herbert-Voss, Ariel and Krueger, Gretchen and Henighan, Tom and Child, Rewon and Ramesh, Aditya and Ziegler, Daniel and Wu, Jeffrey and Winter, Clemens and Amodei, Dario},
-year = {2020},
-month = {05},
-pages = {},
-title = {Language Models are Few-Shot Learners},
-doi = {10.48550/arXiv.2005.14165}
 }
 
 @article{zoratti2025valutazione,
@@ -186,7 +212,7 @@ doi = {10.48550/arXiv.2005.14165}
 
 @online{tristan2026listtop10000,
   author={F.-R. Tristan},
-  title={List of top 10000 NPM packages},
+  title={List of top 10000 npm packages},
   year={2026},
   url={https://tristan-f-r.github.io/npm-rank/PACKAGES.html}
 }
@@ -200,7 +226,7 @@ doi = {10.48550/arXiv.2005.14165}
 
 
 @online{oxsecurity2025npm20hack,
-  title        = {180+ NPM Packages Hit in Major Supply Chain Attack},
+  title        = {180+ npm Packages Hit in Major Supply Chain Attack},
   author       = {Moshe Siman Tov Bustan and Alexander Chailytko},
   year         = 2025,
   url          = {https://www.ox.security/blog/npm-2-0-hack-40-npm-packages-hit-in-major-supply-chain-attack/}
@@ -227,7 +253,7 @@ doi = {10.48550/arXiv.2005.14165}
   url          = {https://www.netskope.com/blog/shai-hulud-2-0-aggressive-automated-one-of-fastest-spreading-npm-supply-chain-attacks-ever-observed}
 }
 @misc{helixguard2025malicioussha1hulud,
-  title        = {Shai-Hulud Returns: Over 1K NPM Packages and 27K+ Github Repos infected via Fake Bun Runtime Within Hours},
+  title        = {Shai-Hulud Returns: Over 1K npm Packages and 27K+ Github Repos infected via Fake Bun Runtime Within Hours},
   author       = {HelixGuard Team},
   year         = 2025,
   url          = {https://helixguard.ai/blog/malicious-sha1hulud-2025-11-24/}
@@ -255,7 +281,7 @@ doi = {10.48550/arXiv.2005.14165}
 }
 
 
-% Tool for Analyzing NPM Packages
+% Tool for Analyzing npm Packages
 
 @misc{semver,
   title        = {Semantic Versioning 2.0.0},
@@ -325,6 +351,11 @@ doi = {10.3390/informatics12020043}
   url          = {https://www.npmjs.com/package/@types/node}
 }
 
+@misc{cheerio-Maintainer-Oversight,
+  title        = {Package cheerio},
+  author       = {Cheerio Maintainers},
+  url          = {https://github.com/cheeriojs/cheerio/releases?page=2}
+}
 
 @misc{node-releases,
   title        = {Package node-releases},
@@ -506,7 +537,7 @@ doi = {10.3390/informatics12020043}
   title        = {Package brace-expansion},
   author       = {Julian Gruber},
   url          = {https://www.npmjs.com/package/brace-expansion},
-  note         = {NPM Package Registry}
+  note         = {npm Package Registry}
 }
 
 @misc{teaProtocol,
@@ -519,5 +550,5 @@ doi = {10.3390/informatics12020043}
   title        = {Package dotenv-expand},
   author       = {Scott Motte},
   url          = {https://www.npmjs.com/package/dotenv-expand},
-  note         = {NPM Package Registry}
+  note         = {npm Package Registry}
 }

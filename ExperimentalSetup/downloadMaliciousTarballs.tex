@@ -1,7 +1,7 @@
 \subsection{Download Malicious Tarballs}
 \label{subsec:DownloadMaliciousTarballs}
 
-This subsection describes the process and the developed script used to retrieve the tarballs
+This section describes the process and the developed script used to retrieve the tarballs
 of the compromised releases specified in \cref{subsec:malwareDataset}.
 
 The first approach was to search public datasets that aggregate known malicious versions from open-source registries~\cite{OpenSourceDatasetMaliciousSoftwarePackages}. 
@@ -9,10 +9,10 @@ The limitation of such repositories is that they do not always contain the speci
 in our case, the compromised versions of the packages affected by the four
 \acp{SSCA} analyzed in \cref{ch:AnalysisRecentAttacks} were not initially present in these collections.
 
-An alternative source of removed \ac{NPM} tarballs, which proved effective, is to query mirror registries. 
+An alternative source of removed \ac{npm} tarballs, which proved effective, is to query mirror registries. 
 A mirror registry is a server that replicates the contents of an official package repository 
 and periodically synchronizes with it~\cite{guo2023empiricalstudymaliciouscode};
-examples of \ac{NPM} mirrors include \emph{Huaweicloud}, \emph{npmmirror}, \emph{Tencent}, and \emph{Alibaba}.
+examples of \ac{npm} mirrors include \emph{Huaweicloud}, \emph{Taobao}, and \emph{Tencent}.
 Because synchronization with the official registry is not instantaneous, 
 mirrors often retain copies of releases that have already been unpublished upstream, 
 sometimes for extended periods depending on the mirror synchronization frequency. 
@@ -21,13 +21,13 @@ as it provides a window during which a removed malicious tarball can still be re
 
 To automate the retrieval of compromised tarballs across multiple mirrors, 
 we developed a dedicated script, 
-implemented in Python and publicly available on GitHub\footnote{\url{https://github.com/Frazzerz/Download-malicious-NPM-packages}}. 
+implemented in Python and publicly available on GitHub\footnote{\url{https://github.com/Frazzerz/Download-malicious-npm-packages}}. 
 The script is invoked from the command line as follows:
 \begin{verbatim}
 python3 downloadpkgnpm.py <input_file>.json
 \end{verbatim}
-The input is a JSON file specifying the list of mirrors to query and the list of package-version pairs to download. 
+The input is a json file specifying the list of mirrors to query and the list of package-version pairs to download. 
 For each requested release, the script queries the mirrors sequentially until the tarball is found and downloaded; 
 if all mirrors fail, the failure is reported and the script moves on to the next entry. 
-Once retrieved, the tarballs can be passed to the \texttt{NPM Packages Analyzer} tool (\cref{subsec:ToolForAnalyzingPkgs}) 
-via the \texttt{-{}-local} flag to construct the \emph{Malware} dataset (\cref{subsec:malwareDataset}).
+Once retrieved, the tarballs can be passed to the \texttt{npm Packages Analyzer} tool (\cref{subsec:ToolForAnalyzingPkgs}) 
+via the \texttt{-{}-local} flag to construct the malware dataset (\cref{subsec:malwareDataset}).

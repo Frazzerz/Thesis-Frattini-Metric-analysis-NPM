@@ -1,7 +1,7 @@
 \section{Analysis Metric 4: Unique Hexadecimal Values}
 \label{sec:analysisHex}
 
-The fourth metric we analyzed is the count of unique hexadecimal values found across all plain-text files of an \ac{NPM} package version.
+The fourth metric we analyzed is the count of unique hexadecimal values found across all plain-text files of an \ac{npm} package version.
 It was motivated by the obfuscation technique used in Attacks~B (\cref{sec:attackB}) and~D (\cref{sec:attackD}),
 which encodes variable and function names as hexadecimal tokens to hide malicious behavior from static analysis,
 introducing obfuscated code that makes extensive use of such tokens.
@@ -11,14 +11,14 @@ so a sudden increase in this count in a new version would constitute an anomalou
 \subsection{Analysis of the Goodware Dataset}
 \label{subsec:goodwareHex}
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{metrics/hex/hex_plot1.pdf}
     \caption{Unique Hexadecimal Values Metric: Package Trend in Goodware Dataset.}
     \label{fig:fig1Hex}
 \end{figure}
 
-The \emph{Goodware} dataset provides, for each of the 629 packages,
+The goodware dataset provides, for each of the 629 packages,
 the count of unique hexadecimal values observed in their 20 analyzed versions,
 as described in \cref{subsec:goodwareDataset}.
 Of these, 520 have zero such values across all versions,
@@ -34,7 +34,7 @@ The three main causes of legitimate high hexadecimal counts are
 cryptographic constants (precomputed lookup tables and algorithm parameters),
 accidental inclusions, 
 and build-tool-generated JavaScript files that use hexadecimal encoding for efficiency. 
-Understanding these cases is essential to distinguish legitimate anomalies from malicious injections when evaluating the \emph{Malware} dataset.
+Understanding these cases is essential to distinguish legitimate anomalies from malicious injections when evaluating the malware dataset.
 These ten packages are highlighted in the following figures with solid colored lines, categorizing them as follows based on their observed trends:
 \begin{itemize}
     \item \textbf{Increasing Trend} (\cref{fig:fig1HexIncreasing}): illustrates highlighted packages with an increasing trend over time.
@@ -42,7 +42,7 @@ These ten packages are highlighted in the following figures with solid colored l
     \item \textbf{Stable Trend} (\cref{fig:fig1HexStable}): displays highlighted packages maintaining a constant value throughout their history.
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{metrics/hex/hex_plot1_Increasing_Trend.pdf}
     \caption{Unique Hexadecimal Values Metric: Outliers Package Increasing Trend in Goodware Dataset.}
@@ -56,15 +56,15 @@ These ten packages are highlighted in the following figures with solid colored l
 such as encryption algorithms and digital signatures~\cite{crypto-js}.
 In its first three versions from thirteen years ago (3.1.2 to 3.1.2-2),
 cryptographic constants were stored in decimal format, yielding a metric value of~0.
-As shown at point~1 in \cref{fig:fig1HexIncreasing},
+As shown at {\large\ding{172}} in \cref{fig:fig1HexIncreasing},
 in version 3.1.2-3 the developers converted these values to hexadecimal,
-aligning with standard cryptographic specification practices, such as the Secure Hash Algorithm (SHA)~\cite{gallagher1995secure}.
+aligning with standard cryptographic specification practices, such as the Secure Hash Algorithm~\cite{gallagher1995secure}.
 This brought the count to 546, an outlier maintained in subsequent versions.
-A further jump at point~2 corresponds to the introduction of the Blowfish algorithm in version 4.2.0, 
+A further jump at {\large\ding{173}} corresponds to the introduction of the Blowfish algorithm in version 4.2.0, 
 which added new hexadecimal constants and raised the count to 1,588, making it the most extreme outlier in the latest version.
 
 \textbf{polished} (solid pink line) is a styling package for JavaScript~\cite{polished}.
-As seen at point~3 in \cref{fig:fig1HexIncreasing}, 
+As seen at {\large\ding{174}} in \cref{fig:fig1HexIncreasing}, 
 it jumped from 0 to 2,208 in version 4.0.0-beta.2, the most extreme outlier for four consecutive releases.
 This happened because the developers accidentally included a \texttt{.yarn} cache directory containing numerous files, including a build-tool-generated JavaScript file,
 as also discussed in \Cref{subsec:goodwarePackageSize,subsec:analysisFileTypesGoodware}.
@@ -72,26 +72,32 @@ When the folder was removed in version 4.0.4~\cite{polished_release_notes}, the 
 This is an example of an accidental anomaly traceable to a documented release note, 
 distinguishable from a malicious injection because it is explained and subsequently corrected.
 
-\textbf{xml2js} (solid blue line) went from~0 to~96 unique hexadecimal values at point~4 in \cref{fig:fig1HexIncreasing}.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.76\textwidth]{metrics/hex/hex_plot1_Decreasing_Trend.pdf}
+    \caption{Unique Hexadecimal Values Metric: Outliers Package Decreasing Trend in Goodware Dataset.}
+    \label{fig:fig1HexDecreasing}
+
+    \vspace{0.3cm} % Spazio verticale tra i due grafici
+
+    \includegraphics[width=0.76\textwidth]{metrics/hex/hex_plot1_Stable_Trend.pdf}
+    \caption{Unique Hexadecimal Values Metric: Outliers Package Stable Trend in Goodware Dataset.}
+    \label{fig:fig1HexStable}
+\end{figure}
+
+\textbf{xml2js} (solid blue line) went from~0 to~96 unique hexadecimal values at {\large\ding{175}} in \cref{fig:fig1HexIncreasing}.
 Starting from version 0.6.1, 
 the developers included a JavaScript file automatically generated from OCaml source using the \texttt{js\_of\_ocaml} compiler,
 which produces output that uses such constants extensively for efficiency.
 The generated file remained in the package for the subsequent version 0.6.2.
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{metrics/hex/hex_plot1_Decreasing_Trend.pdf}
-    \caption{Unique Hexadecimal Values Metric: Outliers Package Decreasing Trend in Goodware Dataset.}
-    \label{fig:fig1HexDecreasing}
-\end{figure}
-
 Two packages experienced a notable decrease: \texttt{buffer-crc32} and \texttt{object-hash}, as shown in \cref{fig:fig1HexDecreasing}.
 
-\textbf{buffer-crc32} (solid green line) implements the Cyclic Redundancy Check (CRC32) algorithm for data integrity checking~\cite{buffer-crc32}.
+\textbf{buffer-crc32} (solid green line) implements the Cyclic Redundancy Check (CRC) algorithm for data integrity checking~\cite{buffer-crc32}.
 For efficiency reasons, the algorithm uses a CRC table, 
 a matrix of 256 precalculated values that prevents the processor from performing complex mathematical calculations on every single byte.
 Until version 0.2.13, the CRC table values were stored as hexadecimal constants.
-As shown at point~1 in \cref{fig:fig1HexDecreasing}, 
+As shown at {\large\ding{172}} in \cref{fig:fig1HexDecreasing}, 
 from version 1.0.0-RC1 onward the developers switched to a build-tool-generated version of the table 
 in which the values were converted to decimal for compactness.
 The count therefore dropped from 256 to~0 without any change in behavior.
@@ -100,17 +106,10 @@ The count therefore dropped from 256 to~0 without any change in behavior.
 From release -19 to -17 (1.1.0 to 1.1.2),
 it represented the upper limit of the confidence intervals, having 78 unique hexadecimal values, 
 all located in the test file \texttt{object\_hash\_test.js}.
-At point~2 in \cref{fig:fig1HexDecreasing}, 
+At {\large\ding{173}} in \cref{fig:fig1HexDecreasing}, 
 starting from version 1.1.7, the test file was excluded from the published tarball for space optimization, 
 as it is not essential for its functionality and not needed by end users.
 The count therefore dropped to~0.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{metrics/hex/hex_plot1_Stable_Trend.pdf}
-    \caption{Unique Hexadecimal Values Metric: Outliers Package Stable Trend in Goodware Dataset.}
-    \label{fig:fig1HexStable}
-\end{figure}
 
 Five packages maintain stable outlier or near-outlier values across all releases.
 
@@ -145,38 +144,38 @@ and the metric is not indicative for this attack.
 
 \textbf{Attack~B} (Crypto attack, \cref{sec:attackB}) injects an obfuscated line of code into an existing \texttt{index.js} file.
 The resulting count of unique hexadecimal values reaches 455.
-As shown in \cref{fig:fig2HexAttackB}, this positions the malicious versions among the outliers of the \emph{Goodware} distribution, 
+As shown in \cref{fig:fig2HexAttackB}, this positions the malicious versions among the outliers of the goodware distribution, 
 making the metric effective for detecting Attack~B.
 
 \textbf{Attack~C} (\texttt{Shai-Hulud}~1.0, \cref{sec:attackC}) introduces a malicious file containing only one unique hexadecimal value.
 As shown in \cref{fig:fig2HexAttackC}, this marginal increase leaves the compromised
-releases within the confidence intervals of the \emph{Goodware} dataset, 
+releases within the confidence intervals of the goodware dataset, 
 making the metric not indicative for this attack.
 This outcome is consistent with the nature of the \ac{SSCA} as it does not rely on any obfuscation technique, 
 but rather on the presence of clear-text malicious code.
 
 \textbf{Attack~D} (\texttt{Shai-Hulud}~2.0, \cref{sec:attackD}) introduces an obfuscated file
 using the same hexadecimal encoding technique as Attack~B.
-As shown in \cref{fig:fig2HexAttackD}, the count jumps to 122,535, far exceeding the maximum outlier values observed in the \emph{Goodware} dataset.
+As shown in \cref{fig:fig2HexAttackD}, the count jumps to 122,535, far exceeding the maximum outlier values observed in the goodware dataset.
 The metric is clearly effective for detecting Attack~D.
 
-In summary, the \emph{Unique Hexadecimal Values} metric is effective for attacks that use hexadecimal encoding as an obfuscation strategy (Attacks~B and~D),
-with detection strength scaling with the amount of encoded content, 
-as Attack~B produces 455 values, sufficient to cross the outlier boundary,
-while Attack~D produces 122,535, an extreme anomaly with no parallel in the \emph{Goodware} baseline.
-It is not indicative for Attack~A, whose malicious payload is binary,
-nor for Attack~C, where the injected code is clear-text and does not rely on obfuscation.
-
-\begin{figure}[htbp]
+\begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{metrics/hex/hex_plot2singlesingle_AttackA.pdf}
+    \includegraphics[width=0.97\textwidth]{metrics/hex/hex_plot2singlesingle_AttackA.pdf}
     \caption{Unique Hexadecimal Values Metric: Malware Comparison for Attack~A.}
     \label{fig:fig2HexAttackA}
 \end{figure}
 
-\begin{figure}[htbp]
+In summary, the \emph{Unique Hexadecimal Values} metric is effective for attacks that use hexadecimal encoding as an obfuscation strategy (Attacks~B and~D),
+with detection strength scaling with the amount of encoded content, 
+as Attack~B produces 455 values, sufficient to cross the outlier boundary,
+while Attack~D produces 122,535, an extreme anomaly with no parallel in the goodware baseline.
+It is not indicative for Attack~A, whose malicious payload is binary,
+nor for Attack~C, where the injected code is clear-text and does not rely on obfuscation.
+
+\begin{figure}[htb]
     \centering
-    \includegraphics[width=0.90\textwidth]{metrics/hex/hex_plot2single_AttackB.pdf}
+    \includegraphics[width=\textwidth]{metrics/hex/hex_plot2single_AttackB.pdf}
     \caption{Unique Hexadecimal Values Metric: Malware Comparison for Attack~B.}
     \label{fig:fig2HexAttackB}
 \end{figure}

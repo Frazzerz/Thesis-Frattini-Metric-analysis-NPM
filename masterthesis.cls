@@ -416,7 +416,7 @@
                     {\LARGE   \bfseries\@title \vskip 60\p@}
          {\Large 
           \@author \vskip 60\p@
-          Advisor: \@advisor \\ 
+          Advisors: \@advisor \\ 
           Examiner: \@examiner \vskip 10\p@
         }    
       \vfill

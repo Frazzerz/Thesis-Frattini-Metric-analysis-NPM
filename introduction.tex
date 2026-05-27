@@ -3,9 +3,9 @@
 
 The Open-Source Software (OSS) ecosystem is one of the core pillars of the modern software landscape,
 accounting for millions of active projects using publicly available libraries and components.
-Among these environments, the \ac{NPM} registry for JavaScript has emerged as one of the largest and most dynamic ones, 
-hosting over two million packages~\cite{9505063}, 
-where developers can collaborate by distributing their code without having to reinvent the wheel.
+Among these environments, the \ac{npm} registry for JavaScript has emerged as one of the largest and most dynamic ones, 
+hosting over two million packages~\cite{9505063}. 
+Here, developers can collaborate by distributing their code without having to reinvent the wheel.
 Integrating an external component in an application implies including not just its functionality, 
 but also trusting the original authors, all transitive dependencies, and the infrastructure involved in the distribution process.
 These elements collectively form the \ac{SSC}~\cite{softwareSupplyChain}.
@@ -14,7 +14,7 @@ Compromising any part of this chain affects all projects that depend on it,
 potentially reaching millions of users and applications.
 An attack targeting the \ac{SSC} falls into the category of a \ac{SSCA}, 
 representing a rising threat to the security of the software ecosystem.
-Indeed, in the second half of 2025, four major incidents took place within \ac{NPM},
+Indeed, in the second half of 2025, four major incidents took place within \ac{npm},
 including five packages compromised in July, like \texttt{eslint-config-prettier} with almost thirty million weekly downloads~\cite{endorlabs2025eslint};
 eighteen others hijacked in September to steal cryptocurrency~\cite{henig2025breakdownwidespreadnpmsupplychainattack},
 like \texttt{chalk} and \texttt{debug} collectively installed over 2.6 billion times per week;
@@ -30,11 +30,11 @@ most notably the lack of longitudinal perspective,
 as they analyze only the most recent version of a package in isolation, ignoring the evolutionary history of its releases.
 This, combined with high operational costs, makes continuous registry-scale monitoring challenging.
 
-The present research adopts a complementary position in this overview, 
+The present thesis work adopts a complementary position in this overview, 
 evaluating five lightweight, easily computable metrics extracted directly from tarball artifacts.
 By tracking their evolution across 20 consecutive versions, 
 their effectiveness is demonstrated against a baseline of 629 popular goodware samples 
-and a \emph{Malware} dataset of 20 packages compromised by the four \acp{SSCA}.
+and a malware dataset of 20 packages compromised by the four \acp{SSCA}.
 The results indicate that while each individual attack is detectable by at least one metric,
 no single one identifies all four simultaneously.
 This outcome reflects the structural diversity of the malicious payloads,
@@ -45,18 +45,18 @@ multi-version monitoring strategy provides a practical and low-cost addition to 
 The remainder of this thesis is organized as follows.
 \Cref{ch:background} provides the foundational concepts underlying this work,
 introducing the \ac{SSC} and the main \ac{SSCA} vectors, 
-the architecture of the \ac{NPM} ecosystem, 
+the architecture of the \ac{npm} ecosystem, 
 and the structure of tarballs.
 \Cref{ch:related} surveys existing detection approaches,
 spanning static analysis, dynamic analysis, \ac{LLM}-based methods, and metric-based analysis,
 and positions this thesis with respect to their limitations.
 \Cref{ch:AnalysisRecentAttacks} presents and analyzes in depth the four \acp{SSCA} 
-that affected the \ac{NPM} ecosystem in 2025, which serve as case studies throughout the research.
+that affected the \ac{npm} ecosystem in 2025, which serve as case studies throughout the research.
 \Cref{ch:ExperimentalSetup} describes the two datasets constructed for the evaluation,
-the \emph{Goodware} and the \emph{Malware} dataset,
+the goodware and the malware dataset,
 together with the two software tools developed to build them.
 \Cref{ch:metricsAnalysis} defines the five metrics, 
-analyzes their distribution in the \emph{Goodware} baseline, 
+analyzes their distribution in the goodware baseline, 
 and evaluates their effectiveness in detecting the compromised releases.
 Finally, \cref{ch:conclusion} summarizes the findings, discusses the limitations of the proposed approach,
 and outlines directions for future work.

@@ -1,13 +1,13 @@
 \section{Attack C: Shai-Hulud 1.0}
 \label{sec:attackC}
 
-On September 15, 2025, 187 \ac{NPM} packages,
+On September 15, 2025, 187 \ac{npm} packages,
 including \texttt{@ctrl/tinycolor}, with over two million weekly downloads,
 were compromised by the \ac{SSCA} known as \texttt{Shai-Hulud}~1.0~\cite{oxsecurity2025npm20hack}.
 The initial infection vector and the identity of patient zero remain unknown;
 phishing is considered the most likely hypothesis~\cite{kaspersky2025tinycolorshaikuludsupplychainattack}.
-The goal of this attack was to steal sensitive information from developers and \ac{NPM} maintainers, specifically 
-GitHub and \ac{NPM} authentication tokens, cloud services access keys (e.g., \ac{AWS}, Google Cloud Platform (GCP), and Azure), and local system data.
+The goal of this attack was to steal sensitive information from developers and \ac{npm} maintainers, specifically 
+GitHub and \ac{npm} authentication tokens, cloud services access keys (e.g., \ac{AWS}, Google Cloud Platform, and Azure), and local system data.
 
 The operation of the malware can be divided into two phases:
 \begin{enumerate}
@@ -19,8 +19,8 @@ The operation of the malware can be divided into two phases:
 
     \item \textbf{Validation and Propagation:} 
     After the search with \texttt{TruffleHog} completes, 
-    the malware checks whether the discovered \ac{NPM} and GitHub tokens are valid and active.
-    If valid \ac{NPM} credentials with publish privileges are found,
+    the malware checks whether the discovered \ac{npm} and GitHub tokens are valid and active.
+    If valid \ac{npm} credentials with publish privileges are found,
     it publishes a new malicious version for every package managed by the victim maintainer,
     embedding the same malicious code in each one;
     this self-propagation mechanism, analogous to that of a worm,
@@ -32,4 +32,12 @@ The operation of the malware can be divided into two phases:
 \end{enumerate}
     
 The malicious code is injected into the tarballs as a new file named \texttt{bundle.js},
-which weighs approximately 3.7~MB and contains a single line of code 3,734,355 characters long.
+which weighs approximately 3.7~MB and contains a single line of code 3,734,355 characters long, 
+as illustrated in \cref{fig:exampleAttackC} for the compromised \texttt{ember-browser-services} package.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{Attacks/exampleAttackC.png}
+    \caption{The \texttt{bundle.js} File of the Compromised \texttt{ember-browser-services} Package in Attack C.}
+    \label{fig:exampleAttackC}
+\end{figure}

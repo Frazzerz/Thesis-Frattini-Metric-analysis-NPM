@@ -1,14 +1,14 @@
 \section{Analysis Metric 3: Longest Line Length}
 \label{sec:analysisLLL}
 
-The third metric we analyzed is the length of the longest line found across all plain-text files of an \ac{NPM} package version, 
+The third metric we analyzed is the length of the longest line found across all plain-text files of an \ac{npm} package version, 
 expressed in number of characters.
 It was motivated by the observation that Attacks~B (\cref{sec:attackB}),
 C (\cref{sec:attackC}), and D (\cref{sec:attackD}) all inject malicious code formatted as a single, extremely long line.
 Specifically, Attack~B adds 76,438 characters to an existing \texttt{index.js},
 while Attacks~C and D introduce files containing lines of 3,734,355 and 10,157,373 characters, respectively.
 The intuition is that legitimate packages rarely contain code with lines of such extreme length, making this an anomalous signal.
-To verify this, we first characterized the distribution of this metric in the \emph{Goodware} dataset,
+To verify this, we first characterized the distribution of this metric in the goodware dataset,
 paying particular attention to the role of build artifacts, 
 automatically generated files that can also produce long lines, 
 and then evaluated whether the malicious releases deviate detectably from that baseline.
@@ -16,14 +16,14 @@ and then evaluated whether the malicious releases deviate detectably from that b
 \subsection{Analysis of the Goodware Dataset}
 \label{subsec:goodwareLLL}
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{metrics/LongestLineLength/LLL_plot1.pdf}
     \caption{Longest Line Length Metric: Package Trend in Goodware Dataset.}
     \label{fig:fig1LLL}
 \end{figure}
 
-The \emph{Goodware} dataset provides, for each of the 629 packages,
+The goodware dataset provides, for each of the 629 packages,
 the longest line length observed across all plain-text files in their 20 analyzed versions,
 as described in \cref{subsec:goodwareDataset}.
 To visualize the distribution and evolutionary patterns of this metric across releases,
@@ -39,7 +39,7 @@ can legitimately contain very long lines, and are therefore a potential source o
 In this analysis, we chose to include the entire tarball contents without excluding any file type or directory a priori,
 because an attacker could inject malicious code anywhere within the tarball.
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{metrics/LongestLineLength/LLL_plot1_Trend.pdf}
     \caption{Longest Line Length Metric: Outliers Package Trend in Goodware Dataset.}
@@ -47,11 +47,11 @@ because an attacker could inject malicious code anywhere within the tarball.
 \end{figure}
 
 As shown in \cref{fig:fig1LLLTrend}, 
-from the \emph{Goodware} dataset we selected three packages for individual analysis as representative cases, 
+from the goodware dataset we selected three packages for individual analysis as representative cases, 
 as they exhibit outlier values directly attributable to build artifacts.
 
 \textbf{next} (solid green line) is a React full-stack framework~\cite{next}.
-It shows the most extreme outlier in the entire \emph{Goodware} dataset, 
+It shows the most extreme outlier in the entire goodware dataset, 
 with a longest line length of 4,041,545 characters, present in all 20 versions.
 This value originates from the file \texttt{app-page-turbo-\allowbreak experimental.runtime.dev.js.map},
 a source map file consisting of a single line.
@@ -64,8 +64,8 @@ as their location depends entirely on the individual developer choices.
 \textbf{@angular/compiler} (solid pink line) is the official compiler of the Angular framework, 
 responsible for tasks such as translating templates with Angular syntax~\cite{angular-compiler}.
 In all releases, the longest line originates from the file \texttt{compiler.mjs.map} in the \texttt{fesm2022} directory, 
-consistently around 3,000,000 characters, making it the second most extreme outlier value in the \emph{Goodware} dataset after \texttt{next}.
-As indicated at point~1 in \cref{fig:fig1LLLTrend}, 
+consistently around 3,000,000 characters, making it the second most extreme outlier value in the goodware dataset after \texttt{next}.
+As indicated at {\large\ding{172}} in \cref{fig:fig1LLLTrend}, 
 in version 21.0.0-rc.0 this value decreased to approximately 2,500,000 characters,
 reflecting a natural variation in the output of the build process for that release.
 This variability shows that even stable outlier values from build artifacts are not perfectly constant.
@@ -74,7 +74,7 @@ such as \texttt{compiler.mjs}, a generated JavaScript file containing approximat
 
 \textbf{date-fns} (solid blue line) shows that build artifacts can be introduced in a new release without having been present in previous ones.
 Before version 3.6.0, this package was within the confidence intervals, 
-but at point~2 in \cref{fig:fig1LLLTrend} the metric jumped to 2,188,784 characters, making it an outlier for all subsequent releases.
+but at {\large\ding{173}} in \cref{fig:fig1LLLTrend} the metric increased to 2,188,784 characters, making it an outlier for all subsequent releases.
 This sudden increase was caused by the addition of \texttt{cdn.js.map} in the \texttt{locale} directory, 
 consisting of 10 lines with the longest being 2,188,784 characters, making it the longest line found across all plain-text files in the package.
 It was introduced in version 3.6.0 together with approximately 400 new files for compatibility with older browsers,
@@ -97,19 +97,19 @@ making this metric not indicative for this attack.
 \textbf{Attack~B} (Crypto attack, \cref{sec:attackB}) adds a single malicious line of 76,438 characters to an existing \texttt{index.js}.
 As shown in \cref{fig:fig2LLLAttackB}, this produces a notable increase in the metric,
 but not enough to position the compromised releases among the outlier values.
-The reason is that the \emph{Goodware} baseline includes packages with build artifacts containing lines of several tens of thousands in length, 
+The reason is that the goodware baseline includes packages with build artifacts containing lines of several tens of thousands in length, 
 which sets the 95th-percentile bound at approximately 200,000 characters.
 The metric is therefore not indicative for this attack.
 
 \textbf{Attack~C} (\texttt{Shai-Hulud}~1.0, \cref{sec:attackC}) introduces a malicious file named \texttt{bundle.js} 
 containing a single line of 3,734,355 characters.
-As shown in \cref{fig:fig2LLLAttackC}, this places the compromised versions among the outlier values of the \emph{Goodware} distribution.
+As shown in \cref{fig:fig2LLLAttackC}, this places the compromised versions among the outlier values of the goodware distribution.
 The metric is therefore effective for detecting Attack~C.
 
 \textbf{Attack~D} (\texttt{Shai-Hulud}~2.0, \cref{sec:attackD}) introduces a malicious file 
 \texttt{bun\_environment.js} containing a single line of 10,157,373 characters.
 As shown in \cref{fig:fig2LLLAttackD}, the compromised releases not only enter
-the outlier range but far exceed the maximum outlier values in the \emph{Goodware} dataset.
+the outlier range but far exceed the maximum outlier values in the goodware dataset.
 The metric is clearly effective for detecting Attack~D.
 
 In summary, despite this metric being influenced by the presence of build artifacts in legitimate packages,
@@ -117,7 +117,7 @@ it effectively detects Attacks~C and~D, whose injected files contain a line long
 Instead, it is not indicative for Attacks~A and~B, since 
 the first scenario involves a binary file that is excluded from computation,
 while the malicious line of 76,438 characters introduced by Attack~B 
-remains within the upper confidence interval bound established in the \emph{Goodware} dataset.
+remains within the upper confidence interval bound established in the goodware dataset.
 
 \begin{figure}[htbp]
     \centering

@@ -5,7 +5,7 @@ This section synthesizes the results of the analysis conducted on the five metri
 evaluates their overall effectiveness in detecting the four attacks considered in this study,
 and discusses the proposed approach.
 
-\begin{table}[htbp]
+\begin{table}[htb]
   \centering
   \caption{Summary of Metric Effectiveness across the Four Attacks.
   %\fullcirc~= Metric is Effective (Malicious Version is an Outlier);
@@ -36,14 +36,14 @@ leaving different traces that are not necessarily shared.
 The detection logic for each metric can be summarized as follows.
 
 As argued in \cref{sec:analysisFileTypes},
-\textbf{Metric 1 - File Types} is effective when an attacker introduces a file type rarely found in \ac{NPM} packages,
+\textbf{Metric 1 - File Types} is effective when an attacker introduces a file type rarely found in \ac{npm} packages,
 such as the \ac{PE} binary in Attack~A.
 Conversely, it is not indicative for \acp{SSCA} that introduce or modify extensions common to the ecosystem, 
 such as JavaScript sources in the case of Attacks~B, C, and D.
 
 As discussed in \cref{sec:analysisPackageSize},
 \textbf{Metric 2 - Package Size} is effective when the malicious files are large enough
-to push the total tarball size among the outliers of the \emph{Goodware} distribution.
+to push the total tarball size among the outliers of the goodware distribution.
 It succeeds for Attacks~C (3.7~MB injection) and~D (10~MB),
 but fails for Attacks~A (1.2~MB, absorbed by the confidence interval)
 and~B (a few kilobytes added to an existing file).
@@ -61,7 +61,7 @@ hexadecimal values to encode variable and function names, such as in the case of
 Instead, it is not indicative for attacks that do not rely on this obfuscation technique, such as Attacks~A and C.
 
 As described in \cref{sec:analysisEthAdd},
-\textbf{Metric 5 --- Unique Ethereum Addresses} is highly specific to attacks that embed cryptocurrency wallet addresses for transaction hijacking.
+\textbf{Metric 5 - Unique Ethereum Addresses} is highly specific to attacks that embed cryptocurrency wallet addresses for transaction hijacking.
 It effectively detects Attack~B, which embeds seven known smart contract addresses, 
 and provides no signal for the other three attacks, which have different goals and do not include any Ethereum address in their malicious versions.
 
@@ -73,14 +73,14 @@ Even an attacker aware of these metrics could craft a malicious payload specific
 by injecting a small syntactically plausible file that avoids unusual extensions, long lines, hexadecimal identifiers, and Ethereum addresses.
 Therefore, it is necessary to extend this set of metrics to include additional, uncovered attack patterns.
 
-Second, the \emph{Goodware} dataset covers 629 of the 1,000 most popular packages.
+Second, the goodware dataset covers 629 of the 1,000 most popular packages.
 Less popular ones may have different structural properties, 
-and the confidence intervals derived from this dataset may not generalize perfectly to the entire \ac{NPM} ecosystem.
-Moreover, the \emph{Goodware} dataset is inherently heterogeneous, comprising packages that vary widely in size, purpose, and content.
+and the confidence intervals derived from this dataset may not generalize perfectly to the entire \ac{npm} ecosystem.
+Moreover, the goodware dataset is inherently heterogeneous, comprising packages that vary widely in size, purpose, and content.
 As a result, some legitimate packages show anomalous values across the considered metrics
 and must be analyzed individually and manually to understand their nature.
 
 Finally, a monitoring system based on these metrics must maintain a history of 20 recent versions per package.
-For a registry the size of \ac{NPM} (over two million packages), this implies storing and updating a substantial amount of per-release data.
+For a registry the size of \ac{npm} (over two million packages), this implies storing and updating a substantial amount of per-release data.
 However, the per-version computation is entirely local to the tarball and requires no external services or container environments,
 making the operational cost substantially lower than dynamic analysis or \ac{LLM}-based approaches.

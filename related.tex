@@ -3,10 +3,10 @@
 
 The detection of malicious packages in open-source registries has attracted considerable research attention in recent years, 
 and the proposed approaches can be broadly grouped into four categories: 
-static analysis, dynamic analysis, machine learning and LLM-based methods, and metric-based analysis.
+static analysis, dynamic analysis, machine learning and \ac{LLM}-based methods, and metric-based analysis.
 \cref{sec:staticAnalysis} examines representative static analysis tools, 
 while \cref{sec:dynamicAnalysis} covers dynamic analysis approaches. 
-\cref{sec:MLAndLLM} describes in detail the two most representative LLM-based tools, \texttt{SpiderScan} and \texttt{SocketAI}, 
+\cref{sec:MLAndLLM} describes in detail the two most representative \ac{LLM}-based tools, \texttt{SpiderScan} and \texttt{SocketAI}, 
 and \cref{sec:metricBasedAnalysis} surveys metric-based methods that rely on measurable structural properties of packages.
 Finally, \cref{sec:positioning} discusses the two main limitations affecting most existing tools which motivate this research, 
 and clarifies how this thesis relates to and differs from existing work, highlighting the contribution it makes to the field.
@@ -28,8 +28,8 @@ typically relying on a predefined set of sensitive \acp{API} or an abstract synt
 One representative tool of this family is \texttt{CodeQL}, a query-based static analysis engine,
 which works by extracting the static features of the code into a searchable representation,
 treating the codebase as a database that can be interrogated using specific queries~\cite{zahan2025leveraginglargelanguagemodels}.
-\textcite{zahan2025leveraginglargelanguagemodels} used thirty-nine custom \texttt{CodeQL} rules, 
-originally developed by \textcite{unknown}, to flag malicious JavaScript patterns in \ac{NPM} packages,
+Thirty-nine custom \texttt{CodeQL} rules, 
+were used to flag malicious JavaScript patterns in \ac{npm} packages~\cite{zahan2025leveraginglargelanguagemodels},
 covering behaviors such as credential exfiltration through network \acp{API}, 
 connections to suspicious domains, unauthorized file system access, and the execution of dynamically generated code via sinks like \texttt{eval()}.
 \texttt{CodeQL} serves as a pre-screening step within the \texttt{SocketAI} workflow described in \cref{subsec:SocketAI},
@@ -107,7 +107,7 @@ behavioral patterns, each requiring separate graph representation.
 Only when a match is found does \texttt{SpiderScan} invoke dynamic analysis and an additional \ac{LLM} query to confirm maliciousness,
 keeping the expensive components on the critical path only when strictly necessary.
 
-In its evaluation, \texttt{SpiderScan} monitored 298,504 newly published packages in \ac{NPM} over three months,
+In its evaluation, \texttt{SpiderScan} monitored 298,504 newly published packages in \ac{npm} over three months,
 identifying 249 previously unknown malicious releases.
 A limitation noted by its authors is that \ac{LLM} queries for \ac{API} recognition 
 and maliciousness confirmation carry non-trivial costs per query, which become significant at registry-level monitoring scale.
@@ -115,8 +115,7 @@ and maliciousness confirmation carry non-trivial costs per query, which become s
 \subsection{SocketAI}
 \label{subsec:SocketAI}
 
-\textcite{zahan2025leveraginglargelanguagemodels} propose \texttt{SocketAI}, 
-a malware detection workflow leveraging \texttt{GPT-3} and \texttt{GPT-4}. 
+\texttt{SocketAI}~\cite{zahan2025leveraginglargelanguagemodels} is a malware detection workflow leveraging \texttt{GPT-3} and \texttt{GPT-4}. 
 The design relies on a two-part prompt structure:
 a \emph{system-role} prompt sets the behavioral context for the model,
 instructing it to act as a security expert reviewing JavaScript code for malicious patterns, 
@@ -124,7 +123,7 @@ while a \emph{user-role} prompt provides the file content to be analyzed.
 To contain \ac{API} costs, the workflow uses \texttt{CodeQL}-based static analysis as a
 pre-screening step that reduces the number of files forwarded to the \ac{LLM}.
 
-Evaluated on 5,115 \ac{NPM} packages, of which 2,180 contain harmful code, 
+Evaluated on 5,115 \ac{npm} packages, of which 2,180 contain harmful code, 
 \texttt{GPT-4} outperforms \texttt{CodeQL} alone, 
 while the combined static-\ac{LLM} pipeline achieves the best cost-accuracy trade-off overall.
 As with \texttt{SpiderScan}, the use of commercial \ac{LLM} \acp{API} makes continuous monitoring of the entire registry expensive,
@@ -138,7 +137,7 @@ source files and package artifacts, rather than on the semantics of \ac{API} cal
 This approach does not require execution or language model inference,
 making it lightweight and straightforward to apply at scale.
 
-\textcite{weissberg2025llm} study the relationship between software metrics and vulnerabilities, 
+The relationship between software metrics and vulnerabilities was studied in~\cite{weissberg2025llm}, 
 proposing a taxonomy organized into several families: 
 \emph{code smell indicators} such as the number of \texttt{goto} statements and function pointers, 
 \emph{complexity metrics} such as the number of loops and local variables,
@@ -146,13 +145,12 @@ proposing a taxonomy organized into several families:
 While their focus is on vulnerability identification rather than \ac{SSCA} detection, 
 their metric taxonomy provides a broad reference point for what structural properties can be extracted from source code.
 
-\textcite{zoratti2025valutazione} addresses a narrower but directly supply-chain-relevant question: 
+A narrower but directly supply-chain-relevant question was addressed in~\cite{zoratti2025valutazione}: 
 can simple metrics derived from the whitespace and character distribution of files detect \emph{\ac{BST}} and \emph{\ac{HUT}} attacks?
 \ac{BST} attacks hide malicious logic after long sequences of blank characters, exploiting parser behaviors,
 while \ac{HUT} attacks use invisible Unicode control characters, such as right-to-left override markers,
 to make the implementation appear different to a human reviewer than what is actually parsed and executed. 
-\textcite{zoratti2025valutazione} proposed the ratio of whitespace to printable 
-characters as a key metric to detect such anomalies in GitHub repositories.
+The ratio of whitespace to printable characters was proposed as a key metric to detect such anomalies in GitHub repositories.
 A significant aspect of his methodology is that the analysis is performed across multiple consecutive versions of a project,
 studying how the metric evolves over time rather than examining a single snapshot. 
 This multi-version perspective is shared with the present thesis, 

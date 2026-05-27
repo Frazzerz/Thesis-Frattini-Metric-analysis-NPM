@@ -2,9 +2,9 @@
 \label{sec:attackB}
 
 On September 8, 2025, an attacker compromised eighteen popular packages, including \texttt{chalk} and \texttt{debug}, 
-respectively the first and third most popular ones in terms of the number of stars on \ac{NPM}~\cite{tristan2026listtop10000}.
+respectively the first and third most popular ones in terms of the number of stars on \ac{npm}~\cite{tristan2026listtop10000}.
 Collectively, these modules account for over 2.6 billion weekly downloads,
-making this one of the most impactful attacks in the recent history of the \ac{NPM} ecosystem~\cite{matthee2025npmsupplychainattack}.
+making this one of the most impactful attacks in the recent history of the \ac{npm} ecosystem~\cite{matthee2025npmsupplychainattack}.
 Fortunately, the financial impact was limited, 
 as the infected versions remained online for approximately two hours before being detected by developers and removed from the registry.
 The attack was made possible by compromising the account of a \ac{PM} (\texttt{qix});
@@ -17,7 +17,7 @@ The operation of the malware can be broken into three phases~\cite{henig2025brea
     The malware integrates itself directly into the browser environment, 
     hooking critical functions such as \texttt{fetch} and \texttt{XMLHttpRequest}
     (the core \acp{API} responsible for web data transfer), 
-    and wallet-specific \acp{API} such as \texttt{window.ethereum}.
+    and wallet-specific \acp{API} such as \texttt{window.\\ ethereum}.
     This allows it to intercept web traffic and wallet interactions in real time.
 
     \item \textbf{Monitoring for Sensitive Data:}
@@ -55,8 +55,19 @@ single obfuscated line of 76,438 characters, which also increases the file size.
 The obfuscation technique employed encodes function names, variables, and constants in hexadecimal notation, 
 filling the \texttt{index.js} file with opaque tokens such as \texttt{0x1c8} or \texttt{\_0x6fd57a},
 which hide the injected malicious logic among the meaningful identifiers present in legitimate versions.
+\cref{fig:exampleAttackB} illustrates this concretely:
+the \texttt{index.js} file of the compromised \texttt{chalk} package shows the legitimate imports on lines 1 to 6, 
+while line 11 contains the entire injected payload as a single long string, 
+as visible from the tiny horizontal scrollbar at the bottom of the editor.
 As a result, many behavioral characteristics of the malware are hidden from static analysis,
 including the hooking of critical functions and wallet-specific \acp{API}, 
 the substitution of the transaction destination, and the wallets controlled by the attacker.
 The only features detectable in plain text are the seven smart contract Ethereum addresses,
 which are not obfuscated as they are publicly known and legitimate.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{Attacks/exampleAttackB.png}
+    \caption{The \texttt{index.js} File of the Compromised \texttt{chalk} Package in Attack B.}
+    \label{fig:exampleAttackB}
+\end{figure}

@@ -1,20 +1,20 @@
-The Open-Source Software ecosystem relies heavily on package managers such as \ac{NPM}, 
+The Open-Source Software ecosystem relies heavily on package managers such as Node Package Manager (npm), 
 which hosts over two million libraries. 
-However, its open nature makes it vulnerable to \acp{SSCA}, 
+However, its open nature makes it vulnerable to Software Supply Chain Attacks (SSCAs), 
 where malicious code is injected into legitimate components. 
 Existing detection tools share two limitations: 
 they analyze only the most recent release, lacking a longitudinal perspective, 
-and incur high operational costs through sandbox execution or commercial \ac{LLM} inference.
+and incur high operational costs through sandbox execution or commercial Large Language Model inference.
 
-This thesis proposes a metric-based approach to identify anomalous \ac{NPM} releases 
+This thesis proposes a metric-based approach to identify anomalous npm releases 
 by tracking their evolution across versions. 
-We first study four \acp{SSCA} that affected the \ac{NPM} ecosystem in 2025: 
+We first study four SSCAs that affected the npm ecosystem in 2025: 
 a malicious Windows library injection, a cryptocurrency-stealing attack, 
 and two \emph{Shai-Hulud} self-propagating worm variants. 
 From these, we define five metrics: 
 \emph{File Types}, \emph{Package Size}, \emph{Longest Line Length}, \emph{Unique Hexadecimal Values}, and \emph{Unique Ethereum Addresses}.
-We evaluate these metrics against a \emph{Goodware} baseline of 629 popular packages across their 20 most recent versions, 
-and a \emph{Malware} collection of 20 compromised releases. 
+We evaluate these metrics against a goodware baseline of 629 popular packages across their 20 most recent versions, 
+and a malware collection of 20 compromised releases. 
 
 Results show that each attack is detectable by at least one metric, 
 but no single one identifies all four simultaneously, 

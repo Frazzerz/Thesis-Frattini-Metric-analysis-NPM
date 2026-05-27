@@ -3,13 +3,13 @@
 
 Only two months after \texttt{Shai-Hulud}~1.0 (\cref{sec:attackC}),
 on November 24, 2025, a new and more aggressive version was identified under the name \texttt{Shai-Hulud}~2.0~\cite{cutolo2025shaihulud20}.
-This time, the \ac{SSCA} compromised 1,055 \ac{NPM} packages within a few hours~\cite{cutolo2025shaihulud20}.
+This time, the \ac{SSCA} compromised 1,055 \ac{npm} packages within a few hours~\cite{cutolo2025shaihulud20}.
 The goal remained unchanged compared to the previous version, 
-aiming at the theft of sensitive information such as GitHub and \ac{NPM} authentication tokens,
+aiming at the theft of sensitive information such as GitHub and \ac{npm} authentication tokens,
 access keys for cloud services, and system data.
 The operating mechanism was similarly preserved: as described in \cref{sec:attackC},
 the attack relies on the automated execution of \texttt{TruffleHog}~\cite{trufflehog} to search for secrets in the local file system of the victim,
-followed by data exfiltration through a public repository and self-propagation if valid \ac{NPM} or GitHub tokens are found.
+followed by data exfiltration through a public repository and self-propagation if valid \ac{npm} or GitHub tokens are found.
 
 However, this version introduces several technical differences and improvements over its predecessor~\cite{helixguard2025malicioussha1hulud}:
 \begin{enumerate}
@@ -21,7 +21,8 @@ However, this version introduces several technical differences and improvements 
     \item \textbf{Malicious Files:}
     The tarball of each compromised package contains two new files: 
     a Bun configuration script \texttt{setup\_bun.js} and the payload \texttt{bun\_environment.js},
-    which weighs over 10~MB and contains the malicious code as a single obfuscated line of 10,157,373 characters.
+    which weighs over 10~MB and contains the malicious code as a single obfuscated line of 10,157,373 characters,
+    as illustrated in \cref{fig:exampleAttackD} for the compromised \texttt{@asyncapi/\\ avro-schema-parser} package.
     The configuration script simply calls the payload file.
 
     \item \textbf{Obfuscated Code:}
@@ -45,3 +46,10 @@ as it spread faster, reached over a thousand packages within hours,
 executed its payload more rapidly thanks to the Bun runtime, 
 introduced destructive capabilities absent in the original version, 
 and its heavily obfuscated code made static analysis considerably harder.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{Attacks/exampleAttackD.png}
+    \caption{The \texttt{bun\_environment.js} File of the Compromised \texttt{@asyncapi/avro-schema-\\ parser} Package in Attack D.}
+    \label{fig:exampleAttackD}
+\end{figure}

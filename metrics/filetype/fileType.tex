@@ -1,13 +1,13 @@
 \section{Analysis Metric 1: File Types}
 \label{sec:analysisFileTypes}
 
-The first metric we examined relates to the set of file types in an \ac{NPM} package version.
+The first metric we examined relates to the set of file types in an \ac{npm} package version.
 It is driven by the characteristics of Attack~A (\cref{sec:attackA}), 
 in which an adversary inserts a harmful binary Windows executable into the tarball.
-The intuition is that \ac{DLL} files are essentially never present in legitimate \ac{NPM} packages;
+The intuition is that \ac{DLL} files are essentially never present in legitimate \ac{npm} packages;
 thus, their appearance in a new version constitutes a clear anomalous signal.
-More generally, the presence of any file type that is rare within the \emph{Goodware} dataset warrants further investigation.
-To verify this, we first identified which categories are typical or rare in the \emph{Goodware} dataset,
+More generally, the presence of any file type that is rare within the goodware dataset warrants further investigation.
+To verify this, we first identified which categories are typical or rare in the goodware dataset,
 and then checked whether the malicious versions deviate from that baseline distribution.
 As demonstrated in this section, the analysis confirmed that binary Windows executables are virtually absent from benign entries, 
 making their detection a strong anomalous signal.
@@ -15,7 +15,7 @@ making their detection a strong anomalous signal.
 \subsection{Analysis of the Goodware Dataset}
 \label{subsec:analysisFileTypesGoodware}
 
-The \emph{Goodware} dataset provides, for each of the 629 packages,
+The goodware dataset provides, for each of the 629 packages,
 the set of file types found across their 20 analyzed versions, as detailed in \cref{subsec:goodwareDataset}.
 In total, 71 distinct extensions were identified throughout the dataset.
 
@@ -30,28 +30,22 @@ whereas 0.010 indicates that only 1\% do.
 Dark shading corresponds to high frequency, while light tones indicate lower occurrence.
 The 71 identified types are split between the two heatmaps as follows:
 \begin{enumerate}
-    \item \textbf{Common File Types} (\cref{fig:fig1ComFileTypes}): represent the most common categories, 
+    \item \textbf{Common File Types} (\cref{fig:fig1ComFileTypes}): represents the most common categories, 
     with a relative frequency exceeding 1\% in at least one version. 
-    \item \textbf{Rare File Types} (\cref{fig:fig1RareFileTypes}): representing rarer ones, 
+    \item \textbf{Rare File Types} (\cref{fig:fig1RareFileTypes}): represents rarer ones, 
     include all remaining extensions whose frequency never surpasses the 1\% threshold.
 \end{enumerate}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{metrics/filetype/heatmap_common.pdf}
-    \caption{Heatmap for Common File Types.}
-    \label{fig:fig1ComFileTypes}
-\end{figure}
-
 \cref{fig:fig1ComFileTypes} reveals several notable patterns in the evolution of common file types.
 
-\textbf{JSON files} are present in all packages across all versions, as expected, 
-because every valid \ac{NPM} package must include a \texttt{package.json} file as a condition of publication~\cite{npmdocs2026npmdocumentation}.
+As expected, \textbf{json files} are present in all packages across all versions, 
+because every valid \ac{npm} package must include a \texttt{package.json} file as a condition of publication~\cite{npmdocs2026npmdocumentation}.
 However, \textbf{JavaScript files} are not always included, and this can occur for several reasons:
 \begin{enumerate}
     \item \emph{Maintainer Oversight}: packages such as \texttt{@opentelemetry/api} (version 1.0.0-rc.2),
 \texttt{cross-fetch} (3.2.0-alpha.0), and \texttt{cheerio} (1.0.0-rc.7), among others,
-were published without JavaScript files by mistake, and the versions were subsequently deprecated.
+were published without JavaScript files by mistake, as documented in their GitHub release notes~\cite{cheerio-Maintainer-Oversight},
+and the versions were subsequently deprecated.
 This explains the slight dips in JavaScript frequency visible in some version columns.
     \item \emph{Project Abandonment}: some packages are no longer maintained,
 and their latest versions contain no code, as with \texttt{@types/uuid}.
@@ -60,9 +54,16 @@ and developers use them as dependencies to retrieve current data without manual 
 For example, some packages contain only TypeScript code, such as those under 
 the \texttt{@types} scope (e.g., \texttt{@types/node}, \texttt{@types/react}), which provide static type definitions~\cite{typesnode}.
 Similarly, \texttt{node-releases}, which catalogues a list of Node.js release versions~\cite{node-releases},
-and \texttt{spdx-license-ids}, which provides the official Software Package Data Exchange (SPDX) license list~\cite{spdx-license-ids};
-distribute information solely as JSON files without any JavaScript code.
+and \texttt{spdx-license-ids}, which provides the official Software Package Data Exchange license list~\cite{spdx-license-ids};
+distribute information solely as json files without any JavaScript code.
 \end{enumerate}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.99\textwidth]{metrics/filetype/heatmap_common.pdf}
+    \caption{Heatmap for Common File Types.}
+    \label{fig:fig1ComFileTypes}
+\end{figure}
 
 The relative frequency of \textbf{TypeScript files} consistently increased across versions, 
 rising from approximately 50\% in the earliest releases to about 70\% in the most recent. 
@@ -119,19 +120,19 @@ as part of the temporary folder discussed above.
 The distinction between these two cases is important, 
 as the \texttt{nodemon} \ac{PE} file is stable, present in all releases, and has a documented purpose,
 whereas for the second package, an unexpected \ac{PE} appears for the first time in a new update, without a documented justification. 
-This second case should be treated as a red flag, and follows a similar behavior pattern to Attack~A.
+This second case should be treated as a high-risk anomaly, and follows a similar behavior pattern to Attack~A.
 
 \subsection{Comparison with the Malware Dataset}
 \label{subsec:analysisFileTypesComparisonMalware}
 
 In Attack~A (\cref{sec:attackA}), the adversary introduced a malicious Windows \ac{DLL} into the tarball, 
-and as shown in \cref{fig:fig1RareFileTypes}, \ac{PE} files are a rare extension in the \emph{Goodware} dataset, 
+and as shown in \cref{fig:fig1RareFileTypes}, \ac{PE} files are a rare extension in the goodware dataset, 
 as only two packages contain them: \texttt{nodemon}, whose presence is documented and stable, 
 and \texttt{moment-timezone}, where it was an accidental inclusion subsequently corrected.
 Therefore, the appearance of a \ac{PE} file in a new version of a package that previously contained none is an outlier signal, 
 making this metric effective for detecting Attack~A.
 
 For the remaining three attacks, the malicious payload either modifies an existing JavaScript file (Attack~B) or introduces new ones (Attacks~C and~D),
-an extension present in nearly all packages in the \emph{Goodware} dataset.
+an extension present in nearly all packages in the goodware dataset.
 The metric is therefore not indicative of these \acp{SSCA},
 since the compromised versions are indistinguishable from legitimate ones.
