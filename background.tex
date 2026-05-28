@@ -79,13 +79,13 @@ Abandoned projects can be reclaimed by new parties,
 or legitimate owners can be persuaded through social engineering into handing over control,
 after which the successor can publish compromised versions.
 A notable instance is the \texttt{event-stream} incident of 2018, 
-in which a new maintainer added a malicious payload to the abandoned package targeting the Copay Bitcoin wallet, 
+in which a new maintainer added a malicious payload to the abandoned package targeting a Bitcoin wallet, 
 which went undetected for over a month~\cite{techtarget2018eventstream}.
 
 \emph{Malicious Contributor} and \emph{Disgruntled Insider} represent vectors that originate from within the package development process itself.
 In the first case, a seemingly legitimate contributor submits a pull request that introduces vulnerable or malicious code
 without the knowledge of the \acp{PM}.
-A prominent example is the XZ Utils backdoor, in which a contributor known as Jia Tan spent nearly two years building trust
+A prominent example is the \texttt{XZ Utils} backdoor, in which a contributor known as Jia Tan spent nearly two years building trust
 before inserting a backdoor into \texttt{liblzma} package~\cite{akamai2024xzutils}.
 In the second, an authorized maintainer deliberately sabotages the project they are responsible for.
 For instance, in early 2022 the maintainer of the \texttt{colors} and \texttt{faker} packages 
@@ -103,7 +103,7 @@ It is, however, considerably harder to execute and comparatively rare in practic
 \label{subsec:VictimsAndImpact}
 
 Not all parties in the ecosystem are equally exposed to \acp{SSCA}.
-In this subsection, we examine the two main victim categories identified in the literature~\cite{duan2020measuringsupplychainattacks} 
+In this section, we examine the two main victim categories identified in the literature~\cite{duan2020measuringsupplychainattacks} 
 and discuss the potential impact on each.
 
 The first category consists of \emph{developers and maintainers}, who may be targeted directly

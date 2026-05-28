@@ -28,8 +28,7 @@ typically relying on a predefined set of sensitive \acp{API} or an abstract synt
 One representative tool of this family is \texttt{CodeQL}, a query-based static analysis engine,
 which works by extracting the static features of the code into a searchable representation,
 treating the codebase as a database that can be interrogated using specific queries~\cite{zahan2025leveraginglargelanguagemodels}.
-Thirty-nine custom \texttt{CodeQL} rules, 
-were used to flag malicious JavaScript patterns in \ac{npm} packages~\cite{zahan2025leveraginglargelanguagemodels},
+Thirty-nine custom \texttt{CodeQL} rules were used to flag malicious JavaScript patterns in \ac{npm} packages~\cite{zahan2025leveraginglargelanguagemodels},
 covering behaviors such as credential exfiltration through network \acp{API}, 
 connections to suspicious domains, unauthorized file system access, and the execution of dynamically generated code via sinks like \texttt{eval()}.
 \texttt{CodeQL} serves as a pre-screening step within the \texttt{SocketAI} workflow described in \cref{subsec:SocketAI},
@@ -81,7 +80,7 @@ requiring a full container per package, significantly impedes throughput and pra
 The third category encompasses techniques that use machine learning models, including \acp{LLM}, 
 to detect malicious packages and identify harmful code fragments within them.
 The two most representative tools in this space are \texttt{SpiderScan} and \texttt{SocketAI}, 
-described in the following subsections.
+described in the following sections.
 
 \subsection{SpiderScan}
 \label{subsec:SpiderScan}

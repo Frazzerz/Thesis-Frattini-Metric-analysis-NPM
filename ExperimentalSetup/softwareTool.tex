@@ -44,7 +44,7 @@ For each version, the tool first extracts the tarball and computes the metrics o
 The \emph{File Types} metric (\cref{sec:analysisFileTypes}) is computed by running \texttt{Magika}~\cite{magika}, 
 a deep-learning-based content-type detection library developed by Google. 
 Each file in the tarball is processed, and the resulting label is recorded.
-Notably, \texttt{Magika} labels Windows \ac{PE} executables (including \ac{DLL} files) as \texttt{pebin}.
+Notably, \texttt{Magika} labels Windows \ac{PE} files (including \acp{DLL}) as \texttt{pebin}.
 The \emph{Package Size} metric (\cref{sec:analysisPackageSize}) is computed as the uncompressed size in bytes of each individual file.
 
 Metrics based on the textual content of files, namely \emph{Longest Line Length} (\cref{sec:analysisLLL}), 
@@ -56,7 +56,7 @@ To determine the nature of each item and thereby distinguish plain-text from bin
 the tool uses \texttt{Magika} to classify each entry and checks the detected label against a predefined whitelist of allowed types.
 Additionally, for these metrics, 
 comments are stripped from JavaScript and TypeScript code before computation, 
-using a parser from the \emph{tree-sitter} library~\cite{treesitter}, so that comment content does not affect the results.
+using a parser from the \texttt{tree-sitter} library~\cite{treesitter}, so that comment content does not affect the results.
 To compute \emph{Longest Line Length}, the tool splits the buffer at newline characters and records the length of the longest line.
 
 The \emph{Unique Hexadecimal Values} and \emph{Unique Ethereum Addresses} metrics are computed via regular expressions (regex).
